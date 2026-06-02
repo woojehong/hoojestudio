@@ -1,0 +1,3767 @@
+{
+  "categories": {
+    "weapon": "무기 / 방패 / 보조무기",
+    "common_armor": "공통 방어구 (망토 / 반지 / 목걸이)",
+    "cloth": "천 방어구",
+    "leather": "가죽 방어구",
+    "chain": "사슬 방어구",
+    "plate": "판금 방어구",
+    "profession": "전문 기술 장비"
+  },
+  "items": {
+    "weapon": {
+      "245770": {
+        "id": 245770,
+        "name": "[지능 지팡이] 알른하라의 지팡이",
+        "popular": true,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "라피트",
+        "icon": "inv_staff_2h_dungeonharronir_c_02",
+        "reqMats": [
+          {
+            "n": "위엄 넘치는 생가죽",
+            "c": 1,
+            "i": "inv_12_skinning_stormchargedleather1"
+          },
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "선별된 아제뿌리 (금색)",
+            "c": 6,
+            "i": "inv_misc_herb_liferoot_stem"
+          },
+          {
+            "n": "영혼 암호 (금색)",
+            "c": 3,
+            "i": "inv_10_specialreagentfoozles_primalistrune_wind"
+          }
+        ]
+      },
+      "245771": {
+        "id": 245771,
+        "name": "[민첩 지팡이] 알른하라의 창지팡이",
+        "popular": true,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "라피트",
+        "icon": "inv_staff_2h_dungeonharronir_c_01",
+        "reqMats": [
+          {
+            "n": "위엄 넘치는 생가죽",
+            "c": 1,
+            "i": "inv_12_skinning_stormchargedleather1"
+          },
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "선별된 아제뿌리 (금색)",
+            "c": 6,
+            "i": "inv_misc_herb_liferoot_stem"
+          },
+          {
+            "n": "영혼 암호 (금색)",
+            "c": 3,
+            "i": "inv_10_specialreagentfoozles_primalistrune_wind"
+          }
+        ]
+      },
+      "245769": {
+        "id": 245769,
+        "name": "[지능 보조장비] 알른하라의 등불",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "라피트",
+        "icon": "inv_offhand_1h_dungeonharronir_c_01",
+        "reqMats": [
+          {
+            "n": "위엄 넘치는 발톱",
+            "c": 1,
+            "i": "inv_12_profession_skinning_animalparts_claws"
+          },
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "선별된 아제뿌리 (금색)",
+            "c": 4,
+            "i": "inv_misc_herb_liferoot_stem"
+          },
+          {
+            "n": "영혼 암호 (금색)",
+            "c": 6,
+            "i": "inv_10_specialreagentfoozles_primalistrune_wind"
+          }
+        ]
+      },
+      "244179": {
+        "id": 244179,
+        "name": "[마법봉] 마법학자의 웅장한 집중 장치",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "르루아",
+        "icon": "inv_wand_24",
+        "reqMats": [
+          {
+            "n": "빛의 티끌",
+            "c": 10,
+            "i": "inv_12_profession_thematicfoozles_moteofpurelight_gold"
+          },
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "찬란한 조각 (금색)",
+            "c": 20,
+            "i": "inv_12_profession_enchanting_enchantingshard_blue"
+          },
+          {
+            "n": "여명의 수정 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_enchanting_enchantingcrystal_orange"
+          },
+          {
+            "n": "실버문 무기 보호대 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_weapon_wraps_red"
+          }
+        ]
+      },
+      "265337": {
+        "id": 265337,
+        "name": "[활] 알른하라의 가지화살",
+        "popular": true,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "라피트",
+        "icon": "inv_bow_1h_dungeonharronir_c_01",
+        "reqMats": [
+          {
+            "n": "위엄 넘치는 지느러미",
+            "c": 1,
+            "i": "inv_icon_wing01b"
+          },
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "선별된 아제뿌리 (금색)",
+            "c": 4,
+            "i": "inv_misc_herb_liferoot_stem"
+          },
+          {
+            "n": "영혼 암호 (금색)",
+            "c": 6,
+            "i": "inv_10_specialreagentfoozles_primalistrune_wind"
+          }
+        ]
+      },
+      "268477": {
+        "id": 268477,
+        "name": "[총] 박.살.포. x3",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "앙리자이에",
+        "icon": "inv_firearm_2h_raidmidnight_d_01",
+        "reqMats": [
+          {
+            "n": "유연한 철사 구조",
+            "c": 6,
+            "i": "inv_10_engineering_device_gadget3_color3"
+          },
+          {
+            "n": "야생 마력의 티끌",
+            "c": 6,
+            "i": "inv_12_profession_thematicfoozles_moteofwildmadic_lightgreen"
+          },
+          {
+            "n": "원시 마력의 티끌",
+            "c": 6,
+            "i": "inv_12_profession_thematicfoozles_moteofprimalenergy_darkorange"
+          },
+          {
+            "n": "휘황찬란한 토륨",
+            "c": 3,
+            "i": "inv_12_profession_mining_dazzlingthorium-"
+          },
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "실체 없는 빛 (금색)",
+            "c": 10,
+            "i": "inv_10_engineering_manufacturedparts_electricalparts_color2"
+          },
+          {
+            "n": "영원핵 (금색)",
+            "c": 4,
+            "i": "inv_12_profession_engineering_manufacturedparts_battery_purple"
+          }
+        ]
+      },
+      "237831": {
+        "id": 237831,
+        "name": "[방패] 주문파괴자의 비난",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "크뤼그",
+        "icon": "inv_shield_1h_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "휘황찬란한 토륨",
+            "c": 2,
+            "i": "inv_12_profession_mining_dazzlingthorium-"
+          },
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "순도 높은 합금 (금색)",
+            "c": 6,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_dazzling"
+          },
+          {
+            "n": "해거름 합금 (금색)",
+            "c": 10,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_gloaming"
+          }
+        ]
+      },
+      "244472": {
+        "id": 244472,
+        "name": "[장식 방패] 기사단장의 방책",
+        "popular": true,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "크뤼그",
+        "icon": "inv_shield_1h_questbloodelf_b_01",
+        "reqMats": []
+      },
+      "237843": {
+        "id": 237843,
+        "name": "[한손 지능 도검] 마법학자의 마나검",
+        "popular": true,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "아르망",
+        "icon": "inv_sword_1h_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "휘황찬란한 토륨",
+            "c": 2,
+            "i": "inv_12_profession_mining_dazzlingthorium-"
+          },
+          {
+            "n": "해거름 합금 (금색)",
+            "c": 8,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_gloaming"
+          },
+          {
+            "n": "순도 높은 합금 (금색)",
+            "c": 6,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_dazzling"
+          },
+          {
+            "n": "실버문 무기 보호대 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_weapon_wraps_red"
+          }
+        ]
+      },
+      "237838": {
+        "id": 237838,
+        "name": "[지능 단검] 마법학자의 의식용 손칼",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "아르망",
+        "icon": "inv_knife_1h_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "휘황찬란한 토륨",
+            "c": 2,
+            "i": "inv_12_profession_mining_dazzlingthorium-"
+          },
+          {
+            "n": "해거름 합금 (금색)",
+            "c": 7,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_gloaming"
+          },
+          {
+            "n": "순도 높은 합금 (금색)",
+            "c": 7,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_dazzling"
+          },
+          {
+            "n": "실버문 무기 보호대 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_weapon_wraps_red"
+          }
+        ]
+      },
+      "237837": {
+        "id": 237837,
+        "name": "[민첩 단검] 원정순찰대원의 자비",
+        "popular": true,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "아르망",
+        "icon": "inv_knife_1h_questbloodelf_b_02",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "휘황찬란한 토륨",
+            "c": 2,
+            "i": "inv_12_profession_mining_dazzlingthorium-"
+          },
+          {
+            "n": "해거름 합금 (금색)",
+            "c": 7,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_gloaming"
+          },
+          {
+            "n": "순도 높은 합금 (금색)",
+            "c": 7,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_dazzling"
+          },
+          {
+            "n": "실버문 무기 보호대 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_weapon_wraps_red"
+          }
+        ]
+      },
+      "237840": {
+        "id": 237840,
+        "name": "[전투검] 주문파괴자의 전투검",
+        "popular": true,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "아르망",
+        "icon": "inv_glaive_1h_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "휘황찬란한 토륨",
+            "c": 2,
+            "i": "inv_12_profession_mining_dazzlingthorium-"
+          },
+          {
+            "n": "해거름 합금 (금색)",
+            "c": 8,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_gloaming"
+          },
+          {
+            "n": "순도 높은 합금 (금색)",
+            "c": 6,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_dazzling"
+          },
+          {
+            "n": "실버문 무기 보호대 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_weapon_wraps_red"
+          }
+        ]
+      },
+      "237839": {
+        "id": 237839,
+        "name": "[힘/민첩 한손 도검] 주문파괴자의 칼날",
+        "popular": true,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "아르망",
+        "icon": "inv_sword_1h_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "휘황찬란한 토륨",
+            "c": 2,
+            "i": "inv_12_profession_mining_dazzlingthorium-"
+          },
+          {
+            "n": "해거름 합금 (금색)",
+            "c": 8,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_gloaming"
+          },
+          {
+            "n": "순도 높은 합금 (금색)",
+            "c": 6,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_dazzling"
+          },
+          {
+            "n": "실버문 무기 보호대 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_weapon_wraps_red"
+          }
+        ]
+      },
+      "237846": {
+        "id": 237846,
+        "name": "[힘 양손 도검] 혈기사의 전투칼날",
+        "popular": true,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "아르망",
+        "icon": "inv_sword_2h_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "휘황찬란한 토륨",
+            "c": 2,
+            "i": "inv_12_profession_mining_dazzlingthorium-"
+          },
+          {
+            "n": "해거름 합금 (금색)",
+            "c": 10,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_gloaming"
+          },
+          {
+            "n": "순도 높은 합금 (금색)",
+            "c": 6,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_dazzling"
+          },
+          {
+            "n": "실버문 무기 보호대 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_weapon_wraps_red"
+          }
+        ]
+      },
+      "237845": {
+        "id": 237845,
+        "name": "[힘/민첩 한손 장착 무기] 만개벼림 발톱",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "아르망",
+        "icon": "inv_hand_1h_dungeonharronir_c_01",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "휘황찬란한 토륨",
+            "c": 2,
+            "i": "inv_12_profession_mining_dazzlingthorium-"
+          },
+          {
+            "n": "해거름 합금 (금색)",
+            "c": 8,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_gloaming"
+          },
+          {
+            "n": "순도 높은 합금 (금색)",
+            "c": 6,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_dazzling"
+          },
+          {
+            "n": "실버문 무기 보호대 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_weapon_wraps_red"
+          }
+        ]
+      },
+      "237844": {
+        "id": 237844,
+        "name": "[지능 한손 도끼] 마법학자의 가로날도끼",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "아르망",
+        "icon": "inv_axe_1h_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "휘황찬란한 토륨",
+            "c": 2,
+            "i": "inv_12_profession_mining_dazzlingthorium-"
+          },
+          {
+            "n": "해거름 합금 (금색)",
+            "c": 8,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_gloaming"
+          },
+          {
+            "n": "순도 높은 합금 (금색)",
+            "c": 6,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_dazzling"
+          },
+          {
+            "n": "실버문 무기 보호대 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_weapon_wraps_red"
+          }
+        ]
+      },
+      "237842": {
+        "id": 237842,
+        "name": "[힘/민첩 양손 도끼] 만개벼림 거대도끼",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "아르망",
+        "icon": "inv_axe_2h_dungeonharronir_c_01",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "휘황찬란한 토륨",
+            "c": 2,
+            "i": "inv_12_profession_mining_dazzlingthorium-"
+          },
+          {
+            "n": "해거름 합금 (금색)",
+            "c": 10,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_gloaming"
+          },
+          {
+            "n": "순도 높은 합금 (금색)",
+            "c": 6,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_dazzling"
+          },
+          {
+            "n": "실버문 무기 보호대 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_weapon_wraps_red"
+          }
+        ]
+      },
+      "237850": {
+        "id": 237850,
+        "name": "[힘/민첩 한손 도끼] 원정순찰대원의 절단도끼",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "아르망",
+        "icon": "inv_axe_1h_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "휘황찬란한 토륨",
+            "c": 2,
+            "i": "inv_12_profession_mining_dazzlingthorium-"
+          },
+          {
+            "n": "해거름 합금 (금색)",
+            "c": 8,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_gloaming"
+          },
+          {
+            "n": "순도 높은 합금 (금색)",
+            "c": 6,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_dazzling"
+          },
+          {
+            "n": "실버문 무기 보호대 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_weapon_wraps_red"
+          }
+        ]
+      },
+      "237841": {
+        "id": 237841,
+        "name": "[힘/민첩 한손 둔기] 주문파괴자의 최후통첩",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "아르망",
+        "icon": "inv_mace_1h_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "휘황찬란한 토륨",
+            "c": 2,
+            "i": "inv_12_profession_mining_dazzlingthorium-"
+          },
+          {
+            "n": "해거름 합금 (금색)",
+            "c": 8,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_gloaming"
+          },
+          {
+            "n": "순도 높은 합금 (금색)",
+            "c": 6,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_dazzling"
+          },
+          {
+            "n": "실버문 무기 보호대 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_weapon_wraps_red"
+          }
+        ]
+      },
+      "244679": {
+        "id": 244679,
+        "name": "[장식 민첩 단검] 죽음의 골목 낚시 바늘",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "아르망",
+        "icon": "inv_knife_1h_questbloodelf_b_02",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "휘황찬란한 토륨",
+            "c": 1,
+            "i": "inv_12_profession_mining_dazzlingthorium-"
+          },
+          {
+            "n": "해거름 합금 (금색)",
+            "c": 10,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_gloaming"
+          },
+          {
+            "n": "순도 높은 합금 (금색)",
+            "c": 10,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_dazzling"
+          },
+          {
+            "n": "실버문 무기 보호대 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_weapon_wraps_red"
+          }
+        ]
+      },
+      "237847": {
+        "id": 237847,
+        "name": "[힘/민첩 양손 장창] 혈기사의 자극",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "아르망",
+        "icon": "inv_polearm_2h_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "휘황찬란한 토륨",
+            "c": 2,
+            "i": "inv_12_profession_mining_dazzlingthorium-"
+          },
+          {
+            "n": "해거름 합금 (금색)",
+            "c": 10,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_gloaming"
+          },
+          {
+            "n": "순도 높은 합금 (금색)",
+            "c": 6,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_dazzling"
+          },
+          {
+            "n": "실버문 무기 보호대 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_weapon_wraps_red"
+          }
+        ]
+      },
+      "237848": {
+        "id": 237848,
+        "name": "[힘/민첩 양손 둔기] 혈기사의 자비",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "아르망",
+        "icon": "mace_2h_blacksmithing_d_04_icon",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "휘황찬란한 토륨",
+            "c": 2,
+            "i": "inv_12_profession_mining_dazzlingthorium-"
+          },
+          {
+            "n": "해거름 합금 (금색)",
+            "c": 10,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_gloaming"
+          },
+          {
+            "n": "순도 높은 합금 (금색)",
+            "c": 6,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_dazzling"
+          },
+          {
+            "n": "실버문 무기 보호대 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_weapon_wraps_red"
+          }
+        ]
+      }
+    },
+    "common_armor": {
+      "239656": {
+        "id": 239656,
+        "name": "[망토] 신봉자의 비단 수의",
+        "popular": true,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "돔페리뇽",
+        "icon": "inv_cape_cloth_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "자수 명주실",
+            "c": 5,
+            "i": "inv_12_profession_tailoring_spellthread_blue"
+          },
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "태양불꽃 비단 두루마리 (금색)",
+            "c": 6,
+            "i": "inv_12_profession_tailoring_rareclothbolt_gold"
+          },
+          {
+            "n": "비전매듭 두루마리 (금색)",
+            "c": 6,
+            "i": "inv_12_profession_tailoring_rareclothbolt_purple"
+          },
+          {
+            "n": "찬란한 조각 (금색)",
+            "c": 3,
+            "i": "inv_12_profession_enchanting_enchantingshard_blue"
+          }
+        ]
+      },
+      "240949": {
+        "id": 240949,
+        "name": "[반지] 걸작 신도레이 고리",
+        "popular": true,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "포므리",
+        "icon": "inv_12_profession_jewelcrafting_ring4_gold",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "만화 분광경 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_jewelcrafting_combined_gem_reagent_multicoloured"
+          },
+          {
+            "n": "어스름장막 돌 (금색)",
+            "c": 3,
+            "i": "inv_12_profession_jewelcrafting_stone_reagent_raw_purple"
+          },
+          {
+            "n": "아른거리는 보석 가루 (금색)",
+            "c": 5,
+            "i": "inv_12_profession_jewelcrafting_gem_dust_red"
+          }
+        ]
+      },
+      "240950": {
+        "id": 240950,
+        "name": "[목걸이] 걸작 신도레이 아뮬렛",
+        "popular": true,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "포므리",
+        "icon": "inv_12_profession_jewelcrafting_necklace2_gold",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "빛의 티끌",
+            "c": 10,
+            "i": "inv_12_profession_thematicfoozles_moteofpurelight_gold"
+          },
+          {
+            "n": "만화 분광경 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_jewelcrafting_combined_gem_reagent_multicoloured"
+          },
+          {
+            "n": "어스름장막 돌 (금색)",
+            "c": 5,
+            "i": "inv_12_profession_jewelcrafting_stone_reagent_raw_purple"
+          }
+        ]
+      },
+      "239661": {
+        "id": 239661,
+        "name": "[장식 망토] 비전매듭 망토",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "돔페리뇽",
+        "icon": "inv_cape_cloth_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "자수 명주실",
+            "c": 5,
+            "i": "inv_12_profession_tailoring_spellthread_blue"
+          },
+          {
+            "n": "순수한 공허의 티끌",
+            "c": 12,
+            "i": "inv_12_profession_thematicfoozles_moteofpurevoid_blue"
+          },
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "환상적인 모피",
+            "c": 4,
+            "i": "inv_misc_pelt_13"
+          },
+          {
+            "n": "비전매듭 두루마리 (금색)",
+            "c": 10,
+            "i": "inv_12_profession_tailoring_rareclothbolt_purple"
+          },
+          {
+            "n": "찬란한 조각 (금색)",
+            "c": 6,
+            "i": "inv_12_profession_enchanting_enchantingshard_blue"
+          }
+        ],
+        "fee5Star": "5000"
+      },
+      "239658": {
+        "id": 239658,
+        "name": "[장식 망토] 태양불꽃 망토",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "돔페리뇽",
+        "icon": "inv_cape_firelands_fireset_d_01",
+        "reqMats": [
+          {
+            "n": "자수 명주실",
+            "c": 5,
+            "i": "inv_12_profession_tailoring_spellthread_blue"
+          },
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "빛의 티끌",
+            "c": 12,
+            "i": "inv_12_profession_thematicfoozles_moteofpurelight_gold"
+          },
+          {
+            "n": "환상적인 모피",
+            "c": 4,
+            "i": "inv_misc_pelt_13"
+          },
+          {
+            "n": "태양불꽃 비단 두루마리 (금색)",
+            "c": 10,
+            "i": "inv_12_profession_tailoring_rareclothbolt_gold"
+          },
+          {
+            "n": "찬란한 조각 (금색)",
+            "c": 6,
+            "i": "inv_12_profession_enchanting_enchantingshard_blue"
+          }
+        ],
+        "fee5Star": "5000"
+      },
+      "251513": {
+        "id": 251513,
+        "name": "[장식 반지] 로아 신봉자의 고리",
+        "popular": true,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "포므리",
+        "icon": "inv_12_profession_jewelcrafting_ring3_silver",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "야생 마력의 티끌",
+            "c": 20,
+            "i": "inv_12_profession_thematicfoozles_moteofwildmadic_lightgreen"
+          },
+          {
+            "n": "만화 분광경 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_jewelcrafting_combined_gem_reagent_multicoloured"
+          },
+          {
+            "n": "어스름장막 돌 (금색)",
+            "c": 5,
+            "i": "inv_12_profession_jewelcrafting_stone_reagent_raw_purple"
+          },
+          {
+            "n": "무결한 아마니 청금석 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_jewelcrafting_rare_gem_uncut_blue"
+          }
+        ]
+      },
+      "241140": {
+        "id": 241140,
+        "name": "[장식 반지] 아제로스의 축복 인장",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "포므리",
+        "icon": "inv_12_profession_jewelcrafting_ring4_silver",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "원시 마력의 티끌",
+            "c": 20,
+            "i": "inv_12_profession_thematicfoozles_moteofprimalenergy_darkorange"
+          },
+          {
+            "n": "만화 분광경 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_jewelcrafting_combined_gem_reagent_multicoloured"
+          },
+          {
+            "n": "어스름장막 돌 (금색)",
+            "c": 5,
+            "i": "inv_12_profession_jewelcrafting_stone_reagent_raw_purple"
+          },
+          {
+            "n": "무결한 하란다르 감람석 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_jewelcrafting_rare_gem_uncut_green"
+          }
+        ]
+      },
+      "251073": {
+        "id": 251073,
+        "name": "[장식 목걸이] 공허석 보호막 배열기",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "포므리",
+        "icon": "inv_12_profession_jewelcrafting_necklace1_silver",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "순수한 공허의 티끌",
+            "c": 20,
+            "i": "inv_12_profession_thematicfoozles_moteofpurevoid_blue"
+          },
+          {
+            "n": "신도레이 렌즈 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_jewelcrafting_stone_reagent_raw_purple"
+          },
+          {
+            "n": "어스름장막 돌 (금색)",
+            "c": 12,
+            "i": "inv_12_profession_jewelcrafting_stone_reagent_raw_purple"
+          }
+        ]
+      },
+      "241139": {
+        "id": 241139,
+        "name": "[장식 목걸이] 탈라시안 불사조 변환 장치",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "포므리",
+        "icon": "inv_12_profession_jewelcrafting_necklace2_silver",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "빛의 티끌",
+            "c": 20,
+            "i": "inv_12_profession_thematicfoozles_moteofpurelight_gold"
+          },
+          {
+            "n": "만화 분광경 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_jewelcrafting_combined_gem_reagent_multicoloured"
+          },
+          {
+            "n": "어스름장막 돌 (금색)",
+            "c": 5,
+            "i": "inv_12_profession_jewelcrafting_stone_reagent_raw_purple"
+          },
+          {
+            "n": "무결한 선혈 석류석 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_jewelcrafting_rare_gem_uncut_red"
+          }
+        ]
+      }
+    },
+    "cloth": {
+      "239648": {
+        "id": 239648,
+        "name": "[천 손목] 순교자의 손목띠",
+        "popular": true,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "오베르",
+        "icon": "inv_bracer_cloth_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "자수 명주실",
+            "c": 5,
+            "i": "inv_12_profession_tailoring_spellthread_blue"
+          },
+          {
+            "n": "원시 마력의 티끌",
+            "c": 8,
+            "i": "inv_12_profession_thematicfoozles_moteofprimalenergy_darkorange"
+          },
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "비할 데 없는 깃털",
+            "c": 1,
+            "i": "inv_12_profession_skinning_animalparts_feathers"
+          },
+          {
+            "n": "비전매듭 두루마리 (금색)",
+            "c": 12,
+            "i": "inv_12_profession_tailoring_rareclothbolt_purple"
+          },
+          {
+            "n": "찬란한 조각 (금색)",
+            "c": 6,
+            "i": "inv_12_profession_enchanting_enchantingshard_blue"
+          }
+        ]
+      },
+      "239649": {
+        "id": 239649,
+        "name": "[천 허리] 순교자의 허리싸개",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "오베르",
+        "icon": "inv_belt_cloth_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "자수 명주실",
+            "c": 5,
+            "i": "inv_12_profession_tailoring_spellthread_blue"
+          },
+          {
+            "n": "원시 마력의 티끌",
+            "c": 8,
+            "i": "inv_12_profession_thematicfoozles_moteofprimalenergy_darkorange"
+          },
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "비할 데 없는 깃털",
+            "c": 1,
+            "i": "inv_12_profession_skinning_animalparts_feathers"
+          },
+          {
+            "n": "태양불꽃 비단 두루마리 (금색)",
+            "c": 12,
+            "i": "inv_12_profession_tailoring_rareclothbolt_gold"
+          },
+          {
+            "n": "찬란한 조각 (금색)",
+            "c": 6,
+            "i": "inv_12_profession_enchanting_enchantingshard_blue"
+          }
+        ]
+      },
+      "239660": {
+        "id": 239660,
+        "name": "[장식 천 손목] 비전매듭 팔보호구",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "오베르",
+        "icon": "inv_bracer_cloth_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "자수 명주실",
+            "c": 5,
+            "i": "inv_12_profession_tailoring_spellthread_blue"
+          },
+          {
+            "n": "빛의 티끌",
+            "c": 12,
+            "i": "inv_12_profession_thematicfoozles_moteofpurelight_gold"
+          },
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "비전매듭 두루마리 (금색)",
+            "c": 6,
+            "i": "inv_12_profession_tailoring_rareclothbolt_purple"
+          },
+          {
+            "n": "찬란한 조각 (금색)",
+            "c": 4,
+            "i": "inv_12_profession_enchanting_enchantingshard_blue"
+          },
+          {
+            "n": "비전매듭 옷감 (금색)",
+            "c": 20,
+            "i": "inv_12_profession_tailoring_rarecloth_purple"
+          }
+        ]
+      },
+      "239664": {
+        "id": 239664,
+        "name": "[장식 천 허리] 비전매듭 장식끈",
+        "popular": true,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "오베르",
+        "icon": "inv_belt_cloth_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "자수 명주실",
+            "c": 5,
+            "i": "inv_12_profession_tailoring_spellthread_blue"
+          },
+          {
+            "n": "원시 마력의 티끌",
+            "c": 12,
+            "i": "inv_12_profession_thematicfoozles_moteofprimalenergy_darkorange"
+          },
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "비전매듭 두루마리 (금색)",
+            "c": 8,
+            "i": "inv_12_profession_tailoring_rareclothbolt_purple"
+          },
+          {
+            "n": "찬란한 조각 (금색)",
+            "c": 6,
+            "i": "inv_12_profession_enchanting_enchantingshard_blue"
+          },
+          {
+            "n": "비전매듭 옷감 (금색)",
+            "c": 15,
+            "i": "inv_12_profession_tailoring_rarecloth_purple"
+          }
+        ]
+      },
+      "239662": {
+        "id": 239662,
+        "name": "[장식 천 발] 비전매듭 발보호대",
+        "popular": false,
+        "active": true,
+        "is5Star": false,
+        "fee": "자율",
+        "crafter": "돔페리뇽",
+        "icon": "inv_boot_cloth_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "자수 명주실",
+            "c": 5,
+            "i": "inv_12_profession_tailoring_spellthread_blue"
+          },
+          {
+            "n": "야생 마력의 티끌",
+            "c": 12,
+            "i": "inv_12_profession_thematicfoozles_moteofwildmadic_lightgreen"
+          },
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "비전매듭 두루마리 (금색)",
+            "c": 10,
+            "i": "inv_12_profession_tailoring_rareclothbolt_purple"
+          },
+          {
+            "n": "비전매듭 옷감 (금색)",
+            "c": 10,
+            "i": "inv_12_profession_tailoring_rarecloth_purple"
+          }
+        ]
+      },
+      "239663": {
+        "id": 239663,
+        "name": "[장식 천 허리] 태양불꽃 장식띠",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "오베르",
+        "icon": "inv_belt_cloth_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "자수 명주실",
+            "c": 5,
+            "i": "inv_12_profession_tailoring_spellthread_blue"
+          },
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "원시 마력의 티끌",
+            "c": 12,
+            "i": "inv_12_profession_thematicfoozles_moteofprimalenergy_darkorange"
+          },
+          {
+            "n": "태양불꽃 비단 두루마리 (금색)",
+            "c": 8,
+            "i": "inv_12_profession_tailoring_rareclothbolt_gold"
+          },
+          {
+            "n": "태양불꽃 비단 (금색)",
+            "c": 15,
+            "i": "inv_12_profession_tailoring_rarecloth_gold"
+          },
+          {
+            "n": "찬란한 조각 (금색)",
+            "c": 6,
+            "i": "inv_12_profession_enchanting_enchantingshard_blue"
+          }
+        ]
+      }
+    },
+    "leather": {
+      "244571": {
+        "id": 244571,
+        "name": "[가죽 머리] 실버문 요원의 머리덮개",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "뒤작",
+        "icon": "inv_helm_leather_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "공허로 단련된 가죽 (금색)",
+            "c": 125,
+            "i": "inv_12_profession_skinning_thalassianleather_brown"
+          },
+          {
+            "n": "공허로 단련된 비늘 (금색)",
+            "c": 65,
+            "i": "inv_12_profession_skinning_thalassianscale_violet"
+          },
+          {
+            "n": "신도레이 방어구 결속끈 (금색)",
+            "c": 2,
+            "i": "inv_12_profession_leatherworking_armor_banding_red"
+          },
+          {
+            "n": "주입된 비늘매듭 생가죽 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_combo_hide_magical_lightbloom"
+          }
+        ]
+      },
+      "244572": {
+        "id": 244572,
+        "name": "[가죽 어깨] 실버문 요원의 어깨덧옷",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "뒤작",
+        "icon": "inv_shoulder_leather_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "공허로 단련된 가죽 (금색)",
+            "c": 150,
+            "i": "inv_12_profession_skinning_thalassianleather_brown"
+          },
+          {
+            "n": "공허로 단련된 비늘 (금색)",
+            "c": 75,
+            "i": "inv_12_profession_skinning_thalassianscale_violet"
+          },
+          {
+            "n": "신도레이 방어구 결속끈 (금색)",
+            "c": 2,
+            "i": "inv_12_profession_leatherworking_armor_banding_red"
+          },
+          {
+            "n": "주입된 비늘매듭 생가죽 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_combo_hide_magical_lightbloom"
+          }
+        ]
+      },
+      "244570": {
+        "id": 244570,
+        "name": "[가죽 가슴] 실버문 요원의 외투",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "뒤작",
+        "icon": "inv_chest_leather_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "공허로 단련된 가죽 (금색)",
+            "c": 150,
+            "i": "inv_12_profession_skinning_thalassianleather_brown"
+          },
+          {
+            "n": "공허로 단련된 비늘 (금색)",
+            "c": 75,
+            "i": "inv_12_profession_skinning_thalassianscale_violet"
+          },
+          {
+            "n": "신도레이 방어구 결속끈 (금색)",
+            "c": 2,
+            "i": "inv_12_profession_leatherworking_armor_banding_red"
+          },
+          {
+            "n": "주입된 비늘매듭 생가죽 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_combo_hide_magical_lightbloom"
+          }
+        ]
+      },
+      "244576": {
+        "id": 244576,
+        "name": "[가죽 손목] 실버문 요원의 굴절보호대",
+        "popular": true,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "뒤작",
+        "icon": "inv_bracer_leather_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "공허로 단련된 가죽 (금색)",
+            "c": 100,
+            "i": "inv_12_profession_skinning_thalassianleather_brown"
+          },
+          {
+            "n": "공허로 단련된 비늘 (금색)",
+            "c": 50,
+            "i": "inv_12_profession_skinning_thalassianscale_violet"
+          },
+          {
+            "n": "신도레이 방어구 결속끈 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_armor_banding_red"
+          },
+          {
+            "n": "주입된 비늘매듭 생가죽 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_combo_hide_magical_lightbloom"
+          }
+        ]
+      },
+      "244575": {
+        "id": 244575,
+        "name": "[가죽 손] 실버문 요원의 손등싸개",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "뒤작",
+        "icon": "inv_glove_leather_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "공허로 단련된 가죽 (금색)",
+            "c": 125,
+            "i": "inv_12_profession_skinning_thalassianleather_brown"
+          },
+          {
+            "n": "공허로 단련된 비늘 (금색)",
+            "c": 65,
+            "i": "inv_12_profession_skinning_thalassianscale_violet"
+          },
+          {
+            "n": "신도레이 방어구 결속끈 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_armor_banding_red"
+          },
+          {
+            "n": "주입된 비늘매듭 생가죽 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_combo_hide_magical_lightbloom"
+          }
+        ]
+      },
+      "244573": {
+        "id": 244573,
+        "name": "[가죽 허리] 실버문 요원의 연장허리띠",
+        "popular": true,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "뒤작",
+        "icon": "inv_belt_leather_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "공허로 단련된 가죽 (금색)",
+            "c": 100,
+            "i": "inv_12_profession_skinning_thalassianleather_brown"
+          },
+          {
+            "n": "공허로 단련된 비늘 (금색)",
+            "c": 50,
+            "i": "inv_12_profession_skinning_thalassianscale_violet"
+          },
+          {
+            "n": "신도레이 방어구 결속끈 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_armor_banding_red"
+          },
+          {
+            "n": "주입된 비늘매듭 생가죽 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_combo_hide_magical_lightbloom"
+          }
+        ]
+      },
+      "244574": {
+        "id": 244574,
+        "name": "[가죽 다리] 실버문 요원의 다리보호구",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "뒤작",
+        "icon": "inv_pant_leather_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "공허로 단련된 가죽 (금색)",
+            "c": 150,
+            "i": "inv_12_profession_skinning_thalassianleather_brown"
+          },
+          {
+            "n": "공허로 단련된 비늘 (금색)",
+            "c": 75,
+            "i": "inv_12_profession_skinning_thalassianscale_violet"
+          },
+          {
+            "n": "신도레이 방어구 결속끈 (금색)",
+            "c": 2,
+            "i": "inv_12_profession_leatherworking_armor_banding_red"
+          },
+          {
+            "n": "주입된 비늘매듭 생가죽 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_combo_hide_magical_lightbloom"
+          }
+        ]
+      },
+      "244569": {
+        "id": 244569,
+        "name": "[가죽 발] 실버문 요원의 신발",
+        "popular": true,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "뒤작",
+        "icon": "inv_boot_leather_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "공허로 단련된 가죽 (금색)",
+            "c": 125,
+            "i": "inv_12_profession_skinning_thalassianleather_brown"
+          },
+          {
+            "n": "공허로 단련된 비늘 (금색)",
+            "c": 65,
+            "i": "inv_12_profession_skinning_thalassianscale_violet"
+          },
+          {
+            "n": "신도레이 방어구 결속끈 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_armor_banding_red"
+          },
+          {
+            "n": "주입된 비늘매듭 생가죽 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_combo_hide_magical_lightbloom"
+          }
+        ]
+      },
+      "244613": {
+        "id": 244613,
+        "name": "[장식 가죽 가슴] 골목 방랑자의 보험",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "뒤작",
+        "icon": "inv_chest_leather_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "공허로 단련된 가죽 (금색)",
+            "c": 200,
+            "i": "inv_12_profession_skinning_thalassianleather_brown"
+          },
+          {
+            "n": "신도레이 방어구 결속끈 (금색)",
+            "c": 2,
+            "i": "inv_12_profession_leatherworking_armor_banding_red"
+          },
+          {
+            "n": "주입된 비늘매듭 생가죽 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_combo_hide_magical_lightbloom"
+          },
+          {
+            "n": "밀수업자의 마력 깃든 칼날 (금색)",
+            "c": 2,
+            "i": "inv_12_profession_enchanting_manaoil_purple"
+          }
+        ]
+      },
+      "244612": {
+        "id": 244612,
+        "name": "[장식 가죽 손목] 골목 방랑자의 굴절띠",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "뒤작",
+        "icon": "inv_bracer_leather_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "공허로 단련된 가죽 (금색)",
+            "c": 140,
+            "i": "inv_12_profession_skinning_thalassianleather_brown"
+          },
+          {
+            "n": "신도레이 방어구 결속끈 (금색)",
+            "c": 2,
+            "i": "inv_12_profession_leatherworking_armor_banding_red"
+          },
+          {
+            "n": "주입된 비늘매듭 생가죽 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_combo_hide_magical_lightbloom"
+          },
+          {
+            "n": "밀수업자의 마력 깃든 칼날 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_enchanting_manaoil_purple"
+          }
+        ]
+      },
+      "244614": {
+        "id": 244614,
+        "name": "[장식 가죽 손] 골목 방랑자의 신속손아귀",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "뒤작",
+        "icon": "inv_glove_leather_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "공허로 단련된 가죽 (금색)",
+            "c": 180,
+            "i": "inv_12_profession_skinning_thalassianleather_brown"
+          },
+          {
+            "n": "신도레이 방어구 결속끈 (금색)",
+            "c": 2,
+            "i": "inv_12_profession_leatherworking_armor_banding_red"
+          },
+          {
+            "n": "주입된 비늘매듭 생가죽 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_combo_hide_magical_lightbloom"
+          },
+          {
+            "n": "밀수업자의 마력 깃든 칼날 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_enchanting_manaoil_purple"
+          }
+        ]
+      },
+      "244606": {
+        "id": 244606,
+        "name": "[장식 가죽 허리] 사술매듭 가닥",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "뒤작",
+        "icon": "inv_belt_leather_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "야생 마력의 티끌",
+            "c": 20,
+            "i": "inv_12_profession_thematicfoozles_moteofwildmadic_lightgreen"
+          },
+          {
+            "n": "공허로 단련된 가죽 (금색)",
+            "c": 175,
+            "i": "inv_12_profession_skinning_thalassianleather_brown"
+          },
+          {
+            "n": "공허로 단련된 비늘 (금색)",
+            "c": 100,
+            "i": "inv_12_profession_skinning_thalassianscale_violet"
+          },
+          {
+            "n": "신도레이 방어구 결속끈 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_armor_banding_red"
+          },
+          {
+            "n": "주입된 비늘매듭 생가죽 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_combo_hide_magical_lightbloom"
+          }
+        ]
+      },
+      "244601": {
+        "id": 244601,
+        "name": "[장식 가죽 발] 세계수 뿌리발등싸개",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "뒤작",
+        "icon": "inv_boot_leather_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "원시 마력의 티끌",
+            "c": 20,
+            "i": "inv_12_profession_thematicfoozles_moteofprimalenergy_darkorange"
+          },
+          {
+            "n": "공허로 단련된 가죽 (금색)",
+            "c": 150,
+            "i": "inv_12_profession_skinning_thalassianleather_brown"
+          },
+          {
+            "n": "공허로 단련된 비늘 (금색)",
+            "c": 75,
+            "i": "inv_12_profession_skinning_thalassianscale_violet"
+          },
+          {
+            "n": "신도레이 방어구 결속끈 (금색)",
+            "c": 2,
+            "i": "inv_12_profession_leatherworking_armor_banding_red"
+          },
+          {
+            "n": "주입된 비늘매듭 생가죽 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_combo_hide_magical_lightbloom"
+          }
+        ]
+      }
+    },
+    "chain": {
+      "244579": {
+        "id": 244579,
+        "name": "[사슬 머리] 원정순찰대원의 흔들리지 않는 안면",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "디켐",
+        "icon": "inv_helm_mail_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "공허로 단련된 가죽 (금색)",
+            "c": 125,
+            "i": "inv_12_profession_skinning_thalassianleather_brown"
+          },
+          {
+            "n": "공허로 단련된 비늘 (금색)",
+            "c": 65,
+            "i": "inv_12_profession_skinning_thalassianscale_violet"
+          },
+          {
+            "n": "신도레이 방어구 결속끈 (금색)",
+            "c": 2,
+            "i": "inv_12_profession_leatherworking_armor_banding_red"
+          },
+          {
+            "n": "주입된 비늘매듭 생가죽 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_combo_hide_magical_lightbloom"
+          }
+        ]
+      },
+      "244580": {
+        "id": 244580,
+        "name": "[사슬 어깨] 원정순찰대원의 빛나는 꽁지깃",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "디켐",
+        "icon": "inv_shoulder_mail_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "공허로 단련된 가죽 (금색)",
+            "c": 150,
+            "i": "inv_12_profession_skinning_thalassianleather_brown"
+          },
+          {
+            "n": "공허로 단련된 비늘 (금색)",
+            "c": 75,
+            "i": "inv_12_profession_skinning_thalassianscale_violet"
+          },
+          {
+            "n": "신도레이 방어구 결속끈 (금색)",
+            "c": 2,
+            "i": "inv_12_profession_leatherworking_armor_banding_red"
+          },
+          {
+            "n": "주입된 비늘매듭 생가죽 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_combo_hide_magical_lightbloom"
+          }
+        ]
+      },
+      "244578": {
+        "id": 244578,
+        "name": "[사슬 가슴] 원정순찰대원의 정찰 조끼",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "디켐",
+        "icon": "inv_chest_mail_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "공허로 단련된 가죽 (금색)",
+            "c": 150,
+            "i": "inv_12_profession_skinning_thalassianleather_brown"
+          },
+          {
+            "n": "공허로 단련된 비늘 (금색)",
+            "c": 75,
+            "i": "inv_12_profession_skinning_thalassianscale_violet"
+          },
+          {
+            "n": "신도레이 방어구 결속끈 (금색)",
+            "c": 2,
+            "i": "inv_12_profession_leatherworking_armor_banding_red"
+          },
+          {
+            "n": "주입된 비늘매듭 생가죽 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_combo_hide_magical_lightbloom"
+          }
+        ]
+      },
+      "244584": {
+        "id": 244584,
+        "name": "[사슬 손목] 원정순찰대원의 철판 팔보호구",
+        "popular": true,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "디켐",
+        "icon": "inv_bracer_mail_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "공허로 단련된 가죽 (금색)",
+            "c": 50,
+            "i": "inv_12_profession_skinning_thalassianleather_brown"
+          },
+          {
+            "n": "공허로 단련된 비늘 (금색)",
+            "c": 100,
+            "i": "inv_12_profession_skinning_thalassianscale_violet"
+          },
+          {
+            "n": "신도레이 방어구 결속끈 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_armor_banding_red"
+          },
+          {
+            "n": "주입된 비늘매듭 생가죽 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_combo_hide_magical_lightbloom"
+          }
+        ]
+      },
+      "244583": {
+        "id": 244583,
+        "name": "[사슬 손] 원정순찰대원의 날카로운 발톱",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "디켐",
+        "icon": "inv_glove_mail_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "공허로 단련된 가죽 (금색)",
+            "c": 125,
+            "i": "inv_12_profession_skinning_thalassianleather_brown"
+          },
+          {
+            "n": "공허로 단련된 비늘 (금색)",
+            "c": 65,
+            "i": "inv_12_profession_skinning_thalassianscale_violet"
+          },
+          {
+            "n": "신도레이 방어구 결속끈 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_armor_banding_red"
+          },
+          {
+            "n": "주입된 비늘매듭 생가죽 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_combo_hide_magical_lightbloom"
+          }
+        ]
+      },
+      "244581": {
+        "id": 244581,
+        "name": "[사슬 허리] 원정순찰대원의 노획품 허리띠",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "디켐",
+        "icon": "inv_belt_mail_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "공허로 단련된 가죽 (금색)",
+            "c": 50,
+            "i": "inv_12_profession_skinning_thalassianleather_brown"
+          },
+          {
+            "n": "공허로 단련된 비늘 (금색)",
+            "c": 100,
+            "i": "inv_12_profession_skinning_thalassianscale_violet"
+          },
+          {
+            "n": "신도레이 방어구 결속끈 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_armor_banding_red"
+          },
+          {
+            "n": "주입된 비늘매듭 생가죽 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_combo_hide_magical_lightbloom"
+          }
+        ]
+      },
+      "244582": {
+        "id": 244582,
+        "name": "[사슬 다리] 원정순찰대원의 보강된 다리보호대",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "디켐",
+        "icon": "inv_pant_mail_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "공허로 단련된 가죽 (금색)",
+            "c": 75,
+            "i": "inv_12_profession_skinning_thalassianleather_brown"
+          },
+          {
+            "n": "공허로 단련된 비늘 (금색)",
+            "c": 150,
+            "i": "inv_12_profession_skinning_thalassianscale_violet"
+          },
+          {
+            "n": "신도레이 방어구 결속끈 (금색)",
+            "c": 2,
+            "i": "inv_12_profession_leatherworking_armor_banding_red"
+          },
+          {
+            "n": "주입된 비늘매듭 생가죽 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_combo_hide_magical_lightbloom"
+          }
+        ]
+      },
+      "244577": {
+        "id": 244577,
+        "name": "[사슬 발] 원정순찰대원의 갈퀴 발톱",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "디켐",
+        "icon": "inv_boot_mail_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "공허로 단련된 가죽 (금색)",
+            "c": 65,
+            "i": "inv_12_profession_skinning_thalassianleather_brown"
+          },
+          {
+            "n": "공허로 단련된 비늘 (금색)",
+            "c": 125,
+            "i": "inv_12_profession_skinning_thalassianscale_violet"
+          },
+          {
+            "n": "신도레이 방어구 결속끈 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_armor_banding_red"
+          },
+          {
+            "n": "주입된 비늘매듭 생가죽 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_combo_hide_magical_lightbloom"
+          }
+        ]
+      },
+      "244611": {
+        "id": 244611,
+        "name": "[장식 사슬 허리] 세계지기의 껍질죔쇠띠",
+        "popular": true,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "디켐",
+        "icon": "inv_belt_mail_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "원시 마력의 티끌",
+            "c": 20,
+            "i": "inv_12_profession_thematicfoozles_moteofprimalenergy_darkorange"
+          },
+          {
+            "n": "공허로 단련된 가죽 (금색)",
+            "c": 90,
+            "i": "inv_12_profession_skinning_thalassianleather_brown"
+          },
+          {
+            "n": "공허로 단련된 비늘 (금색)",
+            "c": 175,
+            "i": "inv_12_profession_skinning_thalassianscale_violet"
+          },
+          {
+            "n": "신도레이 방어구 결속끈 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_armor_banding_red"
+          },
+          {
+            "n": "주입된 비늘매듭 생가죽 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_combo_hide_magical_lightbloom"
+          }
+        ]
+      },
+      "244610": {
+        "id": 244610,
+        "name": "[장식 사슬 발] 세계지기의 뿌리끌신",
+        "popular": true,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "디켐",
+        "icon": "inv_boot_mail_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "원시 마력의 티끌",
+            "c": 20,
+            "i": "inv_12_profession_thematicfoozles_moteofprimalenergy_darkorange"
+          },
+          {
+            "n": "공허로 단련된 가죽 (금색)",
+            "c": 65,
+            "i": "inv_12_profession_skinning_thalassianleather_brown"
+          },
+          {
+            "n": "공허로 단련된 비늘 (금색)",
+            "c": 125,
+            "i": "inv_12_profession_skinning_thalassianscale_violet"
+          },
+          {
+            "n": "신도레이 방어구 결속끈 (금색)",
+            "c": 2,
+            "i": "inv_12_profession_leatherworking_armor_banding_red"
+          },
+          {
+            "n": "주입된 비늘매듭 생가죽 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_combo_hide_magical_lightbloom"
+          }
+        ]
+      },
+      "244605": {
+        "id": 244605,
+        "name": "[장식 사슬 손목] 도끼 투척용 손목매듭",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "디켐",
+        "icon": "inv_bracer_mail_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "야생 마력의 티끌",
+            "c": 20,
+            "i": "inv_12_profession_thematicfoozles_moteofwildmadic_lightgreen"
+          },
+          {
+            "n": "공허로 단련된 가죽 (금색)",
+            "c": 100,
+            "i": "inv_12_profession_skinning_thalassianleather_brown"
+          },
+          {
+            "n": "공허로 단련된 비늘 (금색)",
+            "c": 50,
+            "i": "inv_12_profession_skinning_thalassianscale_violet"
+          },
+          {
+            "n": "신도레이 방어구 결속끈 (금색)",
+            "c": 2,
+            "i": "inv_12_profession_leatherworking_armor_banding_red"
+          },
+          {
+            "n": "주입된 비늘매듭 생가죽 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_combo_hide_magical_lightbloom"
+          }
+        ]
+      },
+      "244602": {
+        "id": 244602,
+        "name": "[장식 사슬 손] 순찰대 사령관의 손장갑",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "디켐",
+        "icon": "inv_glove_mail_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "빛의 티끌",
+            "c": 20,
+            "i": "inv_12_profession_thematicfoozles_moteofpurelight_gold"
+          },
+          {
+            "n": "공허로 단련된 가죽 (금색)",
+            "c": 65,
+            "i": "inv_12_profession_skinning_thalassianleather_brown"
+          },
+          {
+            "n": "공허로 단련된 비늘 (금색)",
+            "c": 125,
+            "i": "inv_12_profession_skinning_thalassianscale_violet"
+          },
+          {
+            "n": "신도레이 방어구 결속끈 (금색)",
+            "c": 2,
+            "i": "inv_12_profession_leatherworking_armor_banding_red"
+          },
+          {
+            "n": "주입된 비늘매듭 생가죽 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_combo_hide_magical_lightbloom"
+          }
+        ]
+      }
+    },
+    "plate": {
+      "237834": {
+        "id": 237834,
+        "name": "[판금 손목] 주문파괴자의 팔보호구",
+        "popular": true,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "크뤼그",
+        "icon": "inv_plate_questbloodelf_b_01_bracer",
+        "reqMats": [
+          {
+            "n": "휘황찬란한 토륨",
+            "c": 1,
+            "i": "inv_12_profession_mining_dazzlingthorium-"
+          },
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "순도 높은 합금 (금색)",
+            "c": 8,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_dazzling"
+          },
+          {
+            "n": "해거름 합금 (금색)",
+            "c": 8,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_gloaming"
+          },
+          {
+            "n": "신도레이 방어구 결속끈 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_armor_banding_red"
+          }
+        ]
+      },
+      "237836": {
+        "id": 237836,
+        "name": "[판금 손] 주문파괴자의 결의",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "크뤼그",
+        "icon": "inv_plate_questbloodelf_b_01_glove",
+        "reqMats": [
+          {
+            "n": "휘황찬란한 토륨",
+            "c": 1,
+            "i": "inv_12_profession_mining_dazzlingthorium-"
+          },
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "순도 높은 합금 (금색)",
+            "c": 10,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_dazzling"
+          },
+          {
+            "n": "해거름 합금 (금색)",
+            "c": 6,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_gloaming"
+          },
+          {
+            "n": "신도레이 방어구 결속끈 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_armor_banding_red"
+          }
+        ]
+      },
+      "237830": {
+        "id": 237830,
+        "name": "[판금 허리] 주문파괴자의 요대",
+        "popular": true,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "크뤼그",
+        "icon": "inv_plate_questbloodelf_b_01_belt",
+        "reqMats": [
+          {
+            "n": "휘황찬란한 토륨",
+            "c": 1,
+            "i": "inv_12_profession_mining_dazzlingthorium-"
+          },
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "순도 높은 합금 (금색)",
+            "c": 8,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_dazzling"
+          },
+          {
+            "n": "해거름 합금 (금색)",
+            "c": 8,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_gloaming"
+          },
+          {
+            "n": "신도레이 방어구 결속끈 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_armor_banding_red"
+          }
+        ]
+      },
+      "237828": {
+        "id": 237828,
+        "name": "[판금 발] 주문파괴자의 행군화",
+        "popular": true,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "크뤼그",
+        "icon": "inv_plate_questbloodelf_b_01_boot",
+        "reqMats": [
+          {
+            "n": "휘황찬란한 토륨",
+            "c": 1,
+            "i": "inv_12_profession_mining_dazzlingthorium-"
+          },
+          {
+            "n": "고통받는 탄탈룸",
+            "c": 1,
+            "i": "inv_10_blacksmithing_craftedoptional_reinforcedmetalplating_color01"
+          },
+          {
+            "n": "순도 높은 합금 (금색)",
+            "c": 10,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_dazzling"
+          },
+          {
+            "n": "해거름 합금 (금색)",
+            "c": 6,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_gloaming"
+          },
+          {
+            "n": "신도레이 방어구 결속끈 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_armor_banding_red"
+          }
+        ]
+      }
+    },
+    "profession": {
+      "246533": {
+        "id": 246533,
+        "name": "[약초채집 도구] 태양벼림 낫",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "아르망",
+        "icon": "inv_knife_1h_herbalismbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "융합된 활력",
+            "c": 20,
+            "i": "spell_nature_wispsplodegreen"
+          },
+          {
+            "n": "위엄 넘치는 발톱",
+            "c": 2,
+            "i": "inv_12_profession_skinning_animalparts_claws"
+          },
+          {
+            "n": "휘황찬란한 토륨",
+            "c": 2,
+            "i": "inv_12_profession_mining_dazzlingthorium-"
+          },
+          {
+            "n": "순도 높은 합금 (금색)",
+            "c": 5,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_dazzling"
+          }
+        ]
+      },
+      "267060": {
+        "id": 267060,
+        "name": "[약초채집 장신구] 탈라시안 약초채집사의 수도두건",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "오베르",
+        "icon": "inv_helm_armor_herbalism_b_01",
+        "reqMats": [
+          {
+            "n": "융합된 활력",
+            "c": 20,
+            "i": "spell_nature_wispsplodegreen"
+          },
+          {
+            "n": "자수 명주실",
+            "c": 5,
+            "i": "inv_12_profession_tailoring_spellthread_blue"
+          },
+          {
+            "n": "야생 마력의 티끌",
+            "c": 5,
+            "i": "inv_12_profession_thematicfoozles_moteofwildmadic_lightgreen"
+          },
+          {
+            "n": "비전매듭 두루마리 (금색)",
+            "c": 8,
+            "i": "inv_12_profession_tailoring_rareclothbolt_purple"
+          },
+          {
+            "n": "찬란한 조각 (금색)",
+            "c": 3,
+            "i": "inv_12_profession_enchanting_enchantingshard_blue"
+          }
+        ]
+      },
+      "244807": {
+        "id": 244807,
+        "name": "[약초채집 장신구] 탈라시안 약초지기의 요람",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "디켐",
+        "icon": "inv_cape_special_herbalism_b_01",
+        "reqMats": [
+          {
+            "n": "융합된 활력",
+            "c": 20,
+            "i": "spell_nature_wispsplodegreen"
+          },
+          {
+            "n": "은엽수잎 실타래",
+            "c": 40,
+            "i": "inv_12_profession_tailoring_tailoringspecializations_fiberarts"
+          },
+          {
+            "n": "야생 마력의 티끌",
+            "c": 40,
+            "i": "inv_12_profession_thematicfoozles_moteofwildmadic_lightgreen"
+          },
+          {
+            "n": "야행성 연꽃",
+            "c": 8,
+            "i": "inv_12_profession_herbalism_blacklotus_void"
+          },
+          {
+            "n": "주입된 비늘매듭 생가죽 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_combo_hide_magical_lightbloom"
+          },
+          {
+            "n": "합성 식물 (금색)",
+            "c": 4,
+            "i": "inv_12_profession_alchemy_alchemyreagents_orange"
+          }
+        ]
+      },
+      "246534": {
+        "id": 246534,
+        "name": "[채광 도구] 태양벼림 곡괭이",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "아르망",
+        "icon": "inv_axe_1h_miningbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "융합된 활력",
+            "c": 20,
+            "i": "spell_nature_wispsplodegreen"
+          },
+          {
+            "n": "위엄 넘치는 발톱",
+            "c": 2,
+            "i": "inv_12_profession_skinning_animalparts_claws"
+          },
+          {
+            "n": "휘황찬란한 토륨",
+            "c": 2,
+            "i": "inv_12_profession_mining_dazzlingthorium-"
+          },
+          {
+            "n": "순도 높은 합금 (금색)",
+            "c": 5,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_dazzling"
+          }
+        ]
+      },
+      "259175": {
+        "id": 259175,
+        "name": "[채광 장신구] 튼튼한 바위 보조기",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "그로",
+        "icon": "inv_cape_special_mining_c_01",
+        "reqMats": [
+          {
+            "n": "융합된 활력",
+            "c": 20,
+            "i": "spell_nature_wispsplodegreen"
+          },
+          {
+            "n": "유연한 철사 구조",
+            "c": 1,
+            "i": "inv_10_engineering_device_gadget3_color3"
+          },
+          {
+            "n": "위엄 넘치는 생가죽",
+            "c": 1,
+            "i": "inv_12_skinning_stormchargedleather1"
+          },
+          {
+            "n": "실체 없는 빛 (금색)",
+            "c": 4,
+            "i": "inv_10_engineering_manufacturedparts_electricalparts_color2"
+          },
+          {
+            "n": "영원핵 (금색)",
+            "c": 2,
+            "i": "inv_12_profession_engineering_manufacturedparts_battery_purple"
+          }
+        ]
+      },
+      "259173": {
+        "id": 259173,
+        "name": "[채광 장신구] 바위 내성 안전모",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "그로",
+        "icon": "inv_helm_armor_mining_a_01",
+        "reqMats": [
+          {
+            "n": "융합된 활력",
+            "c": 20,
+            "i": "spell_nature_wispsplodegreen"
+          },
+          {
+            "n": "유연한 철사 구조",
+            "c": 1,
+            "i": "inv_10_engineering_device_gadget3_color3"
+          },
+          {
+            "n": "위엄 넘치는 생가죽",
+            "c": 1,
+            "i": "inv_12_skinning_stormchargedleather1"
+          },
+          {
+            "n": "실체 없는 빛 (금색)",
+            "c": 4,
+            "i": "inv_10_engineering_manufacturedparts_electricalparts_color2"
+          },
+          {
+            "n": "영원핵 (금색)",
+            "c": 2,
+            "i": "inv_12_profession_engineering_manufacturedparts_battery_purple"
+          }
+        ]
+      },
+      "246535": {
+        "id": 246535,
+        "name": "[무두질 도구] 태양벼림 무두질용 손칼",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "아르망",
+        "icon": "inv_knife_1h_skinningbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "융합된 활력",
+            "c": 20,
+            "i": "spell_nature_wispsplodegreen"
+          },
+          {
+            "n": "위엄 넘치는 발톱",
+            "c": 2,
+            "i": "inv_12_profession_skinning_animalparts_claws"
+          },
+          {
+            "n": "휘황찬란한 토륨",
+            "c": 2,
+            "i": "inv_12_profession_mining_dazzlingthorium-"
+          },
+          {
+            "n": "순도 높은 합금 (금색)",
+            "c": 5,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_dazzling"
+          }
+        ]
+      },
+      "244808": {
+        "id": 244808,
+        "name": "[무두질 장신구] 탈라시안 야생추적자의 작업 가방",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "디켐",
+        "icon": "inv_cape_special_skinning_c_01",
+        "reqMats": [
+          {
+            "n": "융합된 활력",
+            "c": 20,
+            "i": "spell_nature_wispsplodegreen"
+          },
+          {
+            "n": "은엽수잎 실타래",
+            "c": 40,
+            "i": "inv_12_profession_tailoring_tailoringspecializations_fiberarts"
+          },
+          {
+            "n": "야생 마력의 티끌",
+            "c": 40,
+            "i": "inv_12_profession_thematicfoozles_moteofwildmadic_lightgreen"
+          },
+          {
+            "n": "위엄 넘치는 지느러미",
+            "c": 1,
+            "i": "inv_icon_wing01b"
+          },
+          {
+            "n": "주입된 비늘매듭 생가죽 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_combo_hide_magical_lightbloom"
+          }
+        ]
+      },
+      "244809": {
+        "id": 244809,
+        "name": "[무두질 장신구] 탈라시안 야생추적자의 여행모",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "디켐",
+        "icon": "inv_helm_armor_skinning_a_01",
+        "reqMats": [
+          {
+            "n": "융합된 활력",
+            "c": 20,
+            "i": "spell_nature_wispsplodegreen"
+          },
+          {
+            "n": "은엽수잎 실타래",
+            "c": 40,
+            "i": "inv_12_profession_tailoring_tailoringspecializations_fiberarts"
+          },
+          {
+            "n": "야생 마력의 티끌",
+            "c": 40,
+            "i": "inv_12_profession_thematicfoozles_moteofwildmadic_lightgreen"
+          },
+          {
+            "n": "위엄 넘치는 생가죽",
+            "c": 1,
+            "i": "inv_12_skinning_stormchargedleather1"
+          },
+          {
+            "n": "주입된 비늘매듭 생가죽 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_combo_hide_magical_lightbloom"
+          }
+        ]
+      },
+      "259205": {
+        "id": 259205,
+        "name": "[연금술 도구] 금빛 연금술사의 혼합봉",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "라피트",
+        "icon": "inv_wand_1h_alchemybloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "융합된 활력",
+            "c": 20,
+            "i": "spell_nature_wispsplodegreen"
+          },
+          {
+            "n": "선별된 아제뿌리 (금색)",
+            "c": 10,
+            "i": "inv_misc_herb_liferoot_stem"
+          },
+          {
+            "n": "영혼 암호 (금색)",
+            "c": 4,
+            "i": "inv_10_specialreagentfoozles_primalistrune_wind"
+          }
+        ]
+      },
+      "267052": {
+        "id": 267052,
+        "name": "[연금술 장신구] 탈라시안 연금술 작업복",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "오베르",
+        "icon": "inv_armor_alchemy_b_01",
+        "reqMats": [
+          {
+            "n": "융합된 활력",
+            "c": 20,
+            "i": "spell_nature_wispsplodegreen"
+          },
+          {
+            "n": "자수 명주실",
+            "c": 2,
+            "i": "inv_12_profession_tailoring_spellthread_blue"
+          },
+          {
+            "n": "원시 마력의 티끌",
+            "c": 5,
+            "i": "inv_12_profession_thematicfoozles_moteofprimalenergy_darkorange"
+          },
+          {
+            "n": "비전매듭 두루마리 (금색)",
+            "c": 8,
+            "i": "inv_12_profession_tailoring_rareclothbolt_purple"
+          },
+          {
+            "n": "찬란한 조각 (금색)",
+            "c": 3,
+            "i": "inv_12_profession_enchanting_enchantingshard_blue"
+          }
+        ]
+      },
+      "244812": {
+        "id": 244812,
+        "name": "[연금술 장신구] 탈라시안 연금술사의 혼합모",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "디켐",
+        "icon": "inv_armor_helm_alchemy_b_01",
+        "reqMats": [
+          {
+            "n": "융합된 활력",
+            "c": 20,
+            "i": "spell_nature_wispsplodegreen"
+          },
+          {
+            "n": "은엽수잎 실타래",
+            "c": 40,
+            "i": "inv_12_profession_tailoring_tailoringspecializations_fiberarts"
+          },
+          {
+            "n": "야생 마력의 티끌",
+            "c": 40,
+            "i": "inv_12_profession_thematicfoozles_moteofwildmadic_lightgreen"
+          },
+          {
+            "n": "주입된 비늘매듭 생가죽 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_combo_hide_magical_lightbloom"
+          },
+          {
+            "n": "합성 식물 (금색)",
+            "c": 5,
+            "i": "inv_12_profession_alchemy_alchemyreagents_orange"
+          }
+        ]
+      },
+      "244177": {
+        "id": 244177,
+        "name": "[마법부여 도구] 룬새김 휘황찬란한 토륨 마법막대",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "르루아",
+        "icon": "inv_misc_1h_enchantingbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "융합된 활력",
+            "c": 20,
+            "i": "spell_nature_wispsplodegreen"
+          },
+          {
+            "n": "영원히 노래하는 가루 (금색)",
+            "c": 30,
+            "i": "inv_12_profession_enchanting_enchantingdust_green"
+          },
+          {
+            "n": "찬란한 조각 (금색)",
+            "c": 10,
+            "i": "inv_12_profession_enchanting_enchantingshard_blue"
+          },
+          {
+            "n": "여명의 수정 (금색)",
+            "c": 4,
+            "i": "inv_12_profession_enchanting_enchantingcrystal_orange"
+          },
+          {
+            "n": "실버문 무기 보호대 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_weapon_wraps_red"
+          }
+        ]
+      },
+      "246523": {
+        "id": 246523,
+        "name": "[마법부여 장신구] 탈라시안 마법부여사의 끈모자",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "오베르",
+        "icon": "inv_helm_armor_enchantinghat_b_01",
+        "reqMats": [
+          {
+            "n": "융합된 활력",
+            "c": 20,
+            "i": "spell_nature_wispsplodegreen"
+          },
+          {
+            "n": "자수 명주실",
+            "c": 2,
+            "i": "inv_12_profession_tailoring_spellthread_blue"
+          },
+          {
+            "n": "야생 마력의 티끌",
+            "c": 5,
+            "i": "inv_12_profession_thematicfoozles_moteofwildmadic_lightgreen"
+          },
+          {
+            "n": "비전매듭 두루마리 (금색)",
+            "c": 8,
+            "i": "inv_12_profession_tailoring_rareclothbolt_purple"
+          },
+          {
+            "n": "찬란한 조각 (금색)",
+            "c": 3,
+            "i": "inv_12_profession_enchanting_enchantingshard_blue"
+          }
+        ]
+      },
+      "246527": {
+        "id": 246527,
+        "name": "[마법부여 장신구] 조율된 탈라시안 룬 분광경",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "포므리",
+        "icon": "inv_offhand_1h_questbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "융합된 활력",
+            "c": 20,
+            "i": "spell_nature_wispsplodegreen"
+          },
+          {
+            "n": "만화 분광경 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_jewelcrafting_combined_gem_reagent_multicoloured"
+          },
+          {
+            "n": "아른거리는 보석 가루 (금색)",
+            "c": 5,
+            "i": "inv_12_profession_jewelcrafting_gem_dust_red"
+          },
+          {
+            "n": "어스름장막 돌 (금색)",
+            "c": 5,
+            "i": "inv_12_profession_jewelcrafting_stone_reagent_raw_purple"
+          },
+          {
+            "n": "실버문 무기 보호대 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_weapon_wraps_red"
+          },
+          {
+            "n": "여명의 수정 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_enchanting_enchantingcrystal_orange"
+          }
+        ]
+      },
+      "259209": {
+        "id": 259209,
+        "name": "[주문각인 도구] 금빛 신도레이 깃펜",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "라피트",
+        "icon": "inv_misc_1h_scribesquill_b_01_silver",
+        "reqMats": [
+          {
+            "n": "융합된 활력",
+            "c": 20,
+            "i": "spell_nature_wispsplodegreen"
+          },
+          {
+            "n": "선별된 아제뿌리 (금색)",
+            "c": 8,
+            "i": "inv_misc_herb_liferoot_stem"
+          },
+          {
+            "n": "문셀 잉크 (금색)",
+            "c": 8,
+            "i": "inv_12_profession_inscriptions_ink_blue"
+          },
+          {
+            "n": "적갈빛 잉크 (금색)",
+            "c": 8,
+            "i": "inv_12_profession_inscriptions_ink_darkorange"
+          }
+        ]
+      },
+      "246525": {
+        "id": 246525,
+        "name": "[주문각인 장신구] 탈라시안 주문각인사의 수정 렌즈",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "포므리",
+        "icon": "inv_12_profession_jewelcrafting_inscription_magnifyingglass_red",
+        "reqMats": [
+          {
+            "n": "융합된 활력",
+            "c": 20,
+            "i": "spell_nature_wispsplodegreen"
+          },
+          {
+            "n": "아른거리는 보석 가루 (금색)",
+            "c": 20,
+            "i": "inv_12_profession_jewelcrafting_gem_dust_red"
+          },
+          {
+            "n": "신도레이 렌즈 (금색)",
+            "c": 3,
+            "i": "inv_12_profession_jewelcrafting_stone_reagent_raw_purple"
+          },
+          {
+            "n": "어스름장막 돌 (금색)",
+            "c": 10,
+            "i": "inv_12_profession_jewelcrafting_stone_reagent_raw_purple"
+          },
+          {
+            "n": "실버문 무기 보호대 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_weapon_wraps_red"
+          }
+        ]
+      },
+      "246524": {
+        "id": 246524,
+        "name": "[주문각인 장신구] 무결한 문헌 검토기",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "포므리",
+        "icon": "inv_helm_armor_scribesspecs_b_01_silver",
+        "reqMats": [
+          {
+            "n": "융합된 활력",
+            "c": 20,
+            "i": "spell_nature_wispsplodegreen"
+          },
+          {
+            "n": "아른거리는 보석 가루 (금색)",
+            "c": 20,
+            "i": "inv_12_profession_jewelcrafting_gem_dust_red"
+          },
+          {
+            "n": "신도레이 렌즈 (금색)",
+            "c": 4,
+            "i": "inv_12_profession_jewelcrafting_stone_reagent_raw_purple"
+          },
+          {
+            "n": "어스름장막 돌 (금색)",
+            "c": 4,
+            "i": "inv_12_profession_jewelcrafting_stone_reagent_raw_purple"
+          }
+        ]
+      },
+      "259181": {
+        "id": 259181,
+        "name": "[보석세공 도구] 초강력 보석 집게",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "무통",
+        "icon": "inv_misc_1h_jewelclampbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "융합된 활력",
+            "c": 20,
+            "i": "spell_nature_wispsplodegreen"
+          },
+          {
+            "n": "유연한 철사 구조",
+            "c": 1,
+            "i": "inv_10_engineering_device_gadget3_color3"
+          },
+          {
+            "n": "위엄 넘치는 지느러미",
+            "c": 1,
+            "i": "inv_icon_wing01b"
+          },
+          {
+            "n": "실체 없는 빛 (금색)",
+            "c": 4,
+            "i": "inv_10_engineering_manufacturedparts_electricalparts_color2"
+          },
+          {
+            "n": "영원핵 (금색)",
+            "c": 2,
+            "i": "inv_12_profession_engineering_manufacturedparts_battery_purple"
+          }
+        ]
+      },
+      "244814": {
+        "id": 244814,
+        "name": "[보석세공 장신구] 탈라시안 보석구체자의 웅장한 덮개",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "디켐",
+        "icon": "inv_tabard_jewelcrafting_b_01",
+        "reqMats": [
+          {
+            "n": "융합된 활력",
+            "c": 20,
+            "i": "spell_nature_wispsplodegreen"
+          },
+          {
+            "n": "은엽수잎 실타래",
+            "c": 40,
+            "i": "inv_12_profession_tailoring_tailoringspecializations_fiberarts"
+          },
+          {
+            "n": "야생 마력의 티끌",
+            "c": 40,
+            "i": "inv_12_profession_thematicfoozles_moteofwildmadic_lightgreen"
+          },
+          {
+            "n": "주입된 비늘매듭 생가죽 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_combo_hide_magical_lightbloom"
+          },
+          {
+            "n": "아른거리는 보석 가루 (금색)",
+            "c": 10,
+            "i": "inv_12_profession_jewelcrafting_gem_dust_red"
+          }
+        ]
+      },
+      "246526": {
+        "id": 246526,
+        "name": "[보석세공 장신구] 거대 시야 정밀 확대경",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "포므리",
+        "icon": "inv_helm_armor_jewelersspecs_b_01",
+        "reqMats": [
+          {
+            "n": "융합된 활력",
+            "c": 20,
+            "i": "spell_nature_wispsplodegreen"
+          },
+          {
+            "n": "위엄 넘치는 생가죽",
+            "c": 1,
+            "i": "inv_12_skinning_stormchargedleather1"
+          },
+          {
+            "n": "신도레이 렌즈 (금색)",
+            "c": 10,
+            "i": "inv_12_profession_jewelcrafting_stone_reagent_raw_purple"
+          },
+          {
+            "n": "어스름장막 돌 (금색)",
+            "c": 6,
+            "i": "inv_12_profession_jewelcrafting_stone_reagent_raw_purple"
+          },
+          {
+            "n": "아른거리는 보석 가루 (금색)",
+            "c": 10,
+            "i": "inv_12_profession_jewelcrafting_gem_dust_red"
+          },
+          {
+            "n": "주입된 비늘매듭 생가죽 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_combo_hide_magical_lightbloom"
+          }
+        ]
+      },
+      "259183": {
+        "id": 259183,
+        "name": "[기계공학 도구] 초고속 고물상의 다용도 도구 V9",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "무통",
+        "icon": "inv_mace_1h_engineeringbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "융합된 활력",
+            "c": 20,
+            "i": "spell_nature_wispsplodegreen"
+          },
+          {
+            "n": "유연한 철사 구조",
+            "c": 1,
+            "i": "inv_10_engineering_device_gadget3_color3"
+          },
+          {
+            "n": "위엄 넘치는 발톱",
+            "c": 1,
+            "i": "inv_12_profession_skinning_animalparts_claws"
+          },
+          {
+            "n": "실체 없는 빛 (금색)",
+            "c": 3,
+            "i": "inv_10_engineering_manufacturedparts_electricalparts_color2"
+          },
+          {
+            "n": "영원핵 (금색)",
+            "c": 2,
+            "i": "inv_12_profession_engineering_manufacturedparts_battery_purple"
+          }
+        ]
+      },
+      "259171": {
+        "id": 259171,
+        "name": "[기계공학 장신구] 머리 장착식 차광 헬멧",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "그로",
+        "icon": "inv_helm_armor_engineering_b_01_orange",
+        "reqMats": [
+          {
+            "n": "융합된 활력",
+            "c": 20,
+            "i": "spell_nature_wispsplodegreen"
+          },
+          {
+            "n": "유연한 철사 구조",
+            "c": 1,
+            "i": "inv_10_engineering_device_gadget3_color3"
+          },
+          {
+            "n": "위엄 넘치는 지느러미",
+            "c": 1,
+            "i": "inv_icon_wing01b"
+          },
+          {
+            "n": "실체 없는 빛 (금색)",
+            "c": 4,
+            "i": "inv_10_engineering_manufacturedparts_electricalparts_color2"
+          },
+          {
+            "n": "영원핵 (금색)",
+            "c": 2,
+            "i": "inv_12_profession_engineering_manufacturedparts_battery_purple"
+          }
+        ]
+      },
+      "244810": {
+        "id": 244810,
+        "name": "[기계공학 장신구] 탈라시안 고철박사의 건틀릿",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "디켐",
+        "icon": "inv_armor_engineering_b_01_orange",
+        "reqMats": [
+          {
+            "n": "융합된 활력",
+            "c": 20,
+            "i": "spell_nature_wispsplodegreen"
+          },
+          {
+            "n": "야생 마력의 티끌",
+            "c": 40,
+            "i": "inv_12_profession_thematicfoozles_moteofwildmadic_lightgreen"
+          },
+          {
+            "n": "주입된 비늘매듭 생가죽 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_combo_hide_magical_lightbloom"
+          },
+          {
+            "n": "실체 없는 빛 (금색)",
+            "c": 6,
+            "i": "inv_10_engineering_manufacturedparts_electricalparts_color2"
+          }
+        ]
+      },
+      "259177": {
+        "id": 259177,
+        "name": "[재봉술 도구] 자가 연마 신도레이 절단가위",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "무통",
+        "icon": "inv_misc_1h_tailoringbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "융합된 활력",
+            "c": 20,
+            "i": "spell_nature_wispsplodegreen"
+          },
+          {
+            "n": "유연한 철사 구조",
+            "c": 1,
+            "i": "inv_10_engineering_device_gadget3_color3"
+          },
+          {
+            "n": "위엄 넘치는 발톱",
+            "c": 1,
+            "i": "inv_12_profession_skinning_animalparts_claws"
+          },
+          {
+            "n": "실체 없는 빛 (금색)",
+            "c": 4,
+            "i": "inv_10_engineering_manufacturedparts_electricalparts_color2"
+          },
+          {
+            "n": "영원핵 (금색)",
+            "c": 2,
+            "i": "inv_12_profession_engineering_manufacturedparts_battery_purple"
+          }
+        ]
+      },
+      "259234": {
+        "id": 259234,
+        "name": "[재봉술 장신구] 태양벼림 바느질 도구",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "아르망",
+        "icon": "inv_12_profession_blacksmithing_tailorstoolkit_purple",
+        "reqMats": [
+          {
+            "n": "융합된 활력",
+            "c": 20,
+            "i": "spell_nature_wispsplodegreen"
+          },
+          {
+            "n": "위엄 넘치는 발톱",
+            "c": 2,
+            "i": "inv_12_profession_skinning_animalparts_claws"
+          },
+          {
+            "n": "영롱한 융제",
+            "c": 5,
+            "i": "inv_10_blacksmithing_craftedoptional_blacksmithdye_fire"
+          },
+          {
+            "n": "휘황찬란한 토륨",
+            "c": 2,
+            "i": "inv_12_profession_mining_dazzlingthorium-"
+          },
+          {
+            "n": "순도 높은 합금 (금색)",
+            "c": 5,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_dazzling"
+          }
+        ]
+      },
+      "246514": {
+        "id": 246514,
+        "name": "[재봉술 장신구] 탈라시안 재봉사의 실타래",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "오베르",
+        "icon": "inv_chest_armor_tailoringrobe_b_01",
+        "reqMats": [
+          {
+            "n": "융합된 활력",
+            "c": 20,
+            "i": "spell_nature_wispsplodegreen"
+          },
+          {
+            "n": "자수 명주실",
+            "c": 2,
+            "i": "inv_12_profession_tailoring_spellthread_blue"
+          },
+          {
+            "n": "순수한 공허의 티끌",
+            "c": 5,
+            "i": "inv_12_profession_thematicfoozles_moteofpurevoid_blue"
+          },
+          {
+            "n": "태양불꽃 비단 두루마리 (금색)",
+            "c": 8,
+            "i": "inv_12_profession_tailoring_rareclothbolt_gold"
+          },
+          {
+            "n": "찬란한 조각 (금색)",
+            "c": 3,
+            "i": "inv_12_profession_enchanting_enchantingshard_blue"
+          }
+        ]
+      },
+      "246536": {
+        "id": 246536,
+        "name": "[가죽세공 도구] 태양벼림 가죽세공 칼",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "아르망",
+        "icon": "inv_knife_1h_leatherbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "융합된 활력",
+            "c": 20,
+            "i": "spell_nature_wispsplodegreen"
+          },
+          {
+            "n": "위엄 넘치는 발톱",
+            "c": 2,
+            "i": "inv_12_profession_skinning_animalparts_claws"
+          },
+          {
+            "n": "휘황찬란한 토륨",
+            "c": 2,
+            "i": "inv_12_profession_mining_dazzlingthorium-"
+          },
+          {
+            "n": "순도 높은 합금 (금색)",
+            "c": 5,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_dazzling"
+          }
+        ]
+      },
+      "259232": {
+        "id": 259232,
+        "name": "[가죽세공 장신구] 태양벼림 가죽세공 도구",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "아르망",
+        "icon": "inv_12_profession_blacksmithing_leatherworkerstoolkit_purple",
+        "reqMats": [
+          {
+            "n": "융합된 활력",
+            "c": 20,
+            "i": "spell_nature_wispsplodegreen"
+          },
+          {
+            "n": "위엄 넘치는 생가죽",
+            "c": 2,
+            "i": "inv_12_skinning_stormchargedleather1"
+          },
+          {
+            "n": "영롱한 융제",
+            "c": 5,
+            "i": "inv_10_blacksmithing_craftedoptional_blacksmithdye_fire"
+          },
+          {
+            "n": "휘황찬란한 토륨",
+            "c": 2,
+            "i": "inv_12_profession_mining_dazzlingthorium-"
+          },
+          {
+            "n": "순도 높은 합금 (금색)",
+            "c": 5,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_dazzling"
+          }
+        ]
+      },
+      "244811": {
+        "id": 244811,
+        "name": "[가죽세공 장신구] 탈라시안 가죽조형사의 예복",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "디켐",
+        "icon": "inv_armor_leatherworking_b_01",
+        "reqMats": [
+          {
+            "n": "융합된 활력",
+            "c": 20,
+            "i": "spell_nature_wispsplodegreen"
+          },
+          {
+            "n": "은엽수잎 실타래",
+            "c": 40,
+            "i": "inv_12_profession_tailoring_tailoringspecializations_fiberarts"
+          },
+          {
+            "n": "야생 마력의 티끌",
+            "c": 40,
+            "i": "inv_12_profession_thematicfoozles_moteofwildmadic_lightgreen"
+          },
+          {
+            "n": "위엄 넘치는 발톱",
+            "c": 1,
+            "i": "inv_12_profession_skinning_animalparts_claws"
+          },
+          {
+            "n": "주입된 비늘매듭 생가죽 (금색)",
+            "c": 11,
+            "i": "inv_12_profession_leatherworking_combo_hide_magical_lightbloom"
+          }
+        ]
+      },
+      "246537": {
+        "id": 246537,
+        "name": "[대장기술 도구] 태양벼림 대장장이 망치",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "아르망",
+        "icon": "inv_mace_1h_blacksmithbloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "융합된 활력",
+            "c": 20,
+            "i": "spell_nature_wispsplodegreen"
+          },
+          {
+            "n": "위엄 넘치는 발톱",
+            "c": 2,
+            "i": "inv_12_profession_skinning_animalparts_claws"
+          },
+          {
+            "n": "휘황찬란한 토륨",
+            "c": 2,
+            "i": "inv_12_profession_mining_dazzlingthorium-"
+          },
+          {
+            "n": "순도 높은 합금 (금색)",
+            "c": 5,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_dazzling"
+          }
+        ]
+      },
+      "244813": {
+        "id": 244813,
+        "name": "[대장기술 장신구] 탈라시안 무쇠형성자의 예복",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "디켐",
+        "icon": "inv_tabard_blacksmithing_b_01_black",
+        "reqMats": [
+          {
+            "n": "융합된 활력",
+            "c": 20,
+            "i": "spell_nature_wispsplodegreen"
+          },
+          {
+            "n": "은엽수잎 실타래",
+            "c": 40,
+            "i": "inv_12_profession_tailoring_tailoringspecializations_fiberarts"
+          },
+          {
+            "n": "야생 마력의 티끌",
+            "c": 40,
+            "i": "inv_12_profession_thematicfoozles_moteofwildmadic_lightgreen"
+          },
+          {
+            "n": "주입된 비늘매듭 생가죽 (금색)",
+            "c": 1,
+            "i": "inv_12_profession_leatherworking_combo_hide_magical_lightbloom"
+          },
+          {
+            "n": "해거름 합금 (금색)",
+            "c": 15,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_gloaming"
+          }
+        ]
+      },
+      "259230": {
+        "id": 259230,
+        "name": "[대장기술 장신구] 태양벼림 대장장이 연장통",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "아르망",
+        "icon": "inv_12_profession_blacksmithing_blacksmithstoolkit_purple",
+        "reqMats": [
+          {
+            "n": "융합된 활력",
+            "c": 20,
+            "i": "spell_nature_wispsplodegreen"
+          },
+          {
+            "n": "위엄 넘치는 지느러미",
+            "c": 2,
+            "i": "inv_icon_wing01b"
+          },
+          {
+            "n": "영롱한 융제",
+            "c": 5,
+            "i": "inv_10_blacksmithing_craftedoptional_blacksmithdye_fire"
+          },
+          {
+            "n": "휘황찬란한 토륨",
+            "c": 2,
+            "i": "inv_12_profession_mining_dazzlingthorium-"
+          },
+          {
+            "n": "순도 높은 합금 (금색)",
+            "c": 5,
+            "i": "inv_12_profession_blacksmithing_blacksmithingalloys_dazzling"
+          }
+        ]
+      },
+      "259179": {
+        "id": 259179,
+        "name": "[낚시대] 신도레이 고기잡이의 낚싯대",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "그로",
+        "icon": "inv_misc_2h_fishingpolebloodelf_b_01",
+        "reqMats": [
+          {
+            "n": "융합된 활력",
+            "c": 20,
+            "i": "spell_nature_wispsplodegreen"
+          },
+          {
+            "n": "유연한 철사 구조",
+            "c": 1,
+            "i": "inv_10_engineering_device_gadget3_color3"
+          },
+          {
+            "n": "위엄 넘치는 지느러미",
+            "c": 1,
+            "i": "inv_icon_wing01b"
+          },
+          {
+            "n": "실체 없는 빛 (금색)",
+            "c": 4,
+            "i": "inv_10_engineering_manufacturedparts_electricalparts_color2"
+          },
+          {
+            "n": "영원핵 (금색)",
+            "c": 2,
+            "i": "inv_12_profession_engineering_manufacturedparts_battery_purple"
+          }
+        ]
+      },
+      "259207": {
+        "id": 259207,
+        "name": "[요리 도구] 금빛 신도레이 밀대",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "라피트",
+        "icon": "inv_misc_1h_rollingpin_b_01",
+        "reqMats": [
+          {
+            "n": "융합된 활력",
+            "c": 20,
+            "i": "spell_nature_wispsplodegreen"
+          },
+          {
+            "n": "위엄 넘치는 발톱",
+            "c": 2,
+            "i": "inv_12_profession_skinning_animalparts_claws"
+          },
+          {
+            "n": "선별된 아제뿌리 (금색)",
+            "c": 4,
+            "i": "inv_misc_herb_liferoot_stem"
+          }
+        ]
+      },
+      "267054": {
+        "id": 267054,
+        "name": "[요리 장신구] 탈라시안 요리사의 모자",
+        "popular": false,
+        "active": true,
+        "is5Star": true,
+        "fee": "자율",
+        "crafter": "오베르",
+        "icon": "inv_helm_armor_chefhat_b_01",
+        "reqMats": [
+          {
+            "n": "융합된 활력",
+            "c": 20,
+            "i": "spell_nature_wispsplodegreen"
+          },
+          {
+            "n": "자수 명주실",
+            "c": 2,
+            "i": "inv_12_profession_tailoring_spellthread_blue"
+          },
+          {
+            "n": "빛의 티끌",
+            "c": 5,
+            "i": "inv_12_profession_thematicfoozles_moteofpurelight_gold"
+          },
+          {
+            "n": "태양불꽃 비단 두루마리 (금색)",
+            "c": 8,
+            "i": "inv_12_profession_tailoring_rareclothbolt_gold"
+          },
+          {
+            "n": "찬란한 조각 (금색)",
+            "c": 3,
+            "i": "inv_12_profession_enchanting_enchantingshard_blue"
+          }
+        ]
+      }
+    }
+  }
+}

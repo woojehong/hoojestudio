@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>후제공방 관제탑</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="icon" href="favicon.png" type="image/png">
+  <link rel="manifest" href="manifest.json">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+    body { font-family: 'Pretendard', sans-serif; background-color: #030712; color: white; overflow-x: hidden; }
+    .active-status { box-shadow: 0 0 20px rgba(255, 255, 255, 0.4); border: 2px solid white !important; transform: scale(1.02); z-index: 10; }
+    .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #374151; border-radius: 10px; }
+    .glass-panel { background: rgba(10, 10, 10, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(135, 136, 238, 0.2); }
+    /* [핵심] 줄바꿈을 화면에 그대로 보여주는 마법의 코드 */
+    .pre-wrap { white-space: pre-wrap; word-break: break-all; }
+  </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-4">
+
+<!-- ── 로그인 오버레이 ── -->
+<div id="loginOverlay" class="fixed inset-0 z-[999] flex items-center justify-center" style="background-color:#030712;">
+  <div class="w-full max-w-sm mx-4 p-8 rounded-2xl border border-gray-800" style="background:rgba(10,10,10,0.9);">
+    <div class="flex flex-col items-center mb-8">
+      <h2 class="text-white text-2xl font-black tracking-widest">관제탑</h2>
+      <p class="text-gray-500 text-xs mt-2 tracking-widest">HOOJE STUDIO ADMIN</p>
+    </div>
+    <input type="password" id="loginPwInput" placeholder="비밀번호"
+      class="w-full bg-black border border-gray-700 rounded-xl px-4 py-3 text-white font-bold text-sm outline-none focus:border-[#8788EE] mb-3"
+      onkeydown="if(event.key==='Enter') doLogin()">
+    <p id="loginError" class="text-red-400 text-xs font-bold mb-3 hidden">비밀번호가 틀렸습니다.</p>
+    <button onclick="doLogin()" class="w-full py-3 bg-[#8788EE] text-white font-black rounded-xl hover:brightness-110 transition-all text-sm tracking-widest">입장</button>
+  </div>
+</div>
+
+<!-- ── 메인 콘텐츠 ── -->
+<div id="mainContent" class="hidden w-full flex flex-col items-center">
+<button onclick="doLogout()" class="fixed top-4 right-4 z-50 px-3 py-1.5 bg-gray-900 border border-gray-700 text-gray-400 text-[10px] font-black rounded-lg hover:border-red-500 hover:text-red-400 transition-all tracking-widest">로그아웃</button>
+
+  <!-- 미확인 메시지 배지 -->
+  <div id="unread-badge" class="hidden w-full max-w-2xl mb-3 mt-4 px-4 py-3 rounded-xl border border-red-500/40 bg-red-500/10 flex items-center justify-between gap-3">
+    <div class="flex items-center gap-2">
+      <span class="relative flex h-2.5 w-2.5"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span><span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span></span>
+      <span class="text-red-400 font-black text-sm">미확인 메시지 <span id="unread-count" class="text-white">0</span>건</span>
+    </div>
+    <button onclick="confirmAllReports()" class="px-3 py-1.5 bg-red-900/30 text-red-400 border border-red-500/30 font-black rounded-lg text-[10px] hover:bg-red-600 hover:text-white transition-all">일괄 확인</button>
+  </div>
+
+  <audio id="order-sound" src="https://t1.daumcdn.net/kakaotv/resource/bk/6f3b7d7f7690460cb71b876f2d9061c5/media/sound/alarm.mp3" preload="auto"></audio>
+
+  <div class="w-full max-w-2xl mb-5 p-6 rounded-2xl glass-panel border-[#8788EE]/40 flex flex-col gap-4 shadow-2xl">
+    <div class="flex items-center justify-between">
+      <div class="flex flex-col flex-1">
+        <span class="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] mb-1">Live Monitor</span>
+        <div class="flex items-start gap-3">
+  <div id="monitor-dot" class="w-3 h-3 rounded-full bg-gray-600 animate-pulse mt-1.5"></div>
+  <h2 id="monitor-text" class="text-lg md:text-xl font-black text-white leading-tight pre-wrap">연결 중...</h2>
+</div>
+      </div>
+    </div>
+    <div class="border-t border-[#8788EE]/10 pt-4 flex items-center justify-between gap-2">
+      <span class="text-gray-500 text-[10px] font-black uppercase tracking-widest">Notice</span>
+      <div id="monitor-notice" class="text-red-400 text-sm font-bold truncate text-right flex-1 ml-4 italic">없음</div>
+    </div>
+  </div>
+
+  <div class="w-full max-w-2xl mb-5 p-5 rounded-2xl glass-panel border-[#8788EE]/20 shadow-xl">
+    <div class="grid grid-cols-3 gap-2 mb-2">
+      <button id="btn-온라인" onclick="setStatus('온라인', '즉시 제작 가능 ✨', 'bg-green-500')" class="py-4 rounded-xl font-black text-xs md:text-sm bg-green-600 hover:bg-green-500 shadow-lg active:scale-95 transition-all border border-transparent">✨ 온라인</button>
+      <button id="btn-쐐기 중" onclick="setStatus('쐐기 중', '20분 내 제작 가능 🗝️', 'bg-yellow-500')" class="py-4 rounded-xl font-black text-xs md:text-sm bg-yellow-600 hover:bg-yellow-500 shadow-lg active:scale-95 transition-all border border-transparent">🗝️ 쐐기 중</button>
+      <button id="btn-레이드 중" onclick="setStatus('레이드 중', '1시간 내 제작 가능 ⚔️', 'bg-orange-600')" class="py-4 rounded-xl font-black text-xs md:text-sm bg-orange-700 hover:bg-orange-600 shadow-lg active:scale-95 transition-all border border-transparent">⚔️ 레이드 중</button>
+      <button id="btn-자리 비움" onclick="setStatus('자리 비움', '10분 내외로 짧은 자리 비움 중입니다.' + String.fromCharCode(10) + '곧 돌아와 바로 제작합니다 ⚡', 'bg-lime-500')" class="py-4 rounded-xl font-black text-xs md:text-sm bg-lime-600 hover:bg-lime-500 shadow-lg active:scale-95 transition-all border border-transparent">🔔 자리 비움</button>
+      <button id="btn-외출 중" onclick="setStatus('외출 중', '틈틈이 원격으로 제작 중입니다.' + String.fromCharCode(10) + '여유롭게 기다리실 수 있는 분만 의뢰 부탁드립니다 🙏', 'bg-teal-500')" class="py-4 rounded-xl font-black text-xs md:text-sm bg-teal-600 hover:bg-teal-500 shadow-lg active:scale-95 transition-all border border-transparent">🙏 외출 중</button>
+      <button id="btn-오프라인" onclick="setStatus('오프라인', '6시간 내 제작 가능 💤', 'bg-gray-600')" class="py-4 rounded-xl font-black text-xs md:text-sm bg-gray-700 hover:bg-gray-600 shadow-lg active:scale-95 transition-all border border-transparent">💤 오프라인</button>
+    </div>
+    <textarea id="status-desc-input" rows="2" placeholder="상세 문구 입력 (엔터로 줄바꿈 가능)..." class="w-full bg-black/40 border border-gray-800 rounded-xl p-4 text-sm text-white outline-none focus:border-[#8788EE] font-bold transition-all shadow-inner custom-scrollbar resize-none"></textarea>
+    <p class="text-[10px] text-gray-600 mt-2 font-bold px-1">* 문구 작성 후 위 상태 버튼을 누르면 송출됩니다.</p>
+  </div>
+
+  <div class="w-full max-w-2xl mb-5 p-5 rounded-2xl glass-panel border-red-500/30 shadow-xl">
+    <div class="flex flex-col sm:flex-row gap-3">
+      <input type="text" id="notice-input" placeholder="공지 내용 입력..." class="flex-1 bg-black/40 border border-gray-800 rounded-xl p-4 text-sm text-white outline-none focus:border-red-500 font-bold shadow-inner">
+      <div class="flex gap-2">
+        <button onclick="updateNotice()" class="px-8 py-4 bg-red-600 text-white font-black rounded-xl hover:bg-red-500 transition-all shadow-lg text-sm">송출</button>
+        <button onclick="clearNotice()" class="px-5 py-4 bg-gray-800 text-gray-500 font-black rounded-xl hover:bg-gray-700 transition-all text-sm">삭제</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="w-full max-w-2xl p-5 rounded-2xl glass-panel border-[#8788EE]/40 shadow-2xl">
+    <div class="flex items-center justify-between mb-4 border-b border-[#8788EE]/10 pb-4 flex-wrap gap-2">
+      <h3 class="text-[#8788EE] font-black tracking-tighter text-lg">⚡ LIVE ORDERS</h3>
+      <div class="flex items-center gap-2 flex-wrap">
+        <label class="flex items-center gap-1.5 cursor-pointer select-none">
+          <input type="checkbox" id="include1account" checked class="w-3.5 h-3.5 accent-[#8788EE]">
+          <span class="text-gray-400 text-[10px] font-black tracking-widest">1계정 포함</span>
+        </label>
+        <button onclick="acceptAllOrders()" class="px-4 py-2 bg-sky-900/20 text-sky-300 border border-sky-500/20 font-black rounded-lg text-xs hover:bg-sky-700 hover:text-white transition-all">일괄 접수</button>
+        <button onclick="completeAllOrders()" class="px-4 py-2 bg-emerald-600/10 text-emerald-400 border border-emerald-500/30 font-black rounded-lg text-xs hover:bg-emerald-600 hover:text-white transition-all">일괄 완료</button>
+      </div>
+    </div>
+    <div class="flex gap-4">
+      <div id="admin-order-list" class="flex flex-col gap-2 max-h-[400px] overflow-y-auto custom-scrollbar pr-1 flex-1">
+        <div class="text-gray-600 text-center py-8 text-xs font-bold uppercase tracking-widest">No active orders</div>
+      </div>
+      <div class="shrink-0 w-28 flex flex-col gap-1">
+        <div class="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-1.5 px-1">잔여 주문</div>
+        <div id="pending-summary" class="flex flex-col gap-1 max-h-[400px] overflow-y-auto custom-scrollbar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 아이템 관리 -->
+  <div class="w-full max-w-2xl mb-5 mt-2 p-5 rounded-2xl glass-panel border-yellow-500/30 shadow-xl">
+    <div class="flex items-center justify-between pb-4" id="item-manager-header" style="cursor:pointer;" onclick="toggleItemManager()">
+      <h3 class="text-yellow-400 font-black tracking-tighter text-lg">⚒️ 아이템 관리</h3>
+      <div class="flex items-center gap-2">
+        <button onclick="event.stopPropagation(); openAddItemModal()" class="px-4 py-2 bg-yellow-500/10 text-yellow-400 border border-yellow-500/30 font-black rounded-lg text-xs hover:bg-yellow-500 hover:text-black transition-all">+ 새 아이템</button>
+        <span id="item-manager-chevron" class="text-yellow-400 font-black text-sm transition-transform">▼</span>
+      </div>
+    </div>
+    <div id="item-manager-body" class="hidden border-t border-yellow-500/10 pt-4">
+    <div id="catTabs" class="flex flex-wrap gap-2 mb-3"></div>
+    <div class="relative mb-3">
+      <input id="itemSearch" type="text" placeholder="🔍  아이템명 또는 제작자로 검색..."
+        oninput="renderItemList(); toggleSearchClear()"
+        class="w-full bg-black/40 border border-gray-800 rounded-xl px-4 py-2.5 pr-10 text-white text-sm font-bold outline-none focus:border-yellow-500/50 transition-all placeholder-gray-600">
+      <button id="searchClearBtn" onclick="clearSearch()"
+        class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white text-base font-black transition-colors leading-none">✕</button>
+    </div>
+    <div id="itemList" class="flex flex-col gap-2 max-h-[500px] overflow-y-auto custom-scrollbar pr-1">
+      <div class="text-gray-600 text-center py-8 text-[10px] font-black tracking-widest">로그인 후 표시됩니다</div>
+    </div>
+    </div><!-- /item-manager-body -->
+  </div>
+
+  <!-- 제보 메뉴 -->
+  <div class="w-full max-w-2xl mb-5 mt-2 p-5 rounded-2xl glass-panel border-gray-700/30 shadow-xl">
+    <div class="flex items-center justify-between pb-4 cursor-pointer" onclick="toggleReportManager()">
+      <h3 class="text-gray-400 font-black tracking-tighter text-lg">💌 제보 / 바란다</h3>
+      <span id="report-manager-chevron" class="text-gray-400 font-black text-sm transition-transform">▼</span>
+    </div>
+    <div id="report-manager-body" class="hidden border-t border-gray-800 pt-4">
+      <!-- 탭 -->
+      <div class="flex gap-2 mb-4 flex-wrap">
+        <button onclick="selectReportTab('error')" id="report-tab-error" class="px-3 py-1.5 rounded-lg text-[11px] font-black border border-red-500/50 text-red-400 bg-red-500/10">🔧 재료 오류</button>
+        <button onclick="selectReportTab('wish')" id="report-tab-wish" class="px-3 py-1.5 rounded-lg text-[11px] font-black border border-gray-700 text-gray-500">💌 바란다</button>
+        <button onclick="selectReportTab('archive')" id="report-tab-archive" class="px-3 py-1.5 rounded-lg text-[11px] font-black border border-gray-700 text-gray-500">📦 보관함</button>
+        <button onclick="bulkDeleteConfirmed()" class="ml-auto px-3 py-1.5 rounded-lg text-[11px] font-black border border-gray-800 text-gray-600 hover:border-red-500/50 hover:text-red-400 transition-all">확인된 것 일괄삭제</button>
+      </div>
+      <div id="report-list" class="flex flex-col gap-2 max-h-[400px] overflow-y-auto custom-scrollbar pr-1">
+        <div class="text-gray-600 text-center py-8 text-[10px] font-black tracking-widest">로딩 중...</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-6 mb-4 text-gray-700 text-[9px] font-black opacity-40 tracking-[0.4em] uppercase">Hooje Studio Tower v5.0</div>
+
+</div><!-- /mainContent -->
+
+<!-- 제보 상세 팝업 -->
+<div id="reportDetailOverlay" class="hidden fixed inset-0 z-[950] flex items-center justify-center p-4" style="background:rgba(0,0,0,0.85);" onclick="closeReportDetail(event)">
+  <div class="w-full max-w-lg bg-[#0a0a0a] border border-gray-700 rounded-2xl p-6 max-h-[85vh] overflow-y-auto custom-scrollbar" onclick="event.stopPropagation()">
+    <div class="flex items-center justify-between mb-4">
+      <span id="rd-type-badge" class="text-xs font-black px-2.5 py-1 rounded-lg"></span>
+      <button onclick="closeReportDetail()" class="text-gray-500 hover:text-white font-black text-xl">✕</button>
+    </div>
+    <div id="rd-meta" class="text-gray-600 text-xs font-bold mb-3"></div>
+    <div id="rd-content" class="text-white text-base font-bold leading-relaxed whitespace-pre-wrap bg-black/30 rounded-xl p-4 mb-6 min-h-[100px]"></div>
+    <div class="flex gap-2 pt-4 border-t border-gray-800">
+      <button id="rd-confirm-btn" onclick="rdConfirm()" class="flex-1 py-3 font-black rounded-xl border text-sm transition-all">확인</button>
+      <button id="rd-archive-btn" onclick="rdArchive()" class="flex-1 py-3 font-black rounded-xl border border-yellow-500/40 text-yellow-400 bg-yellow-500/10 hover:bg-yellow-500/20 text-sm transition-all">보관</button>
+      <button id="rd-delete-btn" onclick="rdDelete()" class="flex-1 py-3 font-black rounded-xl border border-red-500/40 text-red-400 bg-red-500/10 hover:bg-red-500/20 text-sm transition-all">삭제</button>
+    </div>
+  </div>
+</div>
+
+<!-- 아이템 편집 모달 -->
+<div id="itemModal" class="hidden fixed inset-0 z-[900] flex items-center justify-center p-4" style="background:rgba(0,0,0,0.85);" onclick="handleItemModalOverlayClick(event)">
+  <div class="w-full max-w-lg bg-[#0a0a0a] border border-gray-700 rounded-2xl p-6 max-h-[90vh] overflow-y-auto custom-scrollbar">
+    <div class="flex items-center justify-between mb-5">
+      <h3 id="modalTitle" class="text-white font-black text-lg">아이템 추가</h3>
+      <button onclick="closeItemModal()" class="text-gray-500 hover:text-white font-black text-xl">✕</button>
+    </div>
+    <div class="grid grid-cols-2 gap-3 mb-4">
+      <div class="col-span-2">
+        <label class="text-gray-400 text-[10px] font-black uppercase tracking-widest mb-1 block">아이템 이름</label>
+        <input id="mi-name" type="text" placeholder="[천 가슴] 순교자의 예복" class="w-full bg-black border border-gray-700 rounded-xl px-4 py-2.5 text-white text-sm font-bold outline-none focus:border-[#8788EE]">
+      </div>
+      <div>
+        <label class="text-gray-400 text-[10px] font-black uppercase tracking-widest mb-1 block">카테고리</label>
+        <select id="mi-cat" class="w-full bg-black border border-gray-700 rounded-xl px-4 py-2.5 text-white text-sm font-bold outline-none focus:border-[#8788EE]">
+          <option value="weapon">무기/방패/보조무기</option>
+          <option value="common_armor">공통 방어구</option>
+          <option value="cloth">천 방어구</option>
+          <option value="leather">가죽 방어구</option>
+          <option value="chain">사슬 방어구</option>
+          <option value="plate">판금 방어구</option>
+          <option value="profession">전문 기술 장비</option>
+        </select>
+      </div>
+      <div>
+        <label class="text-gray-400 text-[10px] font-black uppercase tracking-widest mb-1 block">제작자</label>
+        <select id="mi-crafter" class="w-full bg-black border border-gray-700 rounded-xl px-4 py-2.5 text-white text-sm font-bold outline-none focus:border-[#8788EE]">
+          <option>라피트</option><option>르루아</option><option>장테</option><option>메오</option><option>후제</option>
+          <option>무통</option><option>앙리자이에</option><option>그로</option><option>포므리</option><option>뒤작</option>
+          <option>디켐</option><option>크뤼그</option><option>아르망</option><option>돔페리뇽</option><option>오베르</option>
+        </select>
+      </div>
+      <div>
+        <label class="text-gray-400 text-[10px] font-black uppercase tracking-widest mb-1 block">4성 수수료</label>
+        <input id="mi-fee" type="text" placeholder="자율 / 100,000" class="w-full bg-black border border-gray-700 rounded-xl px-4 py-2.5 text-white text-sm font-bold outline-none focus:border-[#8788EE]">
+      </div>
+      <div>
+        <label class="text-gray-400 text-[10px] font-black uppercase tracking-widest mb-1 block">5성 수수료</label>
+        <input id="mi-fee5" type="text" placeholder="비워두면 Coming Soon" class="w-full bg-black border border-gray-700 rounded-xl px-4 py-2.5 text-white text-sm font-bold outline-none focus:border-[#8788EE]">
+      </div>
+      <div>
+        <label class="text-gray-400 text-[10px] font-black uppercase tracking-widest mb-1 block">Wowhead ID</label>
+        <input id="mi-id" type="number" placeholder="239648" class="w-full bg-black border border-gray-700 rounded-xl px-4 py-2.5 text-white text-sm font-bold outline-none focus:border-[#8788EE]">
+      </div>
+      <div>
+        <label class="text-gray-400 text-[10px] font-black uppercase tracking-widest mb-1 block">아이콘 이름</label>
+        <input id="mi-icon" type="text" placeholder="inv_staff_2h_..." class="w-full bg-black border border-gray-700 rounded-xl px-4 py-2.5 text-white text-sm font-bold outline-none focus:border-[#8788EE]">
+      </div>
+    </div>
+    <div class="flex gap-4 mb-4 flex-wrap">
+      <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="mi-active" checked class="w-4 h-4 accent-[#8788EE]"><span class="text-sm font-bold text-gray-300">활성화</span></label>
+      <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="mi-5star" class="w-4 h-4 accent-yellow-400"><span class="text-sm font-bold text-gray-300">5성 가능</span></label>
+      <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="mi-popular" class="w-4 h-4 accent-red-400"><span class="text-sm font-bold text-gray-300">HOT 표시</span></label>
+    </div>
+    <div class="grid grid-cols-2 gap-3 mb-4">
+      <div>
+        <label class="text-gray-400 text-[10px] font-black uppercase tracking-widest mb-1 block">서신 종류</label>
+        <select id="mi-missive" class="w-full bg-black border border-gray-700 rounded-xl px-4 py-2.5 text-white text-sm font-bold outline-none focus:border-[#8788EE]">
+          <option value="">자동 결정</option>
+          <option value="none">없음</option>
+          <option value="combat">전투 서신</option>
+          <option value="gather">채집 서신</option>
+          <option value="craft">제작 서신</option>
+        </select>
+      </div>
+      <div>
+        <label class="text-gray-400 text-[10px] font-black uppercase tracking-widest mb-1 block">장식 종류</label>
+        <select id="mi-embellish" class="w-full bg-black border border-gray-700 rounded-xl px-4 py-2.5 text-white text-sm font-bold outline-none focus:border-[#8788EE]">
+          <option value="">자동 결정</option>
+          <option value="none">없음</option>
+          <option value="armor">방어구 장식</option>
+          <option value="weapon">무기 장식</option>
+          <option value="jewelry">장신구 장식</option>
+        </select>
+      </div>
+    </div>
+    <div class="mb-4">
+      <div class="flex items-center justify-between mb-2">
+        <label class="text-gray-400 text-[10px] font-black uppercase tracking-widest">필수 재료</label>
+        <button onclick="addMatRow()" class="text-[10px] font-black text-[#8788EE] border border-[#8788EE]/30 rounded-lg px-2 py-1 hover:bg-[#8788EE]/10 transition-all">+ 재료 추가</button>
+      </div>
+      <div id="matRows" class="flex flex-col gap-2"></div>
+    </div>
+    <div class="flex gap-3 pt-4 border-t border-gray-800">
+      <button onclick="saveItem()" class="flex-1 py-3 bg-[#8788EE] text-white font-black rounded-xl hover:brightness-110 transition-all text-sm">저장</button>
+      <button id="deleteBtn" onclick="deleteItem()" class="px-6 py-3 bg-red-900/30 text-red-400 border border-red-500/30 font-black rounded-xl hover:bg-red-500 hover:text-white transition-all text-sm hidden">삭제</button>
+    </div>
+  </div>
+</div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, set, onValue, update, push, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDXH0-y0vUQ9K29XbtRXDEuIokTqDLmo_I",
+      authDomain: "rougetsblendingroom.firebaseapp.com",
+      databaseURL: "https://rougetsblendingroom-default-rtdb.firebaseio.com/",
+      projectId: "rougetsblendingroom"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const auth = getAuth(app);
+
+    const CLS_COLOR = { 
+      "메오": "#8788EE", "후제": "#8788EE", "무통": "#8788EE", "앙리자이에": "#8788EE", "그로": "#8788EE", "포므리": "#0070DE", 
+      "뒤작": "#A330C9", "디켐": "#FFF569", "크뤼그": "#C41E3A", "아르망": "#F48CBA", "라피트": "#3FC7EB", "장테": "#00FF96", "돔페리뇽": "#00FF98", "오베르": "#8788EE", "르루아": "#8788EE", "미정": "#6B7280"
+    };
+
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+    let wakeLock = null;
+    const requestWakeLock = async () => {
+      try { if ('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen'); } catch (err) {}
+    };
+    requestWakeLock();
+    document.addEventListener('visibilitychange', () => { if (wakeLock !== null && document.visibilityState === 'visible') requestWakeLock(); });
+
+    let currentStatusType = "온라인";
+    let currentStatusColor = "bg-green-500";
+
+    window.setStatus = (type, defaultMsg, color) => {
+      currentStatusType = type;
+      currentStatusColor = color;
+      const customMsg = document.getElementById('status-desc-input').value.trim();
+      set(ref(db, 'status'), { type, message: customMsg || defaultMsg, color });
+      document.getElementById('status-desc-input').value = "";
+    };
+
+    // [수정] textarea에서는 엔터가 줄바꿈이어야 하므로 엔터 시 송출 로직은 제거했습니다.
+    // 상태 버튼을 눌러서 송출하세요!
+
+    onValue(ref(db, 'status'), (snap) => {
+      const data = snap.val();
+      if(data) {
+        currentStatusType = data.type;
+        currentStatusColor = data.color;
+        // 텍스트 표시 시 줄바꿈 적용
+        document.getElementById('monitor-text').innerText = `${data.type} : ${data.message}`;
+        document.getElementById('monitor-dot').className = `w-3 h-3 rounded-full ${data.color} animate-pulse`;
+        document.querySelectorAll('[id^="btn-"]').forEach(btn => btn.classList.remove('active-status'));
+        document.getElementById(`btn-${data.type}`)?.classList.add('active-status');
+      }
+    });
+
+    onValue(ref(db, 'notice'), (snap) => {
+      const txt = snap.val();
+      document.getElementById('monitor-notice').innerHTML = txt ? `🚨 ${txt}` : "없음";
+      document.getElementById('notice-input').value = txt || "";
+    });
+
+    const ONE_ACCOUNT_CRAFTERS = ['메오', '후제', '그로', '무통', '장테'];
+    const PRIORITY_ORDER = ['포므리','돔페리뇽','오베르','메오','라피트','디켐','뒤작','아르망','크뤼그','르루아','앙리자이에','그로','무통','후제'];
+
+    let lastOrderCount = 0;
+    let isFirstLoad = true;
+    let currentPendingOrders = {};
+    let allOrdersCache = [];
+
+    // 경과 시간 텍스트
+    function getElapsedText(timestamp) {
+      if (!timestamp) return '';
+      const diff = Math.floor((Date.now() - timestamp) / 60000);
+      if (diff < 1) return '방금 전';
+      if (diff < 60) return `${diff}분 전`;
+      const h = Math.floor(diff / 60);
+      return `${h}시간 전`;
+    }
+
+    // 잔여 주문 현황 표 렌더 (pending + accepted 포함, done/rejected 제외)
+    function renderPendingSummary(orders) {
+      const summary = document.getElementById('pending-summary');
+      const active = orders.filter(o => o.status === 'pending' || o.status === 'accepted');
+      if (!active.length) { summary.innerHTML = ''; return; }
+
+      const countMap = {};
+      active.forEach(o => {
+        const c = o.crafter || '미정';
+        countMap[c] = (countMap[c] || 0) + 1;
+      });
+
+      const sorted = Object.entries(countMap).sort((a, b) => {
+        if (b[1] !== a[1]) return b[1] - a[1];
+        return PRIORITY_ORDER.indexOf(a[0]) - PRIORITY_ORDER.indexOf(b[0]);
+      });
+
+      summary.innerHTML = `
+        ${sorted.map(([crafter, count]) => {
+          const color = CLS_COLOR[crafter] || '#6B7280';
+          return `<div onclick="completeCrafterOrders('${crafter}')" class="flex items-center justify-between px-2 py-1 rounded-lg bg-black/30 border border-gray-900 hover:border-emerald-500/40 hover:bg-emerald-500/5 transition-all cursor-pointer" title="${crafter} 전체 완료">
+            <span class="text-[10px] font-black" style="color:${color}">${crafter}</span>
+            <span class="text-[10px] font-black text-white">${count}</span>
+          </div>`;
+        }).join('')}
+      `;
+    }
+
+    // 주문 목록 렌더 (1분마다 경과시간 갱신)
+    function renderOrderList(orders) {
+      const listContainer = document.getElementById('admin-order-list');
+      if (!orders.length) {
+        listContainer.innerHTML = '<div class="text-gray-600 text-center py-8 text-[10px] font-black tracking-widest uppercase">No orders</div>';
+        return;
+      }
+
+      listContainer.innerHTML = orders.slice(0, 100).map(o => {
+        const time = o.timestamp ? new Date(o.timestamp).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false }) : '--:--';
+        const crafter = o.crafter || '미정';
+        const cColor = CLS_COLOR[crafter] || '#6B7280';
+        const match = o.itemName.match(/\[.*?\]/);
+        const shortItemName = match ? match[0] : o.itemName;
+
+        let badge = '', buttons = '', timeHtml = '';
+
+        if (o.status === 'done') {
+          badge = '<span class="px-2 py-0.5 rounded text-[9px] font-black bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">DONE</span>';
+          buttons = `<button onclick="undoOrder('${o.id}')" class="ml-2 px-3 py-1.5 bg-gray-900 text-white text-[10px] font-black rounded-lg border border-gray-800 hover:bg-gray-700 transition-all">UNDO</button>`;
+          timeHtml = `<span class="text-[10px] font-bold text-white shrink-0 tracking-tighter">${time}</span>`;
+        } else if (o.status === 'accepted') {
+          badge = '<span class="px-2 py-0.5 rounded text-[9px] font-black bg-sky-900/30 text-sky-300 border border-sky-500/20 shrink-0">접수</span>';
+          buttons = `<button onclick="completeOrder('${o.id}')" class="ml-2 px-3 py-1.5 bg-emerald-600 text-white text-[10px] font-black rounded-lg hover:bg-emerald-500 transition-all">완료</button>
+                     <button onclick="rejectOrder('${o.id}')" class="ml-1 px-3 py-1.5 bg-yellow-600 text-white text-[10px] font-black rounded-lg hover:bg-yellow-500 transition-all">반려</button>
+                     <button onclick="undoOrder('${o.id}')" class="ml-1 px-3 py-1.5 bg-gray-900 text-white text-[10px] font-black rounded-lg border border-gray-800 hover:bg-gray-700 transition-all">UNDO</button>`;
+          const elapsed2 = getElapsedText(o.timestamp);
+          timeHtml = `<span class="text-[10px] font-bold text-white shrink-0 tracking-tighter">${time}</span><span class="text-[9px] font-bold text-white shrink-0 ml-1">(${elapsed2})</span>`;
+        } else if (o.status === 'rejected') {
+          badge = '<span class="px-2 py-0.5 rounded text-[9px] font-black bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 shrink-0">REJ</span>';
+          buttons = `<button onclick="undoOrder('${o.id}')" class="ml-2 px-3 py-1.5 bg-gray-900 text-white text-[10px] font-black rounded-lg border border-gray-800 hover:bg-gray-700 transition-all">UNDO</button>`;
+          timeHtml = `<span class="text-[10px] font-bold text-white shrink-0 tracking-tighter">${time}</span>`;
+        } else {
+          badge = '<span class="px-2 py-0.5 rounded text-[9px] font-black bg-red-500/20 text-red-400 border border-red-500/30 animate-pulse shrink-0">WAIT</span>';
+          buttons = `<button onclick="acceptOrder('${o.id}')" class="ml-2 px-3 py-1.5 bg-sky-700 text-white text-[10px] font-black rounded-lg hover:bg-sky-500 transition-all">접수</button>
+                     <button onclick="completeOrder('${o.id}')" class="ml-1 px-3 py-1.5 bg-emerald-600 text-white text-[10px] font-black rounded-lg hover:bg-emerald-500 transition-all">완료</button>
+                     <button onclick="rejectOrder('${o.id}')" class="ml-1 px-3 py-1.5 bg-yellow-600 text-white text-[10px] font-black rounded-lg hover:bg-yellow-500 transition-all">반려</button>`;
+          const elapsed = getElapsedText(o.timestamp);
+          timeHtml = `<span class="text-[10px] font-bold text-white shrink-0 tracking-tighter">${time}</span><span class="text-[9px] font-bold text-white shrink-0 ml-1">(${elapsed})</span>`;
+        }
+
+        return `<div class="bg-black/30 rounded-xl border border-gray-900 hover:border-gray-800 transition-colors">
+                  <!-- 데스크탑: 한 줄 -->
+                  <div class="hidden md:flex items-center justify-between p-3.5">
+                    <div class="flex items-center gap-2 overflow-hidden">
+                      <div class="flex items-center gap-1 shrink-0">${timeHtml}</div>
+                      <span class="text-xs font-black shrink-0" style="color: ${cColor};">${crafter}</span>
+                      <span class="text-xs font-bold text-gray-300 truncate">${shortItemName}</span>
+                    </div>
+                    <div class="flex items-center gap-1 shrink-0 pl-2">${badge}${buttons}</div>
+                  </div>
+                  <!-- 모바일: 두 줄 -->
+                  <div class="flex md:hidden flex-col gap-1.5 p-3">
+                    <div class="flex items-center gap-2 overflow-hidden">
+                      <div class="flex items-center gap-1 shrink-0">${timeHtml}</div>
+                      <span class="text-xs font-black shrink-0" style="color: ${cColor};">${crafter}</span>
+                      <span class="text-xs font-bold text-gray-300 truncate">${shortItemName}</span>
+                      ${badge}
+                    </div>
+                    <div class="flex items-center gap-1 flex-wrap">${buttons}</div>
+                  </div>
+                </div>`;
+      }).join('');
+    }
+
+    onValue(ref(db, 'orders'), (snap) => {
+      const data = snap.val();
+      currentPendingOrders = {};
+      if(!data) {
+        allOrdersCache = [];
+        renderOrderList([]);
+        renderPendingSummary([]);
+        return;
+      }
+
+      const now = Date.now();
+      const H24 = 24 * 60 * 60 * 1000;
+      const orders = Object.keys(data)
+        .map(k => ({ id: k, ...data[k] }))
+        .filter(o => !o.timestamp || (now - o.timestamp) < H24)
+        .sort((a,b) => b.timestamp - a.timestamp);
+      allOrdersCache = orders;
+
+      if(!isFirstLoad && orders.length > lastOrderCount) document.getElementById('order-sound').play().catch(()=>{});
+      lastOrderCount = orders.length;
+      isFirstLoad = false;
+
+      orders.forEach(o => { if(o.status === 'pending') currentPendingOrders[o.id] = true; });
+
+      renderOrderList(orders);
+      renderPendingSummary(orders);
+    });
+
+    // 1분마다 경과시간 갱신
+    setInterval(() => { if (allOrdersCache.length) renderOrderList(allOrdersCache); }, 60000);
+
+    window.updateNotice = () => { const input = document.getElementById('notice-input'); if(input.value.trim()) set(ref(db, 'notice'), input.value); };
+    window.clearNotice = () => set(ref(db, 'notice'), "");
+    window.acceptOrder = (id) => update(ref(db, `orders/${id}`), { status: 'accepted' });
+    window.completeOrder = (id) => update(ref(db, `orders/${id}`), { status: 'done' });
+    window.rejectOrder = (id) => update(ref(db, `orders/${id}`), { status: 'rejected' });
+    window.undoOrder = (id) => update(ref(db, `orders/${id}`), { status: 'pending' });
+
+    function getInclude1Account() { return document.getElementById('include1account').checked; }
+
+    window.completeCrafterOrders = (crafter) => {
+      const updates = {};
+      allOrdersCache.forEach(o => {
+        if ((o.status === 'pending' || o.status === 'accepted') && o.crafter === crafter) {
+          updates[`/orders/${o.id}/status`] = 'done';
+        }
+      });
+      if (Object.keys(updates).length) update(ref(db), updates);
+    };
+
+    window.acceptAllOrders = () => {
+      const include1 = getInclude1Account();
+      const updates = {};
+      allOrdersCache.forEach(o => {
+        if (o.status !== 'pending') return;
+        if (!include1 && ONE_ACCOUNT_CRAFTERS.includes(o.crafter)) return;
+        updates[`/orders/${o.id}/status`] = 'accepted';
+      });
+      if (Object.keys(updates).length) update(ref(db), updates);
+    };
+
+    window.completeAllOrders = () => {
+      const include1 = getInclude1Account();
+      const updates = {};
+      allOrdersCache.forEach(o => {
+        if (o.status !== 'accepted') return; // 접수된 주문만 일괄 완료
+        if (!include1 && ONE_ACCOUNT_CRAFTERS.includes(o.crafter)) return;
+        updates[`/orders/${o.id}/status`] = 'done';
+      });
+      if (Object.keys(updates).length) update(ref(db), updates);
+    };
+
+    // ── Firebase Auth ────────────────────────────────────────────────────
+    const ADMIN_EMAIL = "admin@hooje.pro";
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        document.getElementById('loginOverlay').style.display = 'none';
+        document.getElementById('mainContent').classList.remove('hidden');
+        document.getElementById('mainContent').style.display = 'flex';
+        document.getElementById('mainContent').style.flexDirection = 'column';
+        document.getElementById('mainContent').style.alignItems = 'center';
+        initItemManager();
+      } else {
+        document.getElementById('loginOverlay').style.display = 'flex';
+        document.getElementById('mainContent').classList.add('hidden');
+      }
+    });
+    window.doLogin = async () => {
+      const pw = document.getElementById('loginPwInput').value;
+      const errEl = document.getElementById('loginError');
+      errEl.classList.add('hidden');
+      if (!pw) return;
+      try { await signInWithEmailAndPassword(auth, ADMIN_EMAIL, pw); }
+      catch(e) { errEl.classList.remove('hidden'); document.getElementById('loginPwInput').value = ''; document.getElementById('loginPwInput').focus(); }
+    };
+    window.doLogout = async () => { await signOut(auth); };
+
+    // ── 제보 매니저 ──────────────────────────────────────────────────
+    let currentReportTab = 'error';
+    let allReportsData = {};
+
+    // 실시간 감시: 미확인 배지 + 데이터 캐시
+    onValue(ref(db, 'reports'), (snap) => {
+      allReportsData = snap.val() || {};
+      updateUnreadBadge();
+      if (!document.getElementById('report-manager-body').classList.contains('hidden')) renderReports();
+    });
+
+    function updateUnreadBadge() {
+      const unread = Object.values(allReportsData).filter(r => !r.confirmed && !r.archived).length;
+      const badge = document.getElementById('unread-badge');
+      document.getElementById('unread-count').textContent = unread;
+      badge.classList.toggle('hidden', unread === 0);
+    }
+
+    window.confirmAllReports = function() {
+      const updates = {};
+      Object.entries(allReportsData).forEach(([key, r]) => {
+        if (!r.confirmed && !r.archived) updates[`/reports/${key}/confirmed`] = true;
+      });
+      if (Object.keys(updates).length) update(ref(db), updates);
+    };
+
+    window.toggleReportManager = function() {
+      const body = document.getElementById('report-manager-body');
+      const chevron = document.getElementById('report-manager-chevron');
+      const isHidden = body.classList.toggle('hidden');
+      chevron.style.transform = isHidden ? '' : 'rotate(180deg)';
+      if (!isHidden) renderReports();
+    };
+
+    window.selectReportTab = function(tab) {
+      currentReportTab = tab;
+      const tabs = { error: 'report-tab-error', wish: 'report-tab-wish', archive: 'report-tab-archive' };
+      Object.entries(tabs).forEach(([t, id]) => {
+        const el = document.getElementById(id);
+        if (t === tab) {
+          if (t === 'error') el.className = 'px-3 py-1.5 rounded-lg text-[11px] font-black border border-red-500/50 text-red-400 bg-red-500/10';
+          else if (t === 'wish') el.className = 'px-3 py-1.5 rounded-lg text-[11px] font-black border border-[#8788EE]/50 text-[#8788EE] bg-[#8788EE]/10';
+          else el.className = 'px-3 py-1.5 rounded-lg text-[11px] font-black border border-yellow-500/50 text-yellow-400 bg-yellow-500/10';
+        } else {
+          el.className = 'px-3 py-1.5 rounded-lg text-[11px] font-black border border-gray-700 text-gray-500';
+        }
+      });
+      renderReports();
+    };
+
+    function renderReports() {
+      const list = document.getElementById('report-list');
+      let entries;
+
+      if (currentReportTab === 'archive') {
+        entries = Object.entries(allReportsData).filter(([, r]) => r.archived);
+      } else {
+        entries = Object.entries(allReportsData).filter(([, r]) => r.type === currentReportTab && !r.archived);
+      }
+      entries.sort((a, b) => b[1].timestamp - a[1].timestamp);
+
+      if (!entries.length) {
+        list.innerHTML = `<div class="text-gray-600 text-center py-8 text-[10px] font-black tracking-widest">없음</div>`;
+        return;
+      }
+
+      list.innerHTML = entries.map(([key, r]) => {
+        const time = new Date(r.timestamp).toLocaleDateString('ko-KR', { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+        const meta = r.type === 'error' ? `<span class="text-red-400 text-[10px] font-black">${r.category || ''} · ${r.itemName || ''}</span>` : '';
+        const isConfirmed = r.confirmed;
+        const isArchived = r.archived;
+
+        const confirmBtn = !isArchived ? `<button onclick="confirmReport('${key}')" class="px-2 py-1 text-[9px] font-black rounded-lg border ${isConfirmed ? 'border-emerald-500/30 text-emerald-400 bg-emerald-500/10' : 'border-gray-700 text-gray-500 hover:border-emerald-500/50 hover:text-emerald-400'} transition-all">${isConfirmed ? '✓ 확인됨' : '확인'}</button>` : '';
+        const archiveBtn = !isArchived ? `<button onclick="archiveReport('${key}')" class="px-2 py-1 text-[9px] font-black rounded-lg border border-gray-700 text-gray-500 hover:border-yellow-500/50 hover:text-yellow-400 transition-all">보관</button>` : '';
+        const deleteBtn = !isArchived
+          ? `<button onclick="deleteReport('${key}')" class="px-2 py-1 text-[9px] font-black rounded-lg border border-gray-700 text-gray-500 hover:border-red-500/50 hover:text-red-400 transition-all">삭제</button>`
+          : `<button onclick="deleteReport('${key}')" class="px-2 py-1 text-[9px] font-black rounded-lg border border-red-900/40 text-red-800 hover:border-red-500/50 hover:text-red-400 transition-all">삭제</button>`;
+
+        return `
+          <div onclick="openReportDetail('${key}')" class="bg-black/30 p-3.5 rounded-xl border ${isConfirmed || isArchived ? 'border-gray-900' : 'border-gray-800'} hover:border-gray-700 transition-colors cursor-pointer">
+            <div class="flex items-start justify-between gap-2 mb-1.5">
+              <div class="flex flex-col gap-0.5">
+                <span class="text-[10px] text-gray-600 font-bold">${time}</span>
+                ${meta}
+                ${isConfirmed ? '<span class="text-[9px] text-emerald-500 font-black">✓ 확인됨</span>' : '<span class="text-[9px] text-red-400 font-black animate-pulse">● 미확인</span>'}
+              </div>
+            </div>
+            <p class="text-gray-400 text-xs font-bold leading-relaxed truncate">${r.content}</p>
+          </div>`;
+      }).join('');
+    }
+
+    window.confirmReport = async function(key) {
+      await update(ref(db, `reports/${key}`), { confirmed: true });
+    };
+    window.archiveReport = async function(key) {
+      await update(ref(db, `reports/${key}`), { archived: true, confirmed: true });
+    };
+    window.deleteReport = async function(key) {
+      await remove(ref(db, `reports/${key}`));
+    };
+    window.bulkDeleteConfirmed = async function() {
+      if (!confirm('확인된 항목(보관함 제외)을 모두 삭제할까요?')) return;
+      const updates = {};
+      Object.entries(allReportsData).forEach(([key, r]) => {
+        if (r.confirmed && !r.archived) updates[`/reports/${key}`] = null;
+      });
+      if (Object.keys(updates).length) await update(ref(db), updates);
+    };
+
+    // ── 제보 상세 팝업 ─────────────────────────────────────────────
+    let rdCurrentKey = null;
+
+    window.openReportDetail = function(key) {
+      const r = allReportsData[key];
+      if (!r) return;
+      rdCurrentKey = key;
+
+      const typeBadge = document.getElementById('rd-type-badge');
+      if (r.type === 'error') {
+        typeBadge.textContent = '🔧 재료 오류 제보';
+        typeBadge.className = 'text-xs font-black px-2.5 py-1 rounded-lg border border-red-500/40 text-red-400 bg-red-500/10';
+      } else {
+        typeBadge.textContent = '💌 후제공방에 바란다';
+        typeBadge.className = 'text-xs font-black px-2.5 py-1 rounded-lg border border-[#8788EE]/40 text-[#8788EE] bg-[#8788EE]/10';
+      }
+
+      const time = new Date(r.timestamp).toLocaleString('ko-KR', { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+      const meta = r.type === 'error' && r.category ? `${r.category} · ${r.itemName || ''}` : '';
+      document.getElementById('rd-meta').textContent = [time, meta].filter(Boolean).join(' | ');
+      document.getElementById('rd-content').textContent = r.content;
+
+      // 확인 버튼 상태
+      const confirmBtn = document.getElementById('rd-confirm-btn');
+      if (r.confirmed) {
+        confirmBtn.textContent = '✓ 확인됨';
+        confirmBtn.className = 'flex-1 py-3 font-black rounded-xl border border-emerald-500/40 text-emerald-400 bg-emerald-500/10 text-sm cursor-default';
+      } else {
+        confirmBtn.textContent = '확인';
+        confirmBtn.className = 'flex-1 py-3 font-black rounded-xl border border-gray-700 text-gray-300 hover:border-emerald-500/50 hover:text-emerald-400 transition-all text-sm';
+      }
+
+      // 보관함 항목이면 확인/보관 버튼 숨김, 삭제만 표시
+      const archiveBtn = document.getElementById('rd-archive-btn');
+      const confirmBtn2 = document.getElementById('rd-confirm-btn');
+      archiveBtn.classList.toggle('hidden', !!r.archived);
+      confirmBtn2.classList.toggle('hidden', !!r.archived);
+
+      document.getElementById('reportDetailOverlay').classList.remove('hidden');
+    };
+
+    window.closeReportDetail = function(e) {
+      if (e && e.target !== document.getElementById('reportDetailOverlay')) return;
+      document.getElementById('reportDetailOverlay').classList.add('hidden');
+      rdCurrentKey = null;
+    };
+
+    window.rdConfirm = async function() {
+      if (!rdCurrentKey) return;
+      await update(ref(db, `reports/${rdCurrentKey}`), { confirmed: true });
+      document.getElementById('reportDetailOverlay').classList.add('hidden');
+    };
+    window.rdArchive = async function() {
+      if (!rdCurrentKey) return;
+      await update(ref(db, `reports/${rdCurrentKey}`), { archived: true, confirmed: true });
+      document.getElementById('reportDetailOverlay').classList.add('hidden');
+    };
+    window.rdDelete = async function() {
+      if (!rdCurrentKey) return;
+      await remove(ref(db, `reports/${rdCurrentKey}`));
+      document.getElementById('reportDetailOverlay').classList.add('hidden');
+    };
+
+    window.toggleItemManager = function() {
+      const body = document.getElementById('item-manager-body');
+      const chevron = document.getElementById('item-manager-chevron');
+      const isHidden = body.classList.toggle('hidden');
+      chevron.style.transform = isHidden ? '' : 'rotate(180deg)';
+    };
+
+    // ── 아이템 관리 ──────────────────────────────────────────────────────
+    const CAT_CONFIG = [
+      { key: "weapon",       name: "무기 / 방패 / 보조무기",              icon: "🗡️" },
+      { key: "common_armor", name: "공통 방어구 (망토 / 반지 / 목걸이)", icon: "💍" },
+      { key: "cloth",        name: "천 방어구",                            icon: "🧵" },
+      { key: "leather",      name: "가죽 방어구",                          icon: "👞" },
+      { key: "chain",        name: "사슬 방어구",                          icon: "⛓️" },
+      { key: "plate",        name: "판금 방어구",                          icon: "🛡️" },
+      { key: "profession",   name: "전문 기술 장비",                       icon: "🛠️" },
+    ];
+    let currentCat = "weapon";
+    let allItemsData = {};
+    let editingKey = null;
+
+    function initItemManager() {
+      const tabs = document.getElementById('catTabs');
+      tabs.innerHTML = CAT_CONFIG.map(c =>
+        `<button onclick="selectCat('${c.key}')" id="tab-${c.key}"
+          class="px-3 py-1.5 rounded-lg text-[11px] font-black border border-gray-800 text-gray-400 hover:border-yellow-500/50 hover:text-yellow-400 transition-all">
+          ${c.icon} ${c.name.split('(')[0].trim().split(' ')[0]}
+        </button>`
+      ).join('');
+      onValue(ref(db, 'items'), (snap) => { allItemsData = snap.val() || {}; renderItemList(); });
+      selectCat('weapon');
+    }
+
+    function selectCat(catKey) {
+      currentCat = catKey;
+      // 탭 전환 시 검색어 초기화
+      const searchEl = document.getElementById('itemSearch');
+      if (searchEl) searchEl.value = '';
+      document.querySelectorAll('[id^="tab-"]').forEach(t => {
+        t.classList.remove('border-yellow-500','text-yellow-400','bg-yellow-500/10');
+        t.classList.add('border-gray-800','text-gray-400');
+      });
+      const tab = document.getElementById(`tab-${catKey}`);
+      if (tab) { tab.classList.remove('border-gray-800','text-gray-400'); tab.classList.add('border-yellow-500','text-yellow-400','bg-yellow-500/10'); }
+      renderItemList();
+    }
+    window.selectCat = selectCat;
+
+    // index.html과 동일한 6단계 자동 정렬 로직
+    function getSortScore(item) {
+      if (item.active) {
+        if (item.is5Star) return item.popular ? 1 : 2;
+        else              return item.popular ? 3 : 4;
+      } else {
+        return item.popular ? 5 : 6;
+      }
+    }
+
+    function renderItemList() {
+      const list = document.getElementById('itemList');
+      const items = allItemsData[currentCat] || {};
+      const searchEl = document.getElementById('itemSearch');
+      const query = searchEl ? searchEl.value.trim().toLowerCase() : '';
+
+      // 6단계 정렬 적용
+      let entries = Object.entries(items).sort((a, b) => {
+        const diff = getSortScore(a[1]) - getSortScore(b[1]);
+        return diff !== 0 ? diff : 0;
+      });
+
+      // 검색 필터
+      if (query) {
+        entries = entries.filter(([, item]) =>
+          (item.name || '').toLowerCase().includes(query) ||
+          (item.crafter || '').toLowerCase().includes(query)
+        );
+      }
+
+      if (!entries.length) {
+        list.innerHTML = `<div class="text-gray-600 text-center py-8 text-[10px] font-black tracking-widest">${query ? '검색 결과 없음' : '아이템 없음'}</div>`;
+        return;
+      }
+      list.innerHTML = entries.map(([key, item]) => `
+        <div class="flex items-center justify-between bg-black/30 p-3 rounded-xl border border-gray-900 hover:border-gray-700 transition-colors ${item.active ? '' : 'opacity-40'}">
+          <div class="flex items-center gap-3 overflow-hidden flex-1">
+            <img src="https://wow.zamimg.com/images/wow/icons/small/${item.icon || 'inv_misc_questionmark'}.jpg" class="w-8 h-8 rounded-lg shrink-0 border border-gray-800">
+            <div class="overflow-hidden">
+              <div class="text-sm font-black text-white truncate">${item.name}</div>
+              <div class="flex items-center gap-2 mt-0.5">
+                <span class="text-[10px] font-bold text-gray-500">${item.crafter}</span>
+                <span class="text-[10px] font-bold text-gray-600">${item.fee || '-'}</span>
+                ${item.popular ? '<span class="text-[9px] font-black text-red-400 border border-red-400/30 rounded px-1">HOT</span>' : ''}
+                ${item.is5Star ? '<span class="text-[9px] font-black text-yellow-400">★5</span>' : ''}
+                ${!item.active ? '<span class="text-[9px] font-black text-red-600">비활성</span>' : ''}
+              </div>
+            </div>
+          </div>
+          <button onclick="openEditItemModal('${key}')" class="shrink-0 ml-3 px-3 py-2 bg-gray-900 text-gray-400 text-[10px] font-black rounded-lg border border-gray-800 hover:border-[#8788EE] hover:text-[#8788EE] transition-all">수정</button>
+        </div>`).join('');
+    }
+    window.renderItemList = renderItemList;
+    window.toggleSearchClear = () => {
+      const val = document.getElementById('itemSearch').value;
+      document.getElementById('searchClearBtn').classList.toggle('hidden', !val);
+    };
+    window.clearSearch = () => {
+      document.getElementById('itemSearch').value = '';
+      document.getElementById('searchClearBtn').classList.add('hidden');
+      renderItemList();
+    };
+
+    function matRowHTML(name, count, icon) {
+      return `<div class="mat-row flex flex-col gap-1.5 p-2.5 rounded-xl border border-gray-800 bg-black/20">
+        <input type="text" placeholder="재료 이름" value="${(name||'').replace(/"/g,'&quot;')}" class="w-full bg-black border border-gray-800 rounded-lg px-3 py-2 text-white text-xs font-bold outline-none focus:border-[#8788EE] mat-name">
+        <div class="flex gap-2 items-center">
+          <input type="number" placeholder="수량" value="${count||1}" min="1" class="w-16 shrink-0 bg-black border border-gray-800 rounded-lg px-3 py-2 text-white text-xs font-bold outline-none focus:border-[#8788EE] mat-count">
+          <input type="text" placeholder="아이콘" value="${(icon||'').replace(/"/g,'&quot;')}" class="flex-1 bg-black border border-gray-800 rounded-lg px-3 py-2 text-white text-xs font-bold outline-none focus:border-[#8788EE] mat-icon">
+          <button onclick="this.closest('.mat-row').remove()" class="text-gray-600 hover:text-red-400 font-black text-lg shrink-0 px-1">✕</button>
+        </div>
+      </div>`;
+    }
+    window.addMatRow = () => { document.getElementById('matRows').insertAdjacentHTML('beforeend', matRowHTML('',1,'')); };
+    function readMatRows() {
+      return Array.from(document.querySelectorAll('.mat-row')).map(r => ({
+        n: r.querySelector('.mat-name').value.trim(),
+        c: parseInt(r.querySelector('.mat-count').value)||1,
+        i: r.querySelector('.mat-icon').value.trim()
+      })).filter(m => m.n);
+    }
+
+    function resetModal() {
+      document.getElementById('mi-name').value=''; document.getElementById('mi-fee').value='';
+      document.getElementById('mi-fee5').value=''; document.getElementById('mi-id').value='';
+      document.getElementById('mi-icon').value=''; document.getElementById('mi-active').checked=true;
+      document.getElementById('mi-5star').checked=false; document.getElementById('mi-popular').checked=false;
+      document.getElementById('mi-missive').value=''; document.getElementById('mi-embellish').value='';
+      document.getElementById('matRows').innerHTML = matRowHTML('',1,'');
+    }
+    window.openAddItemModal = () => {
+      editingKey=null;
+      document.getElementById('modalTitle').innerText='아이템 추가';
+      document.getElementById('deleteBtn').classList.add('hidden');
+      document.getElementById('mi-cat').value=currentCat;
+      document.getElementById('mi-crafter').value='라피트';
+      resetModal();
+      document.getElementById('itemModal').classList.remove('hidden');
+    };
+    window.openEditItemModal = (key) => {
+      const item = (allItemsData[currentCat]||{})[key];
+      if(!item) return;
+      editingKey=key;
+      document.getElementById('modalTitle').innerText='아이템 수정';
+      document.getElementById('deleteBtn').classList.remove('hidden');
+      document.getElementById('mi-name').value=item.name||'';
+      document.getElementById('mi-cat').value=currentCat;
+      document.getElementById('mi-crafter').value=item.crafter||'라피트';
+      document.getElementById('mi-fee').value=item.fee||'';
+      document.getElementById('mi-fee5').value=item.fee5Star||'';
+      document.getElementById('mi-id').value=item.id||'';
+      document.getElementById('mi-icon').value=item.icon||'';
+      document.getElementById('mi-active').checked=!!item.active;
+      document.getElementById('mi-5star').checked=!!item.is5Star;
+      document.getElementById('mi-popular').checked=!!item.popular;
+      document.getElementById('mi-missive').value=item.missiveType||'';
+      document.getElementById('mi-embellish').value=item.embellishType||'';
+      const mats = item.reqMats ? Object.values(item.reqMats) : [];
+      document.getElementById('matRows').innerHTML = mats.map(m=>matRowHTML(m.n,m.c,m.i)).join('');
+      if(!mats.length) document.getElementById('matRows').innerHTML = matRowHTML('',1,'');
+      document.getElementById('itemModal').classList.remove('hidden');
+    };
+    window.closeItemModal = () => { document.getElementById('itemModal').classList.add('hidden'); editingKey=null; };
+    window.handleItemModalOverlayClick = (e) => { if (e.target === document.getElementById('itemModal')) closeItemModal(); };
+    window.saveItem = async () => {
+      const name = document.getElementById('mi-name').value.trim();
+      const catKey = document.getElementById('mi-cat').value;
+      if(!name) return alert('아이템 이름을 입력해주세요.');
+      const fee5 = document.getElementById('mi-fee5').value.trim();
+      const missiveVal = document.getElementById('mi-missive').value;
+      const embellishVal = document.getElementById('mi-embellish').value;
+      const itemData = {
+        name, crafter: document.getElementById('mi-crafter').value,
+        fee: document.getElementById('mi-fee').value.trim()||'자율',
+        id: parseInt(document.getElementById('mi-id').value)||0,
+        icon: document.getElementById('mi-icon').value.trim(),
+        active: document.getElementById('mi-active').checked,
+        is5Star: document.getElementById('mi-5star').checked,
+        popular: document.getElementById('mi-popular').checked,
+        reqMats: readMatRows(),
+      };
+      if(fee5) itemData.fee5Star = fee5;
+      if(missiveVal) itemData.missiveType = missiveVal;
+      if(embellishVal) itemData.embellishType = embellishVal;
+      if(editingKey) {
+        if(catKey !== currentCat) await remove(ref(db, `items/${currentCat}/${editingKey}`));
+        await set(ref(db, `items/${catKey}/${editingKey}`), itemData);
+      } else {
+        await push(ref(db, `items/${catKey}`), itemData);
+      }
+      if(catKey !== currentCat) selectCat(catKey);
+      closeItemModal();
+    };
+    window.deleteItem = async () => {
+      if(!editingKey) return;
+      const name = document.getElementById('mi-name').value;
+      if(!confirm(`"${name}"\n정말 삭제하시겠습니까? 되돌릴 수 없습니다.`)) return;
+      await remove(ref(db, `items/${currentCat}/${editingKey}`));
+      closeItemModal();
+    };
+
+  </script>
+</body>
+</html>
