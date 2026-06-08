@@ -169,9 +169,22 @@
       </div>
     </div>
 
-    <div onclick="window.showNotice()" class="w-full md:w-1/3 cursor-pointer hover:opacity-80 transition-opacity flex flex-col items-center text-center order-1 md:order-2 shrink-0">
-      <h1 class="text-2xl md:text-4xl font-extrabold text-white" style="font-family:'Jeju Myeongjo',serif; letter-spacing: 0.25em;">후제공방</h1>
-      <div class="mt-1 text-[10px] md:text-xs text-white/50 font-bold uppercase tracking-[0.2em]">World of Warcraft KR · Azshara</div>
+    <div class="w-full md:w-1/3 flex flex-col items-center text-center order-1 md:order-2 shrink-0">
+      <div onclick="window.showNotice()" class="cursor-pointer hover:opacity-80 transition-opacity flex flex-col items-center">
+        <h1 class="text-2xl md:text-4xl font-extrabold text-white" style="font-family:'Jeju Myeongjo',serif; letter-spacing: 0.25em;">후제공방</h1>
+        <div class="mt-1 text-[10px] md:text-xs text-white/50 font-bold uppercase tracking-[0.2em]">World of Warcraft KR · Azshara</div>
+      </div>
+      <a href="https://github.com/hwj-rouget/HoojeGongbang/releases/latest/download/HoojeGongbang.zip"
+         class="mt-3 inline-flex items-center gap-2 px-5 py-2 rounded-xl font-black text-xs md:text-sm tracking-tight transition-all
+                bg-gradient-to-r from-amber-500/20 to-yellow-400/10
+                border border-amber-400/50 hover:border-amber-300/80
+                text-amber-200 hover:text-white hover:from-amber-500/30 hover:to-yellow-400/20
+                shadow-[0_0_16px_rgba(251,191,36,0.25)] hover:shadow-[0_0_24px_rgba(251,191,36,0.45)]">
+        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"/>
+        </svg>
+        후제공방 애드온 다운로드
+      </a>
     </div>
 
     <div class="w-full md:w-1/3 flex justify-center md:justify-end order-3 gap-2 items-center">
@@ -449,19 +462,9 @@
     <!-- 커피(후원) 버튼 -->
     <div class="flex flex-col items-center gap-1">
       <span class="text-white text-[9px] font-black px-2 py-0.5 rounded-full border select-none" style="border-color:#92400e; letter-spacing:0.05em;">Support me!</span>
-      <button onclick="showDonationPopup()" class="w-11 h-11 rounded-full flex items-center justify-center shadow-lg transition-all hover:scale-110 hover:brightness-110 bg-amber-800">
-      <svg width="22" height="22" viewBox="0 0 80 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="6" y="34" width="52" height="44" rx="10" fill="#6b3a1f" opacity="0.6"/>
-        <rect x="6" y="34" width="52" height="44" rx="10" stroke="white" stroke-width="2.2"/>
-        <ellipse cx="32" cy="34" rx="24" ry="5" fill="#4a2510" opacity="0.8"/>
-        <ellipse cx="32" cy="34" rx="24" ry="5" stroke="white" stroke-width="1.5" opacity="0.7"/>
-        <path d="M58 46 Q74 46 74 56 Q74 67 58 67" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
-        <rect x="3" y="76" width="58" height="5" rx="2.5" stroke="white" stroke-width="1.8"/>
-        <path d="M20 24 C18 15 22 9 20 3" stroke="white" stroke-width="1.6" stroke-linecap="round" opacity="0.8"/>
-        <path d="M32 22 C30 13 34 7 32 1" stroke="white" stroke-width="1.6" stroke-linecap="round" opacity="0.8"/>
-        <path d="M44 24 C42 15 46 9 44 3" stroke="white" stroke-width="1.6" stroke-linecap="round" opacity="0.8"/>
-      </svg>
-    </button>
+      <button onclick="showDonationPopup()" class="w-11 h-11 rounded-full overflow-hidden shadow-lg transition-all hover:scale-110 hover:brightness-110 p-0 border-0 bg-transparent">
+        <img src="coffee.png" alt="Support me" class="w-full h-full object-cover rounded-full">
+      </button>
     </div>
 
     <!-- 봉투+하트 제보 버튼 -->
@@ -545,13 +548,20 @@
           <label class="text-gray-400 text-[10px] font-black uppercase tracking-widest mb-1 block">카테고리</label>
           <select id="report-cat" onchange="loadReportItems()" class="w-full bg-black border border-gray-700 rounded-xl px-3 py-2 text-white text-sm font-bold outline-none focus:border-red-500">
             <option value="">카테고리 선택</option>
-            <option value="무기 / 방패 / 보조무기">무기 / 방패 / 보조무기</option>
+            <option value="무기류 (무기 / 방패 / 보조무기)">무기류</option>
             <option value="공통 방어구 (망토 / 반지 / 목걸이)">공통 방어구</option>
             <option value="천 방어구">천 방어구</option>
             <option value="가죽 방어구">가죽 방어구</option>
             <option value="사슬 방어구">사슬 방어구</option>
             <option value="판금 방어구">판금 방어구</option>
+            <option value="기계공학 방어구">기계공학 방어구</option>
             <option value="전문 기술 장비">전문 기술 장비</option>
+            <option value="PVP 무기류">PVP 무기류</option>
+            <option value="PVP 공통 방어구">PVP 공통 방어구</option>
+            <option value="PVP 천 방어구">PVP 천 방어구</option>
+            <option value="PVP 가죽 방어구">PVP 가죽 방어구</option>
+            <option value="PVP 사슬 방어구">PVP 사슬 방어구</option>
+            <option value="PVP 판금 방어구">PVP 판금 방어구</option>
           </select>
         </div>
         <div>
@@ -766,9 +776,21 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
       "뒤작": "#A330C9", "디켐": "#FFF569", "크뤼그": "#C41E3A", "아르망": "#F48CBA", "라피트": "#3FC7EB", "장테": "#00FF96", "돔페리뇽": "#00FF98", "오베르": "#8788EE", "르루아": "#8788EE", "미정": "#6B7280"
     };
     
-    const CAT_ICONS = { 
-      "공통 방어구 (망토 / 반지 / 목걸이)": "💍", "천 방어구": "🧵", "가죽 방어구": "👞", 
-      "사슬 방어구": "⛓️", "판금 방어구": "🛡️", "무기 / 방패 / 보조무기": "🗡️", "전문 기술 장비": "🛠️" 
+    const CAT_ICONS = {
+      "무기류 (무기 / 방패 / 보조무기)":    "⚔️",
+      "공통 방어구 (망토 / 반지 / 목걸이)": "🧣",
+      "천 방어구":       "🧵",
+      "가죽 방어구":     "🦎",
+      "사슬 방어구":     "⛓️",
+      "판금 방어구":     "🛡️",
+      "기계공학 방어구": "⚙️",
+      "전문 기술 장비":  "🔧",
+      "PVP 무기류":      "🏆",
+      "PVP 공통 방어구": "🏆",
+      "PVP 천 방어구":   "🏆",
+      "PVP 가죽 방어구": "🏆",
+      "PVP 사슬 방어구": "🏆",
+      "PVP 판금 방어구": "🏆"
     };
 
     const starIconSVG = `<svg class="w-3.5 h-3.5 mb-0.5 inline-block" viewBox="0 0 24 24" fill="#EAB308"><polygon points="12 2, 22 9, 18 21, 6 21, 2 9"/></svg>`;
@@ -821,26 +843,90 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
       { label: "축복받은 천산갑 부적<br>(금색)", copy: "축복받은 천산갑 부적", icon: "inv_jewelry_necklace_139" }
     ];
     const CAT_KEY_TO_NAME = {
-      "weapon":       "무기 / 방패 / 보조무기",
+      "weapon":       "무기류 (무기 / 방패 / 보조무기)",
       "common_armor": "공통 방어구 (망토 / 반지 / 목걸이)",
       "cloth":        "천 방어구",
       "leather":      "가죽 방어구",
       "chain":        "사슬 방어구",
       "plate":        "판금 방어구",
-      "profession":   "전문 기술 장비"
+      "engineering":  "기계공학 방어구",
+      "profession":   "전문 기술 장비",
+      "pvp_weapon":   "PVP 무기류",
+      "pvp_common":   "PVP 공통 방어구",
+      "pvp_cloth":    "PVP 천 방어구",
+      "pvp_leather":  "PVP 가죽 방어구",
+      "pvp_chain":    "PVP 사슬 방어구",
+      "pvp_plate":    "PVP 판금 방어구"
     };
     // ── Firebase에서 아이템 데이터 로드 ──────────────────────────────────
     let DB = {};
     const allItemsFlat = [];
 
-    // 6단계 자동 정렬 점수 계산
-    function getSortScore(item) {
-      if (item.active) {
-        if (item.is5Star) return item.popular ? 1 : 2;
-        else              return item.popular ? 3 : 4;
-      } else {
-        return item.popular ? 5 : 6;
-      }
+    // ── 자동 정렬 로직 ────────────────────────────────────────────────
+    // 방어구 슬롯 순서: 머리→어깨→가슴→손목→손→허리→다리→발
+    const ARMOR_SLOT_ORDER = { '머리':1,'어깨':2,'가슴':3,'손목':4,'손':5,'허리':6,'다리':7,'발':8 };
+    // 공통 방어구 슬롯 순서: 망토→목걸이→반지
+    const COMMON_SLOT_ORDER = { '망토':1,'목걸이':2,'반지':3 };
+
+    // [장식 천 머리] → { slot:'머리', isDecoration:true }
+    // [천 머리]      → { slot:'머리', isDecoration:false }
+    // [방패]         → { slot:'방패', isDecoration:false }
+    function parseBracket(name) {
+      const m = name.match(/^\[(.+?)\]/);
+      if (!m) return { slot: '', isDecoration: false };
+      const bracket = m[1];
+      const isDecoration = bracket.startsWith('장식');
+      const parts = bracket.replace(/^장식\s*/, '').trim().split(/\s+/);
+      const slot = parts[parts.length - 1] || '';
+      return { slot, isDecoration };
+    }
+
+    // HOT+장식=1, HOT=2, 장식=3, 일반=4
+    function getSlotPriority(item) {
+      const { isDecoration } = parseBracket(item.name);
+      if (item.popular && isDecoration) return 1;
+      if (item.popular)                 return 2;
+      if (isDecoration)                 return 3;
+      return 4;
+    }
+
+    // 기계공학 방어구: 판금→사슬→가죽→천 순서
+    const ARMOR_TYPE_ORDER = { '판금':1, '사슬':2, '가죽':3, '천':4 };
+
+    function sortItems(items, catKey) {
+      return items.slice().sort((a, b) => {
+        if (catKey === 'weapon' || catKey === 'pvp_weapon' || catKey === 'profession') {
+          // HOT 우선, 그 다음 가나다순
+          const pa = getSlotPriority(a), pb = getSlotPriority(b);
+          if (pa !== pb) return pa - pb;
+          return a.name.localeCompare(b.name, 'ko');
+        }
+        if (catKey === 'common_armor' || catKey === 'pvp_common') {
+          const { slot: sa } = parseBracket(a.name);
+          const { slot: sb } = parseBracket(b.name);
+          const oa = COMMON_SLOT_ORDER[sa] ?? 99;
+          const ob = COMMON_SLOT_ORDER[sb] ?? 99;
+          if (oa !== ob) return oa - ob;
+          return getSlotPriority(a) - getSlotPriority(b);
+        }
+        if (catKey === 'engineering') {
+          // 방어구 타입(판금→사슬→가죽→천) 후 슬롯(머리→손목→발)
+          const getAT = n => { const m = n.match(/^\[기계공학\s+(\S+)/); return m ? m[1] : ''; };
+          const ta = ARMOR_TYPE_ORDER[getAT(a.name)] ?? 99;
+          const tb = ARMOR_TYPE_ORDER[getAT(b.name)] ?? 99;
+          if (ta !== tb) return ta - tb;
+          const { slot: sa } = parseBracket(a.name);
+          const { slot: sb } = parseBracket(b.name);
+          return (ARMOR_SLOT_ORDER[sa] ?? 99) - (ARMOR_SLOT_ORDER[sb] ?? 99);
+        }
+        // 방어구 (cloth/leather/chain/plate + PVP 변형 전부)
+        const { slot: sa } = parseBracket(a.name);
+        const { slot: sb } = parseBracket(b.name);
+        const oa = ARMOR_SLOT_ORDER[sa] ?? 99;
+        const ob = ARMOR_SLOT_ORDER[sb] ?? 99;
+        if (oa !== ob) return oa - ob;
+        return getSlotPriority(a) - getSlotPriority(b);
+      });
     }
 
     function buildDB(itemsData) {
@@ -851,15 +937,11 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
         const catName = CAT_KEY_TO_NAME[catKey];
         const catItems = itemsData[catKey];
         if (!catItems) return;
-        DB[catName] = Object.values(catItems).map(item => ({
+        const raw = Object.values(catItems).map(item => ({
           ...item,
           reqMats: item.reqMats ? Object.values(item.reqMats) : []
         }));
-        // --- 6단계 자동 정렬 마법 (buildDB 내부에서 실행) ---
-        DB[catName].sort((a, b) => {
-          const diff = getSortScore(a) - getSortScore(b);
-          return diff !== 0 ? diff : 0;
-        });
+        DB[catName] = sortItems(raw, catKey);
         DB[catName].forEach(item => allItemsFlat.push({ ...item, cat: catName }));
       });
     }
@@ -1268,7 +1350,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
           showMissive = item.name.includes('죽음의 골목 낚시 바늘');
       } else {
           showMissive = true;
-          if (catName === "무기 / 방패 / 보조무기") embellishType = item.name.includes('[방패]') ? 'armor' : 'weapon';
+          if (catName === "무기류 (무기 / 방패 / 보조무기)" || catName === "PVP 무기류") embellishType = item.name.includes('[방패]') || item.name.includes('[PVP 방패]') ? 'armor' : 'weapon';
           else if (catName === "공통 방어구 (망토 / 반지 / 목걸이)") embellishType = item.name.includes('[망토]') ? 'armor' : 'jewelry';
           else embellishType = 'armor';
       }
@@ -1441,18 +1523,26 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 
       Object.keys(DB).forEach(cat => {
         const catIcon = CAT_ICONS[cat] || "📦";
+        const isPVP = cat.startsWith('PVP ');
         const catDiv = document.createElement('div');
-        catDiv.className = "border border-gray-800 rounded-xl overflow-hidden bg-gray-900 shadow-xl mb-2 md:mb-3";
+        catDiv.className = isPVP
+          ? "border border-gray-700/40 rounded-xl overflow-hidden bg-gray-900/50 shadow mb-2 md:mb-3"
+          : "border border-gray-800 rounded-xl overflow-hidden bg-gray-900 shadow-xl mb-2 md:mb-3";
 
         const catBtn = document.createElement('button');
-        catBtn.className = "w-full flex items-center justify-between p-2.5 md:p-3 bg-gray-800/80 border-b border-gray-800 transition-colors hover:bg-gray-700";
+        catBtn.className = isPVP
+          ? "w-full flex items-center justify-between p-2.5 md:p-3 bg-gray-800/25 border-b border-gray-700/30 transition-colors hover:bg-gray-800/45"
+          : "w-full flex items-center justify-between p-2.5 md:p-3 bg-gray-800/80 border-b border-gray-800 transition-colors hover:bg-gray-700";
+
+        const textColor  = isPVP ? 'text-gray-500' : 'text-gray-100';
+        const countStyle = isPVP ? 'text-gray-600 bg-gray-950/50' : 'text-gray-400 bg-gray-950';
         
         catBtn.innerHTML = `
-          <span class="text-xs md:text-sm font-black text-gray-100 tracking-tight font-kr-title flex items-center gap-1.5 truncate">
+          <span class="text-xs md:text-sm font-black ${textColor} tracking-tight font-kr-title flex items-center gap-1.5 truncate">
             <span class="text-sm md:text-base">${catIcon}</span>
             <span class="truncate">${cat}</span>
           </span>
-          <span class="text-[10px] font-bold text-gray-400 bg-gray-950 px-2 py-0.5 rounded-full shrink-0">${DB[cat].length}</span>
+          <span class="text-[10px] font-bold ${countStyle} px-2 py-0.5 rounded-full shrink-0">${DB[cat].length}</span>
         `;
         
         const content = document.createElement('div');
@@ -1847,68 +1937,4 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
           // 상세 풀화면
           sidebar.style.display = 'none';
           detailPanel.style.height = '100%';
-          detailPanel.style.display = '';
-          menuBtn.classList.add('hidden');
-          backBtn.classList.remove('hidden');
-          // 복귀 버튼 위치: 헤더 아래
-          const headerH = document.querySelector('header').offsetHeight +
-                          (document.getElementById('live-order-feed').classList.contains('hidden') ? 0 : document.getElementById('live-order-feed').offsetHeight) +
-                          (document.getElementById('ticker-container').classList.contains('hidden') ? 0 : document.getElementById('ticker-container').offsetHeight);
-          backBtn.style.top = (headerH + 8) + 'px';
-        }
-      }
-
-      window.toggleMobileMenu = function() {
-        if (!isMobile()) return;
-        if (mobileState === 'menu-full') applyMobileState('default');
-        else applyMobileState('menu-full');
-      };
-
-      window.goToDefault = function() {
-        if (!isMobile()) return;
-        applyMobileState('default');
-      };
-
-      window.handleDetailPanelClick = function(e) {
-        if (!isMobile()) return;
-        if (mobileState !== 'default') return;
-        // 인터랙티브 요소 클릭 시 무시
-        const tag = e.target.tagName;
-        if (['BUTTON','A','INPUT','SELECT','TEXTAREA','IMG'].includes(tag)) return;
-        applyMobileState('detail-full');
-      };
-
-      // 모바일에서 아이템 클릭 시 detail-full로
-      const _origRenderDetail = window.renderDetail;
-      window.renderDetail = function(item) {
-        _origRenderDetail(item);
-        if (isMobile()) applyMobileState('detail-full');
-      };
-
-      // 공지사항 버튼 클릭 시도 detail-full로
-      const _origShowNotice = window.showNotice;
-      window.showNotice = function() {
-        _origShowNotice();
-        if (isMobile()) applyMobileState('detail-full');
-      };
-
-      // 초기 상태 설정
-      if (isMobile()) applyMobileState('default');
-      window.addEventListener('resize', () => {
-        if (!isMobile()) {
-          sidebar.style.cssText = '';
-          detailPanel.style.cssText = '';
-          backBtn.classList.add('hidden');
-        } else {
-          applyMobileState('default');
-        }
-      });
-
-      renderSidebar();
-      loadYouTubeVideos();
-    }
-    
-    init();
-  </script>
-</body>
-</html>
+  
