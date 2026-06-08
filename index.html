@@ -1923,4 +1923,74 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
           // 상세 풀화면
           sidebar.style.display = 'none';
           detailPanel.style.height = '100%';
-  
+            backBtn.classList.add('hidden');
+
+        } else if (state === 'detail-full') {
+          // 상세 풀화면
+          sidebar.style.display = 'none';
+          detailPanel.style.height = '100%';
+          detailPanel.style.display = '';
+          menuBtn.classList.add('hidden');
+          backBtn.classList.remove('hidden');
+          // 복귀 버튼 위치: 헤더 아래
+          const headerH = document.querySelector('header').offsetHeight +
+                          (document.getElementById('live-order-feed').classList.contains('hidden') ? 0 : document.getElementById('live-order-feed').offsetHeight) +
+                          (document.getElementById('ticker-container').classList.contains('hidden') ? 0 : document.getElementById('ticker-container').offsetHeight);
+          backBtn.style.top = (headerH + 8) + 'px';
+        }
+      }
+
+      window.toggleMobileMenu = function() {
+        if (!isMobile()) return;
+        if (mobileState === 'menu-full') applyMobileState('default');
+        else applyMobileState('menu-full');
+      };
+
+      window.goToDefault = function() {
+        if (!isMobile()) return;
+        applyMobileState('default');
+      };
+
+      window.handleDetailPanelClick = function(e) {
+        if (!isMobile()) return;
+        if (mobileState !== 'default') return;
+        // 인터랙티브 요소 클릭 시 무시
+        const tag = e.target.tagName;
+        if (['BUTTON','A','INPUT','SELECT','TEXTAREA','IMG'].includes(tag)) return;
+        applyMobileState('detail-full');
+      };
+
+      // 모바일에서 아이템 클릭 시 detail-full로
+      const _origRenderDetail = window.renderDetail;
+      window.renderDetail = function(item) {
+        _origRenderDetail(item);
+        if (isMobile()) applyMobileState('detail-full');
+      };
+
+      // 공지사항 버튼 클릭 시도 detail-full로
+      const _origShowNotice = window.showNotice;
+      window.showNotice = function() {
+        _origShowNotice();
+        if (isMobile()) applyMobileState('detail-full');
+      };
+
+      // 초기 상태 설정
+      if (isMobile()) applyMobileState('default');
+      window.addEventListener('resize', () => {
+        if (!isMobile()) {
+          sidebar.style.cssText = '';
+          detailPanel.style.cssText = '';
+          backBtn.classList.add('hidden');
+        } else {
+          applyMobileState('default');
+        }
+      });
+
+      renderSidebar();
+      loadYouTubeVideos();
+    }
+    
+    init();
+  </script>
+</body>
+</html>
