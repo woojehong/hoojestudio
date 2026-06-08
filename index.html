@@ -1805,31 +1805,10 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
       const btns = document.querySelectorAll('.order-action-btn');
       btns.forEach(btn => { btn.outerHTML = generateOrderButtonHTML(crafter, itemName); });
 
-      const CRAFTER_TOKENS = {
-        "후제":    "8645321047:AAGHiuZVSQITvb4R1ZNT_DrUX_cbEF0N6vE",
-        "무통":    "8645321047:AAGHiuZVSQITvb4R1ZNT_DrUX_cbEF0N6vE",
-        "앙리자이에": "8645321047:AAGHiuZVSQITvb4R1ZNT_DrUX_cbEF0N6vE",
-        "그로":    "8645321047:AAGHiuZVSQITvb4R1ZNT_DrUX_cbEF0N6vE",
-        "메오":    "8776540381:AAFUJQhaWfrhMlM1OCGYQl-a8ioE3VWxjuk",
-        "돔페리뇽": "8776540381:AAFUJQhaWfrhMlM1OCGYQl-a8ioE3VWxjuk",
-        "오베르":  "8776540381:AAFUJQhaWfrhMlM1OCGYQl-a8ioE3VWxjuk",
-        "포므리":  "8681702046:AAENQLN547p4A8HIiTw3c5HNk9y5NmTSx8g",
-        "뒤작":    "8756058192:AAE6EJqF4co3xAPeazlPCJgYZHequOGymH4",
-        "디켐":    "7975466847:AAERY8VDFrdMLQs28r8qhqDcs-QpZh_eC1Y",
-        "크뤼그":  "8599306653:AAHqaLss67EaZPv5rEHacIsfY_wj2FGGu0w",
-        "아르망":  "8655424059:AAFOXstweYqERhmcquzix7ZehyxGHyosafI",
-        "라피트":  "8508876582:AAG9bEXx7Vt0oFaD6yti-6adQzOKi8NQimk",
-        "장테":    "8508876582:AAG9bEXx7Vt0oFaD6yti-6adQzOKi8NQimk",
-        "르루아":  "8508876582:AAG9bEXx7Vt0oFaD6yti-6adQzOKi8NQimk",
-      };
-      const TG_CHAT_ID = "5782526146";
-      const tgToken = CRAFTER_TOKENS[crafter];
-      if (tgToken) {
-        fetch(`https://api.telegram.org/bot${tgToken}/sendMessage`, {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ chat_id: TG_CHAT_ID, text: message })
-        }).catch(err => console.error('[TG] 네트워크 오류:', err));
-      }
+      // 토큰은 서버(notify.js)에서만 관리 — 아이템명으로 호출
+      const shortName = itemName.replace(/^\[.*?\]\s*/, '');
+      fetch(`/notify?item=${encodeURIComponent(shortName)}`)
+        .catch(err => console.error('[TG] 알림 오류:', err));
     };
 
     function init() {
