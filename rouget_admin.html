@@ -156,6 +156,24 @@
     </div>
   </div>
 
+  <!-- 애드온 다운로드 버튼 문구 -->
+  <div class="w-full max-w-2xl mb-5 mt-2 p-5 rounded-2xl glass-panel border-amber-500/20 shadow-xl">
+    <div class="flex items-center justify-between pb-4 cursor-pointer" onclick="toggleAddonLabel()">
+      <h3 class="text-amber-400 font-black tracking-tighter text-lg">⬇️ 애드온 다운로드 버튼 문구</h3>
+      <span id="addon-label-chevron" class="text-amber-400 font-black text-sm transition-transform">▼</span>
+    </div>
+    <div id="addon-label-body" class="hidden border-t border-amber-500/10 pt-4 flex flex-col gap-3">
+      <p class="text-gray-500 text-xs font-bold">index.html 헤더의 다운로드 버튼 문구를 수정합니다. 예: <span class="text-amber-300">후제공방 애드온 다운로드 (v1.2.3)</span></p>
+      <input id="addon-label-input" type="text" placeholder="후제공방 애드온 다운로드"
+        class="w-full bg-black/40 border border-amber-500/30 rounded-xl p-3 text-sm text-white outline-none focus:border-amber-400 font-bold shadow-inner">
+      <div class="flex gap-2">
+        <button onclick="saveAddonLabel()" class="flex-1 py-2.5 bg-amber-500/20 text-amber-300 border border-amber-500/40 font-black rounded-xl text-sm hover:bg-amber-500/40 hover:text-white transition-all">저장</button>
+        <button onclick="resetAddonLabel()" class="px-4 py-2.5 bg-gray-800 text-gray-400 border border-gray-700 font-black rounded-xl text-sm hover:bg-gray-700 transition-all">초기화</button>
+      </div>
+      <div id="addon-label-current" class="text-gray-600 text-xs font-bold"></div>
+    </div>
+  </div>
+
   <div class="mt-6 mb-4 text-gray-700 text-[9px] font-black opacity-40 tracking-[0.4em] uppercase">Hooje Studio Tower v5.0</div>
 
 </div><!-- /mainContent -->
@@ -917,6 +935,31 @@
       if(!confirm(`"${name}"\n정말 삭제하시겠습니까? 되돌릴 수 없습니다.`)) return;
       await remove(ref(db, `items/${currentCat}/${editingKey}`));
       closeItemModal();
+    };
+
+    // ── 애드온 다운로드 버튼 문구 ───────────────────────────────────────
+    window.toggleAddonLabel = () => {
+      const body = document.getElementById('addon-label-body');
+      const chevron = document.getElementById('addon-label-chevron');
+      const hidden = body.classList.toggle('hidden');
+      chevron.style.transform = hidden ? '' : 'rotate(180deg)';
+    };
+    onValue(ref(db, 'addon_label'), (snap) => {
+      const val = snap.val() || '';
+      const input = document.getElementById('addon-label-input');
+      const current = document.getElementById('addon-label-current');
+      if(input) input.value = val;
+      if(current) current.textContent = val ? `현재: ${val}` : '현재: (기본값)';
+    });
+    window.saveAddonLabel = async () => {
+      const val = document.getElementById('addon-label-input').value.trim();
+      await set(ref(db, 'addon_label'), val || null);
+      document.getElementById('addon-label-current').textContent = val ? `저장됨: ${val}` : '초기화됨 (기본값으로 표시)';
+    };
+    window.resetAddonLabel = async () => {
+      await set(ref(db, 'addon_label'), null);
+      document.getElementById('addon-label-input').value = '';
+      document.getElementById('addon-label-current').textContent = '초기화됨 (기본값으로 표시)';
     };
 
   </script>

@@ -183,7 +183,7 @@
         <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"/>
         </svg>
-        후제공방 애드온 다운로드
+        <span id="addon-btn-label">후제공방 애드온 다운로드</span>
       </a>
     </div>
 
@@ -950,6 +950,13 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
     onValue(ref(db, 'items'), (snap) => {
       buildDB(snap.val());
       renderSidebar();
+    }, { onlyOnce: true });
+
+    // 애드온 다운로드 버튼 문구 동기화
+    onValue(ref(db, 'addon_label'), (snap) => {
+      const label = snap.val();
+      const el = document.getElementById('addon-btn-label');
+      if (el) el.textContent = label || '후제공방 애드온 다운로드';
     }, { onlyOnce: true });
 
     // ── 제보 시스템 ────────────────────────────────────────────────────
