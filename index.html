@@ -1353,6 +1353,9 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
               showMissive = true;
               missiveList = (item.name.includes('[약초채집') || item.name.includes('[채광') || item.name.includes('[무두질')) ? GATHERING_MISSIVES : CRAFTING_MISSIVES;
           } else { showMissive = false; }
+      } else if (catName.startsWith('PVP ') || catName === "기계공학 방어구") {
+          showMissive = false;
+          embellishType = null;
       } else if (item.name.includes('[장식 ')) {
           showMissive = item.name.includes('죽음의 골목 낚시 바늘');
       } else {

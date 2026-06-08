@@ -4509,7 +4509,7 @@
         "fee": "자율",
         "icon": "",
         "id": 900014,
-        "is5Star": false,
+        "is5Star": true,
         "name": "[기계공학 판금 머리] 실체 없는 빛 태양 보호대",
         "popular": false,
         "reqMats": []
@@ -4520,7 +4520,7 @@
         "fee": "자율",
         "icon": "",
         "id": 900015,
-        "is5Star": false,
+        "is5Star": true,
         "name": "[기계공학 판금 손목] 실체 없는 빛 손목보호대",
         "popular": false,
         "reqMats": []
@@ -4531,7 +4531,7 @@
         "fee": "자율",
         "icon": "",
         "id": 900016,
-        "is5Star": false,
+        "is5Star": true,
         "name": "[기계공학 판금 발] 실체 없는 빛 디딤장화",
         "popular": false,
         "reqMats": []
@@ -4542,7 +4542,7 @@
         "fee": "자율",
         "icon": "",
         "id": 900017,
-        "is5Star": false,
+        "is5Star": true,
         "name": "[기계공학 사슬 머리] 실체 없는 빛 시야 두건",
         "popular": false,
         "reqMats": []
@@ -4553,7 +4553,7 @@
         "fee": "자율",
         "icon": "",
         "id": 900018,
-        "is5Star": false,
+        "is5Star": true,
         "name": "[기계공학 사슬 손목] 실체 없는 빛 팔찌",
         "popular": false,
         "reqMats": []
@@ -4564,7 +4564,7 @@
         "fee": "자율",
         "icon": "",
         "id": 900019,
-        "is5Star": false,
+        "is5Star": true,
         "name": "[기계공학 사슬 발] 실체 없는 빛 철강화",
         "popular": false,
         "reqMats": []
@@ -4575,7 +4575,7 @@
         "fee": "자율",
         "icon": "",
         "id": 900020,
-        "is5Star": false,
+        "is5Star": true,
         "name": "[기계공학 가죽 머리] 실체 없는 빛 탐지경",
         "popular": false,
         "reqMats": []
@@ -4586,7 +4586,7 @@
         "fee": "자율",
         "icon": "",
         "id": 900021,
-        "is5Star": false,
+        "is5Star": true,
         "name": "[기계공학 가죽 손목] 실체 없는 빛 손목매듭",
         "popular": false,
         "reqMats": []
@@ -4597,7 +4597,7 @@
         "fee": "자율",
         "icon": "",
         "id": 900022,
-        "is5Star": false,
+        "is5Star": true,
         "name": "[기계공학 가죽 발] 실체 없는 빛 신발",
         "popular": false,
         "reqMats": []
@@ -4608,7 +4608,7 @@
         "fee": "자율",
         "icon": "",
         "id": 900023,
-        "is5Star": false,
+        "is5Star": true,
         "name": "[기계공학 천 머리] 실체 없는 빛 눈싸개",
         "popular": false,
         "reqMats": []
@@ -4619,7 +4619,7 @@
         "fee": "자율",
         "icon": "",
         "id": 900024,
-        "is5Star": false,
+        "is5Star": true,
         "name": "[기계공학 천 손목] 실체 없는 빛 비단 소매장식",
         "popular": false,
         "reqMats": []
@@ -4630,7 +4630,7 @@
         "fee": "자율",
         "icon": "",
         "id": 900025,
-        "is5Star": false,
+        "is5Star": true,
         "name": "[기계공학 천 발] 실체 없는 빛 안락화",
         "popular": false,
         "reqMats": []

@@ -242,7 +242,7 @@ exports.handler = async (event) => {
   const crafter = ITEM_TO_CRAFTER[item];
   if (!crafter) {
     return {
-      statusCode: 404,
+      statusCode: 200,
       headers,
       body: JSON.stringify({ ok: false, error: `'${item}' 은(는) 후제공방 DB에 없습니다.` }),
     };
