@@ -156,21 +156,39 @@
     </div>
   </div>
 
-  <!-- 애드온 다운로드 버튼 문구 -->
+  <!-- 애드온 다운로드 버튼 문구 + 링크 -->
   <div class="w-full max-w-2xl mb-5 mt-2 p-5 rounded-2xl glass-panel border-amber-500/20 shadow-xl">
     <div class="flex items-center justify-between pb-4 cursor-pointer" onclick="toggleAddonLabel()">
-      <h3 class="text-amber-400 font-black tracking-tighter text-lg">⬇️ 애드온 다운로드 버튼 문구</h3>
+      <h3 class="text-amber-400 font-black tracking-tighter text-lg">애드온 다운로드 설정</h3>
       <span id="addon-label-chevron" class="text-amber-400 font-black text-sm transition-transform">▼</span>
     </div>
-    <div id="addon-label-body" class="hidden border-t border-amber-500/10 pt-4 flex flex-col gap-3">
-      <p class="text-gray-500 text-xs font-bold">index.html 헤더의 다운로드 버튼 문구를 수정합니다. 예: <span class="text-amber-300">후제공방 애드온 다운로드 (v1.2.3)</span></p>
-      <input id="addon-label-input" type="text" placeholder="후제공방 애드온 다운로드"
-        class="w-full bg-black/40 border border-amber-500/30 rounded-xl p-3 text-sm text-white outline-none focus:border-amber-400 font-bold shadow-inner">
-      <div class="flex gap-2">
-        <button onclick="saveAddonLabel()" class="flex-1 py-2.5 bg-amber-500/20 text-amber-300 border border-amber-500/40 font-black rounded-xl text-sm hover:bg-amber-500/40 hover:text-white transition-all">저장</button>
-        <button onclick="resetAddonLabel()" class="px-4 py-2.5 bg-gray-800 text-gray-400 border border-gray-700 font-black rounded-xl text-sm hover:bg-gray-700 transition-all">초기화</button>
+    <div id="addon-label-body" class="hidden border-t border-amber-500/10 pt-4 flex flex-col gap-4">
+
+      <!-- 버튼 문구 -->
+      <div class="flex flex-col gap-2">
+        <p class="text-amber-400 text-[10px] font-black uppercase tracking-widest">버튼 문구</p>
+        <input id="addon-label-input" type="text" placeholder="후제공방 애드온 다운로드"
+          class="w-full bg-black/40 border border-amber-500/30 rounded-xl p-3 text-sm text-white outline-none focus:border-amber-400 font-bold shadow-inner">
+        <div id="addon-label-current" class="text-gray-600 text-xs font-bold"></div>
+        <div class="flex gap-2">
+          <button onclick="saveAddonLabel()" class="flex-1 py-2.5 bg-amber-500/20 text-amber-300 border border-amber-500/40 font-black rounded-xl text-sm hover:bg-amber-500/40 hover:text-white transition-all">저장</button>
+          <button onclick="resetAddonLabel()" class="px-4 py-2.5 bg-gray-800 text-gray-400 border border-gray-700 font-black rounded-xl text-sm hover:bg-gray-700 transition-all">초기화</button>
+        </div>
       </div>
-      <div id="addon-label-current" class="text-gray-600 text-xs font-bold"></div>
+
+      <!-- 다운로드 링크 -->
+      <div class="flex flex-col gap-2 border-t border-amber-500/10 pt-4">
+        <p class="text-amber-400 text-[10px] font-black uppercase tracking-widest">다운로드 링크 URL</p>
+        <input id="addon-url-input" type="text" placeholder="https://github.com/.../HoojeGongbang.zip"
+          class="w-full bg-black/40 border border-amber-500/30 rounded-xl p-3 text-sm text-white outline-none focus:border-amber-400 font-bold shadow-inner">
+        <div id="addon-url-current" class="text-gray-600 text-xs font-bold break-all"></div>
+        <div class="flex gap-2">
+          <button onclick="saveAddonUrl()" class="flex-1 py-2.5 bg-amber-500/20 text-amber-300 border border-amber-500/40 font-black rounded-xl text-sm hover:bg-amber-500/40 hover:text-white transition-all">저장</button>
+          <button onclick="resetAddonUrl()" class="px-4 py-2.5 bg-gray-800 text-gray-400 border border-gray-700 font-black rounded-xl text-sm hover:bg-gray-700 transition-all">초기화</button>
+        </div>
+      </div>
+
+      <div id="addon-save-msg" class="hidden text-green-400 text-xs font-black text-center py-1"></div>
     </div>
   </div>
 
@@ -958,6 +976,16 @@
       const hidden = body.classList.toggle('hidden');
       chevron.style.transform = hidden ? '' : 'rotate(180deg)';
     };
+
+    function showAddonMsg(msg, ok = true) {
+      const el = document.getElementById('addon-save-msg');
+      if (!el) return;
+      el.textContent = msg;
+      el.className = `text-xs font-black text-center py-1 ${ok ? 'text-green-400' : 'text-red-400'}`;
+      el.classList.remove('hidden');
+      setTimeout(() => el.classList.add('hidden'), 2500);
+    }
+
     onValue(ref(db, 'addon_label'), (snap) => {
       const val = snap.val() || '';
       const input = document.getElementById('addon-label-input');
@@ -965,15 +993,53 @@
       if(input) input.value = val;
       if(current) current.textContent = val ? `현재: ${val}` : '현재: (기본값)';
     });
+    onValue(ref(db, 'addon_url'), (snap) => {
+      const val = snap.val() || '';
+      const input = document.getElementById('addon-url-input');
+      const current = document.getElementById('addon-url-current');
+      if(input) input.value = val;
+      if(current) current.textContent = val ? `현재: ${val}` : '현재: (기본값)';
+    });
+
     window.saveAddonLabel = async () => {
-      const val = document.getElementById('addon-label-input').value.trim();
-      await set(ref(db, 'addon_label'), val || null);
-      document.getElementById('addon-label-current').textContent = val ? `저장됨: ${val}` : '초기화됨 (기본값으로 표시)';
+      try {
+        const val = document.getElementById('addon-label-input').value.trim();
+        await set(ref(db, 'addon_label'), val || null);
+        document.getElementById('addon-label-current').textContent = val ? `현재: ${val}` : '현재: (기본값)';
+        showAddonMsg('문구 저장 완료');
+      } catch(e) {
+        showAddonMsg('저장 실패: ' + e.message, false);
+      }
     };
     window.resetAddonLabel = async () => {
-      await set(ref(db, 'addon_label'), null);
-      document.getElementById('addon-label-input').value = '';
-      document.getElementById('addon-label-current').textContent = '초기화됨 (기본값으로 표시)';
+      try {
+        await set(ref(db, 'addon_label'), null);
+        document.getElementById('addon-label-input').value = '';
+        document.getElementById('addon-label-current').textContent = '현재: (기본값)';
+        showAddonMsg('문구 초기화 완료');
+      } catch(e) {
+        showAddonMsg('초기화 실패: ' + e.message, false);
+      }
+    };
+    window.saveAddonUrl = async () => {
+      try {
+        const val = document.getElementById('addon-url-input').value.trim();
+        await set(ref(db, 'addon_url'), val || null);
+        document.getElementById('addon-url-current').textContent = val ? `현재: ${val}` : '현재: (기본값)';
+        showAddonMsg('링크 저장 완료');
+      } catch(e) {
+        showAddonMsg('저장 실패: ' + e.message, false);
+      }
+    };
+    window.resetAddonUrl = async () => {
+      try {
+        await set(ref(db, 'addon_url'), null);
+        document.getElementById('addon-url-input').value = '';
+        document.getElementById('addon-url-current').textContent = '현재: (기본값)';
+        showAddonMsg('링크 초기화 완료');
+      } catch(e) {
+        showAddonMsg('초기화 실패: ' + e.message, false);
+      }
     };
 
   </script>

@@ -221,52 +221,43 @@ function getCrafterToken(crafter) {
   return null;
 }
 
+const RTDB_URL = "https://rougetsblendingroom-default-rtdb.firebaseio.com";
+
 exports.handler = async (event) => {
-  const headers = {
+  const jsonHeaders = {
     "Access-Control-Allow-Origin": "*",
     "Content-Type": "application/json; charset=utf-8",
   };
 
   const params = event.queryStringParameters || {};
   const rawItem = params.item || "";
-  const item = decodeURIComponent(rawItem).trim();
+  const fullItem = decodeURIComponent(rawItem).trim();  // 전체 아이템명 (브라켓 포함 가능)
 
-  if (!item) {
-    return {
-      statusCode: 400,
-      headers,
-      body: JSON.stringify({ ok: false, error: "item 파라미터가 없습니다." }),
-    };
+  if (!fullItem) {
+    return { statusCode: 400, headers: jsonHeaders, body: JSON.stringify({ ok: false, error: "item 파라미터가 없습니다." }) };
   }
 
-  const crafter = ITEM_TO_CRAFTER[item];
+  // 브라켓 prefix 제거해서 ITEM_TO_CRAFTER 조회 ([사슬 머리] 원정... → 원정...)
+  const shortItem = fullItem.replace(/^\[.*?\]\s*/, "");
+  const crafter = ITEM_TO_CRAFTER[shortItem] || ITEM_TO_CRAFTER[fullItem];
+
   if (!crafter) {
-    return {
-      statusCode: 200,
-      headers,
-      body: JSON.stringify({ ok: false, error: `'${item}' 은(는) 후제공방 DB에 없습니다.` }),
-    };
+    return { statusCode: 200, headers: jsonHeaders, body: JSON.stringify({ ok: false, error: `'${shortItem}' 은(는) DB에 없습니다.` }) };
   }
 
   const token  = getCrafterToken(crafter);
   const chatId = process.env["TG_" + "CHAT_ID"];
 
   if (!token || !chatId) {
-    return {
-      statusCode: 500,
-      headers,
-      body: JSON.stringify({ ok: false, error: "서버 환경변수 누락" }),
-    };
+    return { statusCode: 500, headers: jsonHeaders, body: JSON.stringify({ ok: false, error: "서버 환경변수 누락" }) };
   }
 
-  const message =
-    `🔔 후제공방 주문 알림\n\n` +
-    `📦 아이템: ${item}\n` +
-    `⚒️ 제작자: ${crafter}\n\n` +
-    `인게임 주문 제작 NPC에서 주문을 넣어주세요.`;
+  // 텔레그램 메시지 — 2줄
+  const message = `제작자: ${crafter}\n아이템: ${fullItem}`;
 
   try {
-    const res = await fetch(
+    // 1. 텔레그램 전송
+    const tgRes = await fetch(
       `https://api.telegram.org/bot${token}/sendMessage`,
       {
         method: "POST",
@@ -274,24 +265,32 @@ exports.handler = async (event) => {
         body: JSON.stringify({ chat_id: chatId, text: message }),
       }
     );
-    const data = await res.json();
-    if (!data.ok) {
-      return {
-        statusCode: 502,
-        headers,
-        body: JSON.stringify({ ok: false, error: "텔레그램 전송 실패", detail: data }),
-      };
+    const tgData = await tgRes.json();
+    if (!tgData.ok) {
+      return { statusCode: 502, headers: jsonHeaders, body: JSON.stringify({ ok: false, error: "텔레그램 전송 실패", detail: tgData }) };
     }
+
+    // 2. Firebase orders에 추가
+    await fetch(`${RTDB_URL}/orders.json`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        crafter,
+        itemName: fullItem,
+        status: "pending",
+        timestamp: { ".sv": "timestamp" },
+      }),
+    });
+
+    // 3. 성공 → hooje.pro로 리디렉션 (토스트 표시용 파라미터 포함)
     return {
-      statusCode: 200,
-      headers,
-      body: JSON.stringify({ ok: true, crafter, item }),
+      statusCode: 303,
+      headers: {
+        Location: `https://hooje.pro/?notified=1&c=${encodeURIComponent(crafter)}&i=${encodeURIComponent(fullItem)}`,
+      },
+      body: "",
     };
   } catch (err) {
-    return {
-      statusCode: 500,
-      headers,
-      body: JSON.stringify({ ok: false, error: err.message }),
-    };
+    return { statusCode: 500, headers: jsonHeaders, body: JSON.stringify({ ok: false, error: err.message }) };
   }
 };
