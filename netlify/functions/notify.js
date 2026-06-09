@@ -270,8 +270,12 @@ exports.handler = async (event) => {
       return { statusCode: 502, headers: jsonHeaders, body: JSON.stringify({ ok: false, error: "텔레그램 전송 실패", detail: tgData }) };
     }
 
-    // 2. Firebase orders에 추가
-    await fetch(`${RTDB_URL}/orders.json`, {
+    // 2. Firebase orders에 추가 (fire-and-forget — 실패해도 리디렉션은 진행)
+    const dbSecret = process.env["FIREBASE_DB_SECRET"];
+    const dbUrl = dbSecret
+      ? `${RTDB_URL}/orders.json?auth=${dbSecret}`
+      : `${RTDB_URL}/orders.json`;
+    fetch(dbUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -280,15 +284,18 @@ exports.handler = async (event) => {
         status: "pending",
         timestamp: { ".sv": "timestamp" },
       }),
-    });
+    }).catch(() => {});  // 에러 무시
 
-    // 3. 성공 → hooje.pro로 리디렉션 (토스트 표시용 파라미터 포함)
+    // 3. 성공 → hooje.pro로 리디렉션
+    // (Netlify 프록시가 303을 삼켜버릴 수 있으므로 HTML meta-refresh 사용)
+    const redirectUrl = `https://hooje.pro/?notified=1&c=${encodeURIComponent(crafter)}&i=${encodeURIComponent(fullItem)}`;
     return {
-      statusCode: 303,
-      headers: {
-        Location: `https://hooje.pro/?notified=1&c=${encodeURIComponent(crafter)}&i=${encodeURIComponent(fullItem)}`,
-      },
-      body: "",
+      statusCode: 200,
+      headers: { "Content-Type": "text/html; charset=utf-8" },
+      body: `<!DOCTYPE html><html><head>
+<meta http-equiv="refresh" content="0;url=${redirectUrl}">
+<script>window.location.replace(${JSON.stringify(redirectUrl)});</script>
+</head><body></body></html>`,
     };
   } catch (err) {
     return { statusCode: 500, headers: jsonHeaders, body: JSON.stringify({ ok: false, error: err.message }) };
