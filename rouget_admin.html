@@ -430,8 +430,7 @@
         const time = o.timestamp ? new Date(o.timestamp).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false }) : '--:--';
         const crafter = o.crafter || '미정';
         const cColor = CLS_COLOR[crafter] || '#6B7280';
-        const match = o.itemName.match(/\[.*?\]/);
-        const shortItemName = match ? match[0] : o.itemName;
+        const shortItemName = o.itemName || '(미정)';
 
         let badge = '', buttons = '', timeHtml = '';
 

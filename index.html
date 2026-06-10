@@ -1822,9 +1822,8 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
       const btns = document.querySelectorAll('.order-action-btn');
       btns.forEach(btn => { btn.outerHTML = generateOrderButtonHTML(crafter, itemName); });
 
-      // 토큰은 서버(notify.js)에서만 관리 — 아이템명으로 호출
-      const shortName = itemName.replace(/^\[.*?\]\s*/, '');
-      fetch(`/notify?item=${encodeURIComponent(shortName)}`)
+      // 토큰은 서버(notify.js)에서만 관리 — 전체 아이템명 전달 (bracket 포함)
+      fetch(`/notify?item=${encodeURIComponent(itemName)}`)
         .catch(err => console.error('[TG] 알림 오류:', err));
     };
 
