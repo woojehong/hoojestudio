@@ -5,3 +5,16 @@
   from = "/notify"
   to   = "/.netlify/functions/notify"
   status = 200
+
+# DB 백업/내부 도구 파일 외부 접근 차단
+[[redirects]]
+  from = "/backup/*"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/tools/*"
+  to = "/404.html"
+  status = 404
+  force = true

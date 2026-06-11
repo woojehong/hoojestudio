@@ -3,6 +3,8 @@
 // https://hooje.pro/notify?item=아이템명
 // ============================================================
 
+// === AUTO-GENERATED:ITEM_TO_CRAFTER:START ===
+// 이 블록은 tools/sync-db.js 가 Firebase 데이터로 자동 생성합니다. 직접 수정하지 마세요.
 const ITEM_TO_CRAFTER = {
   // 천 방어구
   "순교자의 손목띠": "오베르",
@@ -207,6 +209,7 @@ const ITEM_TO_CRAFTER = {
   "탈라시안 경쟁자의 판금 손목띠": "앙리자이에",
   "탈라시안 경쟁자의 판금 활동화": "앙리자이에",
 };
+// === AUTO-GENERATED:ITEM_TO_CRAFTER:END ===
 
 function getCrafterToken(crafter) {
   const e = process.env;
@@ -223,6 +226,28 @@ function getCrafterToken(crafter) {
 
 const RTDB_URL = "https://rougetsblendingroom-default-rtdb.firebaseio.com";
 
+// ── 간이 속도 제한 (함수 인스턴스 메모리 기반 — 콜드스타트 시 초기화됨) ──
+// 동일 아이템: 30초에 1회 / 동일 IP: 60초에 5회
+const lastItemSent = new Map();
+const ipHits = new Map();
+function isRateLimited(item, ip) {
+  const now = Date.now();
+  const last = lastItemSent.get(item) || 0;
+  if (now - last < 30 * 1000) return true;
+  const hits = (ipHits.get(ip) || []).filter(t => now - t < 60 * 1000);
+  if (hits.length >= 5) return true;
+  hits.push(now);
+  ipHits.set(ip, hits);
+  lastItemSent.set(item, now);
+  return false;
+}
+
+// Netlify가 쿼리스트링을 1차 디코딩하므로 추가 디코딩은 %xx 패턴이 남아있을 때만 (malformed % 입력 시 500 방지)
+function safeDecode(s) {
+  if (!/%[0-9A-Fa-f]{2}/.test(s)) return s;
+  try { return decodeURIComponent(s); } catch { return s; }
+}
+
 exports.handler = async (event) => {
   const jsonHeaders = {
     "Access-Control-Allow-Origin": "*",
@@ -231,10 +256,15 @@ exports.handler = async (event) => {
 
   const params = event.queryStringParameters || {};
   const rawItem = params.item || "";
-  const fullItem = decodeURIComponent(rawItem).trim();  // 전체 아이템명 (브라켓 포함 가능)
+  const fullItem = safeDecode(rawItem).trim();  // 전체 아이템명 (브라켓 포함 가능)
 
   if (!fullItem) {
     return { statusCode: 400, headers: jsonHeaders, body: JSON.stringify({ ok: false, error: "item 파라미터가 없습니다." }) };
+  }
+
+  const clientIp = (event.headers && (event.headers["x-nf-client-connection-ip"] || event.headers["client-ip"])) || "unknown";
+  if (isRateLimited(fullItem, clientIp)) {
+    return { statusCode: 429, headers: jsonHeaders, body: JSON.stringify({ ok: false, error: "요청이 너무 잦습니다. 잠시 후 다시 시도해주세요." }) };
   }
 
   // 브라켓 prefix 제거해서 ITEM_TO_CRAFTER 조회 ([사슬 머리] 원정... → 원정...)

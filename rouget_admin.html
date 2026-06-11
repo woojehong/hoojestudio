@@ -326,10 +326,13 @@
     const db = getDatabase(app);
     const auth = getAuth(app);
 
-    const CLS_COLOR = { 
-      "메오": "#8788EE", "후제": "#8788EE", "무통": "#8788EE", "앙리자이에": "#8788EE", "그로": "#8788EE", "포므리": "#0070DE", 
+    const CLS_COLOR = {
+      "메오": "#8788EE", "후제": "#8788EE", "무통": "#8788EE", "앙리자이에": "#8788EE", "그로": "#8788EE", "포므리": "#0070DE",
       "뒤작": "#A330C9", "디켐": "#FFF569", "크뤼그": "#C41E3A", "아르망": "#F48CBA", "라피트": "#3FC7EB", "장테": "#00FF96", "돔페리뇽": "#00FF98", "오베르": "#8788EE", "르루아": "#8788EE", "미정": "#6B7280"
     };
+
+    // 외부(방문자) 입력 데이터 HTML 이스케이프 — 관리자 세션 XSS 방지
+    const escapeHTML = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
     if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
     let wakeLock = null;
@@ -410,8 +413,8 @@
       summary.innerHTML = `
         ${sorted.map(([crafter, count]) => {
           const color = CLS_COLOR[crafter] || '#6B7280';
-          return `<div onclick="completeCrafterOrders('${crafter}')" class="flex items-center justify-between px-2 py-1 rounded-lg bg-black/30 border border-gray-900 hover:border-emerald-500/40 hover:bg-emerald-500/5 transition-all cursor-pointer" title="${crafter} 전체 완료">
-            <span class="text-[10px] font-black" style="color:${color}">${crafter}</span>
+          return `<div onclick="completeCrafterOrders(this.dataset.crafter)" data-crafter="${escapeHTML(crafter)}" class="flex items-center justify-between px-2 py-1 rounded-lg bg-black/30 border border-gray-900 hover:border-emerald-500/40 hover:bg-emerald-500/5 transition-all cursor-pointer" title="${escapeHTML(crafter)} 전체 완료">
+            <span class="text-[10px] font-black" style="color:${color}">${escapeHTML(crafter)}</span>
             <span class="text-[10px] font-black text-white">${count}</span>
           </div>`;
         }).join('')}
@@ -428,9 +431,9 @@
 
       listContainer.innerHTML = orders.slice(0, 100).map(o => {
         const time = o.timestamp ? new Date(o.timestamp).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false }) : '--:--';
-        const crafter = o.crafter || '미정';
-        const cColor = CLS_COLOR[crafter] || '#6B7280';
-        const shortItemName = o.itemName || '(미정)';
+        const crafter = escapeHTML(o.crafter || '미정');
+        const cColor = CLS_COLOR[o.crafter] || '#6B7280';
+        const shortItemName = escapeHTML(o.itemName || '(미정)');
 
         let badge = '', buttons = '', timeHtml = '';
 
@@ -499,6 +502,18 @@
         .filter(o => !o.timestamp || (now - o.timestamp) < H24)
         .sort((a,b) => b.timestamp - a.timestamp);
       allOrdersCache = orders;
+
+      // 7일 지난 주문 자동 정리 (DB 무한 누적 방지, 세션당 1회)
+      if (!window.__ordersPruned) {
+        window.__ordersPruned = true;
+        const D7 = 7 * H24;
+        const prune = {};
+        Object.keys(data).forEach(k => {
+          const ts = data[k] && data[k].timestamp;
+          if (ts && (now - ts) > D7) prune[`/orders/${k}`] = null;
+        });
+        if (Object.keys(prune).length) update(ref(db), prune).catch(() => {});
+      }
 
       if(!isFirstLoad && orders.length > lastOrderCount) document.getElementById('order-sound').play().catch(()=>{});
       lastOrderCount = orders.length;
@@ -647,7 +662,7 @@
 
       list.innerHTML = entries.map(([key, r]) => {
         const time = new Date(r.timestamp).toLocaleDateString('ko-KR', { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
-        const meta = r.type === 'error' ? `<span class="text-red-400 text-[10px] font-black">${r.category || ''} · ${r.itemName || ''}</span>` : '';
+        const meta = r.type === 'error' ? `<span class="text-red-400 text-[10px] font-black">${escapeHTML(r.category || '')} · ${escapeHTML(r.itemName || '')}</span>` : '';
         const isConfirmed = r.confirmed;
         const isArchived = r.archived;
 
@@ -666,7 +681,7 @@
                 ${isConfirmed ? '<span class="text-[9px] text-emerald-500 font-black">✓ 확인됨</span>' : '<span class="text-[9px] text-red-400 font-black animate-pulse">● 미확인</span>'}
               </div>
             </div>
-            <p class="text-gray-400 text-xs font-bold leading-relaxed truncate">${r.content}</p>
+            <p class="text-gray-400 text-xs font-bold leading-relaxed truncate">${escapeHTML(r.content)}</p>
           </div>`;
       }).join('');
     }
@@ -846,10 +861,10 @@
           <div class="flex items-center gap-3 overflow-hidden flex-1">
             <img src="https://wow.zamimg.com/images/wow/icons/small/${item.icon || 'inv_misc_questionmark'}.jpg" class="w-8 h-8 rounded-lg shrink-0 border border-gray-800">
             <div class="overflow-hidden">
-              <div class="text-sm font-black text-white truncate">${item.name}</div>
+              <div class="text-sm font-black text-white truncate">${escapeHTML(item.name)}</div>
               <div class="flex items-center gap-2 mt-0.5">
-                <span class="text-[10px] font-bold text-gray-500">${item.crafter}</span>
-                <span class="text-[10px] font-bold text-gray-600">${item.fee || '-'}</span>
+                <span class="text-[10px] font-bold text-gray-500">${escapeHTML(item.crafter)}</span>
+                <span class="text-[10px] font-bold text-gray-600">${escapeHTML(item.fee || '-')}</span>
                 ${item.popular ? '<span class="text-[9px] font-black text-red-400 border border-red-400/30 rounded px-1">HOT</span>' : ''}
                 ${item.is5Star ? '<span class="text-[9px] font-black text-yellow-400">★5</span>' : ''}
                 ${!item.active ? '<span class="text-[9px] font-black text-red-600">비활성</span>' : ''}

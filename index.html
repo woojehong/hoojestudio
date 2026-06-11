@@ -649,9 +649,13 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
     const FIXED_VIDEO_ID = ''; 
 
     
+    // 사용자 입력/외부 데이터 HTML 이스케이프 (XSS 방지)
+    const escapeHTML = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
     // [신규] 제품별 독립 쿨타임 및 장바구니 저장소
     const itemCooldowns = {};
     let shoppingCart = [];
+    let currentDetailItem = null; // 현재 상세 패널에 표시 중인 아이템
     let favorites = JSON.parse(localStorage.getItem('favs')) || [];
 
     let currentStatusType = '';
@@ -767,7 +771,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
             <div class="relative flex items-center gap-2 px-3 py-1.5 rounded-lg border ${borderClass} bg-gray-950 shadow-md transition-all duration-500">
               ${myBadge}
               <span class="text-xs md:text-sm font-black text-gray-500">${timeStr}</span>
-              <span class="text-[11px] md:text-xs font-bold text-white truncate max-w-[120px] md:max-w-[150px]">${order.itemName}</span>
+              <span class="text-[11px] md:text-xs font-bold text-white truncate max-w-[120px] md:max-w-[150px]">${escapeHTML(order.itemName)}</span>
               ${statusHtml}
             </div>
           </div>
@@ -838,8 +842,8 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
       { label: "축복받은 천산갑 부적<br>(금색)", copy: "축복받은 천산갑 부적", icon: "inv_jewelry_necklace_139" },
       { label: "원시 포자 결속끈<br>(금색)", copy: "원시 포자 결속끈", icon: "inv_12_profession_leatherworking_armor_banding_green" },
       { label: "포식의 결속끈<br>(금색)", copy: "포식의 결속끈", icon: "inv_12_profession_leatherworking_armor_banding_brown" },
-      { label: "다크문 혈기<br>(금색)", copy: "다크문 인장: 혈기", icon: "inv_12_profession_inscriptions_darkmoonsigil_hunt" },
-      { label: "다크문 사냥<br>(금색)", copy: "다크문 인장: 사냥", icon: "inv_12_profession_inscriptions_darkmoonsigil_bloom" },
+      { label: "다크문 혈기<br>(금색)", copy: "다크문 인장: 혈기", icon: "inv_12_profession_inscriptions_darkmoonsigil_bloom" },
+      { label: "다크문 사냥<br>(금색)", copy: "다크문 인장: 사냥", icon: "inv_12_profession_inscriptions_darkmoonsigil_hunt" },
       { label: "다크문 부식<br>(금색)", copy: "다크문 인장: 부식", icon: "inv_12_profession_inscriptions_darkmoonsigil_rot" },
       { label: "다크문 공허<br>(금색)", copy: "다크문 인장: 공허", icon: "inv_12_profession_inscriptions_darkmoonsigil_void" }
     ];
@@ -1279,6 +1283,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
     }
 
     window.renderDetail = function(item) {
+      currentDetailItem = item;
       document.getElementById('notice-state').classList.add('hidden');
       document.getElementById('content-state').classList.remove('hidden');
       document.getElementById('detail-panel').scrollTop = 0;
@@ -1673,10 +1678,10 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
       localStorage.setItem(FLOAT_SEEN_KEY, JSON.stringify(m));
     }
 
-    // 아이템명 약칭: [천 허리] 부분만
+    // 아이템명 약칭: [천 허리] 부분만 (innerHTML에 들어가므로 이스케이프)
     function shortName(itemName) {
-      const m = itemName.match(/\[([^\]]+)\]/);
-      return m ? `[${m[1]}]` : itemName;
+      const m = String(itemName || '').match(/\[([^\]]+)\]/);
+      return escapeHTML(m ? `[${m[1]}]` : itemName);
     }
 
     let floatingVisible = false;
@@ -1796,8 +1801,15 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
       }
     }
 
-    // ── sendOrder 패치: push 완료 후 key 저장 ──────────────────────────
-    const _origSendOrder = window.sendOrder;
+    // ── 주문 버튼 재생성: 항상 "현재 보고 있는 아이템" 기준 ────────────
+    function refreshOrderButtons() {
+      if (!currentDetailItem) return;
+      const top = document.getElementById('top-order-section');
+      const bottom = document.getElementById('bottom-order-section');
+      if (top) top.innerHTML = generateOrderButtonHTML(currentDetailItem.crafter, currentDetailItem.name, false);
+      if (bottom) bottom.innerHTML = generateOrderButtonHTML(currentDetailItem.crafter, currentDetailItem.name, true);
+    }
+
     window.sendOrder = function(crafter, itemName) {
       const now = Date.now();
       const cdKey = 'cd_' + itemName;
@@ -1807,18 +1819,12 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
       if(itemCooldowns[itemName]) return;
       itemCooldowns[itemName] = true;
 
-      // 1분 후 버튼 자동 복구
+      // 1분 후 버튼 자동 복구 — 현재 표시 중인 아이템 기준으로만 재생성
       setTimeout(() => {
         itemCooldowns[itemName] = false;
         localStorage.removeItem(cdKey);
-        document.querySelectorAll('.order-action-btn').forEach(btn => {
-          btn.outerHTML = generateOrderButtonHTML(crafter, itemName);
-        });
+        refreshOrderButtons();
       }, 60000);
-
-      const partMatch = itemName.match(/\[(.*?)\]/);
-      const part = partMatch ? partMatch[1] : "아이템";
-      const message = `${crafter}에게 ${part} 주문!`;
 
       const orderRef = push(ref(db, 'orders'), {
         crafter, itemName, status: 'pending', timestamp: serverTimestamp()
@@ -1826,8 +1832,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
       // key 저장 (serverTimestamp 대신 로컬 시각 사용)
       saveMyOrderKey(orderRef.key, Date.now());
 
-      const btns = document.querySelectorAll('.order-action-btn');
-      btns.forEach(btn => { btn.outerHTML = generateOrderButtonHTML(crafter, itemName); });
+      refreshOrderButtons();
 
       // 토큰은 서버(notify.js)에서만 관리 — 전체 아이템명 전달 (bracket 포함)
       fetch(`/notify?item=${encodeURIComponent(itemName)}`)
@@ -1947,12 +1952,6 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
           menuLabel.textContent = '닫기';
           menuBtn.classList.remove('hidden');
           backBtn.classList.add('hidden');
-
-        } else if (state === 'detail-full') {
-          // 상세 풀화면
-          sidebar.style.display = 'none';
-          detailPanel.style.height = '100%';
-            backBtn.classList.add('hidden');
 
         } else if (state === 'detail-full') {
           // 상세 풀화면
