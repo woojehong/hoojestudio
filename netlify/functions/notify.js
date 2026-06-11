@@ -300,8 +300,29 @@ exports.handler = async (event) => {
       return { statusCode: 502, headers: jsonHeaders, body: JSON.stringify({ ok: false, error: "텔레그램 전송 실패", detail: tgData }) };
     }
 
-    // 2. 성공 → hooje.pro로 리디렉션
-    // (Firebase write는 index.html 클라이언트에서 처리 — 여기서 중복 쓰지 않음)
+    // 2. Firebase /orders 기록 — 애드온/직접 호출도 Live Orders에 표시되도록
+    //    (웹사이트 주문은 클라이언트가 직접 기록하므로 src=web 이면 건너뜀)
+    if (params.src !== "web") {
+      try {
+        const dupRes = await fetch(`${RTDB_URL}/orders.json?orderBy="$key"&limitToLast=20`);
+        const recent = (await dupRes.json()) || {};
+        const now = Date.now();
+        const isDup = Object.values(recent).some(
+          (o) => o && o.itemName === fullItem && o.timestamp && now - o.timestamp < 90 * 1000
+        );
+        if (!isDup) {
+          await fetch(`${RTDB_URL}/orders.json`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ crafter, itemName: fullItem, status: "pending", timestamp: { ".sv": "timestamp" } }),
+          });
+        }
+      } catch (e) {
+        // 기록 실패해도 알림 흐름은 유지
+      }
+    }
+
+    // 3. 성공 → hooje.pro로 리디렉션
     // (Netlify 프록시가 303을 삼켜버릴 수 있으므로 HTML meta-refresh 사용)
     const redirectUrl = `https://hooje.pro/?notified=1&c=${encodeURIComponent(crafter)}&i=${encodeURIComponent(fullItem)}`;
     return {

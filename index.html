@@ -2,6 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>후제공방 | 아즈샤라 제작 서비스</title>
   
   <meta property="og:type" content="website">
@@ -284,22 +285,22 @@
 
     <!-- Starfall Forest — 골드 glow -->
     <a href="https://starfallforest.netlify.app/" target="_blank" class="block w-full overflow-hidden rounded-xl md:rounded-2xl border-2 border-yellow-500/50 transition-all group aspect-[3/1] relative starfall-pulse">
-      <img src="starfall_banner.png" alt="Starfall Forest" class="w-full h-full object-cover">
+      <img src="starfall_banner.webp" alt="Starfall Forest" class="w-full h-full object-cover">
     </a>
 
     <!-- 유기견 공격대 — 은빛 glow -->
     <a href="https://abandoneddogs.netlify.app/" target="_blank" class="block w-full overflow-hidden rounded-xl md:rounded-2xl border border-gray-400/30 transition-all group aspect-[3/1] ugdog-pulse">
-      <img src="sad_banner.png" alt="유기견 공격대" class="w-full h-full object-cover">
+      <img src="sad_banner.webp" alt="유기견 공격대" class="w-full h-full object-cover">
     </a>
 
     <!-- 후제공방 — 흑마법사 퍼플 glow -->
     <a href="https://hooje.pro/" class="block w-full overflow-hidden rounded-xl md:rounded-2xl transition-all group aspect-[3/1] hooje-pulse" style="border: 1px solid rgba(160,100,50,0.4);">
-      <img src="hooje_banner.png" alt="후제공방" class="w-full h-full object-cover">
+      <img src="hooje_banner.webp" alt="후제공방" class="w-full h-full object-cover">
     </a>
 
     <!-- YouTube — 레드 glow -->
     <a href="https://www.youtube.com/@warlockhooje" target="_blank" class="block w-full overflow-hidden rounded-xl md:rounded-2xl border border-red-500/40 transition-all group aspect-[3/1] yt-pulse">
-      <img src="youtube_banner.png" alt="흑마법사 후제 Youtube" class="w-full h-full object-cover">
+      <img src="youtube_banner.webp" alt="흑마법사 후제 Youtube" class="w-full h-full object-cover">
     </a>
 
     </div><!-- /grid -->
@@ -463,7 +464,7 @@
     <div class="flex flex-col items-center gap-1">
       <span class="text-white text-[9px] font-black px-2 py-0.5 rounded-full border select-none" style="border-color:#92400e; letter-spacing:0.05em;">Support me!</span>
       <button onclick="showDonationPopup()" class="w-11 h-11 rounded-full overflow-hidden shadow-lg transition-all hover:scale-110 hover:brightness-110 p-0 border-0 bg-transparent">
-        <img src="coffee.png" alt="Support me" class="w-full h-full object-cover rounded-full">
+        <img src="coffee.webp" alt="Support me" class="w-full h-full object-cover rounded-full">
       </button>
     </div>
 
@@ -1834,8 +1835,8 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 
       refreshOrderButtons();
 
-      // 토큰은 서버(notify.js)에서만 관리 — 전체 아이템명 전달 (bracket 포함)
-      fetch(`/notify?item=${encodeURIComponent(itemName)}`)
+      // 토큰은 서버(notify.js)에서만 관리 — src=web: 주문 기록은 위에서 이미 했으므로 서버 측 중복 기록 방지
+      fetch(`/notify?item=${encodeURIComponent(itemName)}&src=web`)
         .catch(err => console.error('[TG] 알림 오류:', err));
     };
 
