@@ -1656,9 +1656,11 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
     const FLOAT_SEEN_KEY = 'hooje_float_seen';     // 이미 닫은 주문 key별 상태
     const FLOAT_24H = 24 * 60 * 60 * 1000;
 
-    // 주문 버튼 클릭 시 key 저장 (sendOrder 호출 직후 연동)
+    // 주문 버튼 클릭 시 key 저장 (sendOrder 호출 직후 연동 / notify 리디렉션 &o= 파라미터에서도 사용)
     function saveMyOrderKey(key, timestamp) {
+      if (!key) return;
       const list = JSON.parse(localStorage.getItem(FLOAT_LS_KEY) || '[]');
+      if (list.some(o => o.key === key)) return; // 중복 저장 방지 (새로고침 등)
       list.push({ key, timestamp });
       localStorage.setItem(FLOAT_LS_KEY, JSON.stringify(list));
     }
@@ -1846,6 +1848,9 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
       if (_np.get('notified') === '1') {
         const _nc = decodeURIComponent(_np.get('c') || '');
         const _ni = decodeURIComponent(_np.get('i') || '');
+        // notify 경유 주문도 '나의 주문'으로 추적 (뱃지 + 접수/완료 팝업)
+        const _no = _np.get('o');
+        if (_no) saveMyOrderKey(_no, Date.now());
         history.replaceState({}, '', location.pathname);
         const t = document.createElement('div');
         t.className = 'fixed top-6 left-1/2 -translate-x-1/2 z-[999] px-6 py-3 rounded-2xl bg-gray-900 border border-emerald-500/60 text-emerald-300 font-black text-sm shadow-2xl toast-animate whitespace-nowrap';

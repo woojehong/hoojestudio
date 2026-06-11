@@ -302,20 +302,27 @@ exports.handler = async (event) => {
 
     // 2. Firebase /orders 기록 — 애드온/직접 호출도 Live Orders에 표시되도록
     //    (웹사이트 주문은 클라이언트가 직접 기록하므로 src=web 이면 건너뜀)
+    //    생성된 주문 키는 리디렉션 URL(&o=)로 전달되어 '나의 주문' 추적에 사용됨
+    let orderKey = null;
     if (params.src !== "web") {
       try {
         const dupRes = await fetch(`${RTDB_URL}/orders.json?orderBy="$key"&limitToLast=20`);
         const recent = (await dupRes.json()) || {};
         const now = Date.now();
-        const isDup = Object.values(recent).some(
-          (o) => o && o.itemName === fullItem && o.timestamp && now - o.timestamp < 90 * 1000
+        const dupEntry = Object.entries(recent).find(
+          ([, o]) => o && o.itemName === fullItem && o.timestamp && now - o.timestamp < 90 * 1000
         );
-        if (!isDup) {
-          await fetch(`${RTDB_URL}/orders.json`, {
+        if (dupEntry) {
+          // 90초 내 동일 아이템 주문 존재 → 새로 만들지 않고 기존 주문 키에 연결
+          orderKey = dupEntry[0];
+        } else {
+          const postRes = await fetch(`${RTDB_URL}/orders.json`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ crafter, itemName: fullItem, status: "pending", timestamp: { ".sv": "timestamp" } }),
           });
+          const postData = await postRes.json();
+          if (postData && postData.name) orderKey = postData.name;
         }
       } catch (e) {
         // 기록 실패해도 알림 흐름은 유지
@@ -324,7 +331,8 @@ exports.handler = async (event) => {
 
     // 3. 성공 → hooje.pro로 리디렉션
     // (Netlify 프록시가 303을 삼켜버릴 수 있으므로 HTML meta-refresh 사용)
-    const redirectUrl = `https://hooje.pro/?notified=1&c=${encodeURIComponent(crafter)}&i=${encodeURIComponent(fullItem)}`;
+    const redirectUrl = `https://hooje.pro/?notified=1&c=${encodeURIComponent(crafter)}&i=${encodeURIComponent(fullItem)}`
+      + (orderKey ? `&o=${encodeURIComponent(orderKey)}` : "");
     return {
       statusCode: 200,
       headers: { "Content-Type": "text/html; charset=utf-8" },
