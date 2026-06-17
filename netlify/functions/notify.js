@@ -282,8 +282,12 @@ exports.handler = async (event) => {
     return { statusCode: 500, headers: jsonHeaders, body: JSON.stringify({ ok: false, error: "서버 환경변수 누락" }) };
   }
 
-  // 텔레그램 메시지 — 2줄
-  const message = `제작자: ${crafter}\n아이템: ${fullItem}`;
+  // 주문 경로 (웹사이트 src=web / 그 외는 애드온 URL 경유)
+  const orderSource = params.src === "web" ? "web" : "addon";
+  const sourceLabel = orderSource === "web" ? "Web" : "AddOn";
+
+  // 텔레그램 메시지 — 2줄 (아이템 줄 끝에 경로 표시)
+  const message = `제작자: ${crafter}\n아이템: ${fullItem} via ${sourceLabel}`;
 
   try {
     // 1. 텔레그램 전송
@@ -319,7 +323,7 @@ exports.handler = async (event) => {
           const postRes = await fetch(`${RTDB_URL}/orders.json`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ crafter, itemName: fullItem, status: "pending", timestamp: { ".sv": "timestamp" } }),
+            body: JSON.stringify({ crafter, itemName: fullItem, status: "pending", source: "addon", timestamp: { ".sv": "timestamp" } }),
           });
           const postData = await postRes.json();
           if (postData && postData.name) orderKey = postData.name;

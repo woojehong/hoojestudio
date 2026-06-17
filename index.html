@@ -1830,7 +1830,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
       }, 60000);
 
       const orderRef = push(ref(db, 'orders'), {
-        crafter, itemName, status: 'pending', timestamp: serverTimestamp()
+        crafter, itemName, status: 'pending', source: 'web', timestamp: serverTimestamp()
       });
       // key 저장 (serverTimestamp 대신 로컬 시각 사용)
       saveMyOrderKey(orderRef.key, Date.now());

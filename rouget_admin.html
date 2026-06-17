@@ -393,6 +393,12 @@
       return `${h}시간 전`;
     }
 
+    // 경과 분 (오래 방치된 주문 경고색 판단용)
+    function getElapsedMinutes(timestamp) {
+      if (!timestamp) return null;
+      return Math.floor((Date.now() - timestamp) / 60000);
+    }
+
     // 잔여 주문 현황 표 렌더 (pending + accepted 포함, done/rejected 제외)
     function renderPendingSummary(orders) {
       const summary = document.getElementById('pending-summary');
@@ -422,6 +428,7 @@
     }
 
     // 주문 목록 렌더 (1분마다 경과시간 갱신)
+    // 레이아웃: [상태 컬러바] | (1열) 시각 · 경과시간 + 배지 / (2열) 제작자 · 아이템 · via 출처 | [버튼: 상하 중앙]
     function renderOrderList(orders) {
       const listContainer = document.getElementById('admin-order-list');
       if (!orders.length) {
@@ -429,57 +436,69 @@
         return;
       }
 
+      const STATUS_CFG = {
+        pending:  { bar: '#ef4444', badge: '<span class="px-1.5 py-0.5 rounded text-[9px] font-black bg-red-500/20 text-red-400 border border-red-500/30 animate-pulse shrink-0">WAIT</span>' },
+        accepted: { bar: '#38bdf8', badge: '<span class="px-1.5 py-0.5 rounded text-[9px] font-black bg-sky-900/30 text-sky-300 border border-sky-500/20 shrink-0">접수</span>' },
+        done:     { bar: '#10b981', badge: '<span class="px-1.5 py-0.5 rounded text-[9px] font-black bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">DONE</span>' },
+        rejected: { bar: '#eab308', badge: '<span class="px-1.5 py-0.5 rounded text-[9px] font-black bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 shrink-0">REJ</span>' }
+      };
+
       listContainer.innerHTML = orders.slice(0, 100).map(o => {
+        const status = o.status || 'pending';
+        const cfg = STATUS_CFG[status] || STATUS_CFG.pending;
         const time = o.timestamp ? new Date(o.timestamp).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false }) : '--:--';
         const crafter = escapeHTML(o.crafter || '미정');
         const cColor = CLS_COLOR[o.crafter] || '#6B7280';
-        const shortItemName = escapeHTML(o.itemName || '(미정)');
+        const itemName = escapeHTML(o.itemName || '(미정)');
 
-        let badge = '', buttons = '', timeHtml = '';
+        // 1열: 시각 + 경과시간 (완료/반려 포함 항상 표시 · 대기/접수가 오래되면 경고색)
+        const mins = getElapsedMinutes(o.timestamp);
+        const elapsedText = getElapsedText(o.timestamp);
+        let elapsedColor = 'text-gray-500';
+        if (status === 'pending' || status === 'accepted') {
+          if (mins !== null && mins >= 30) elapsedColor = 'text-red-400';
+          else if (mins !== null && mins >= 15) elapsedColor = 'text-amber-400';
+          else elapsedColor = 'text-gray-300';
+        }
+        const elapsedHtml = elapsedText ? `<span class="${elapsedColor} font-bold">· ${elapsedText}</span>` : '';
 
-        if (o.status === 'done') {
-          badge = '<span class="px-2 py-0.5 rounded text-[9px] font-black bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">DONE</span>';
-          buttons = `<button onclick="undoOrder('${o.id}')" class="ml-2 px-3 py-1.5 bg-gray-900 text-white text-[10px] font-black rounded-lg border border-gray-800 hover:bg-gray-700 transition-all">UNDO</button>`;
-          timeHtml = `<span class="text-[10px] font-bold text-white shrink-0 tracking-tighter">${time}</span>`;
-        } else if (o.status === 'accepted') {
-          badge = '<span class="px-2 py-0.5 rounded text-[9px] font-black bg-sky-900/30 text-sky-300 border border-sky-500/20 shrink-0">접수</span>';
-          buttons = `<button onclick="completeOrder('${o.id}')" class="ml-2 px-3 py-1.5 bg-emerald-600 text-white text-[10px] font-black rounded-lg hover:bg-emerald-500 transition-all">완료</button>
-                     <button onclick="rejectOrder('${o.id}')" class="ml-1 px-3 py-1.5 bg-yellow-600 text-white text-[10px] font-black rounded-lg hover:bg-yellow-500 transition-all">반려</button>
-                     <button onclick="undoOrder('${o.id}')" class="ml-1 px-3 py-1.5 bg-gray-900 text-white text-[10px] font-black rounded-lg border border-gray-800 hover:bg-gray-700 transition-all">UNDO</button>`;
-          const elapsed2 = getElapsedText(o.timestamp);
-          timeHtml = `<span class="text-[10px] font-bold text-white shrink-0 tracking-tighter">${time}</span><span class="text-[9px] font-bold text-white shrink-0 ml-1">(${elapsed2})</span>`;
-        } else if (o.status === 'rejected') {
-          badge = '<span class="px-2 py-0.5 rounded text-[9px] font-black bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 shrink-0">REJ</span>';
-          buttons = `<button onclick="undoOrder('${o.id}')" class="ml-2 px-3 py-1.5 bg-gray-900 text-white text-[10px] font-black rounded-lg border border-gray-800 hover:bg-gray-700 transition-all">UNDO</button>`;
-          timeHtml = `<span class="text-[10px] font-bold text-white shrink-0 tracking-tighter">${time}</span>`;
+        // 2열 출처 라벨 (기존 주문은 source 없음 → 표시 안 함)
+        let viaHtml = '';
+        if (o.source === 'web') viaHtml = '<span class="text-gray-500 font-bold shrink-0 ml-0.5">🌐 via Web</span>';
+        else if (o.source === 'addon') viaHtml = '<span class="text-gray-500 font-bold shrink-0 ml-0.5">⚙️ via AddOn</span>';
+
+        // 버튼 (onclick / id 핸들러 보존)
+        let buttons = '';
+        if (status === 'done') {
+          buttons = `<button onclick="undoOrder('${o.id}')" class="px-3 py-1.5 bg-gray-900 text-white text-[10px] font-black rounded-lg border border-gray-800 hover:bg-gray-700 transition-all">UNDO</button>`;
+        } else if (status === 'accepted') {
+          buttons = `<button onclick="completeOrder('${o.id}')" class="px-3 py-1.5 bg-emerald-600 text-white text-[10px] font-black rounded-lg hover:bg-emerald-500 transition-all">완료</button>
+                     <button onclick="rejectOrder('${o.id}')" class="px-3 py-1.5 bg-yellow-600 text-white text-[10px] font-black rounded-lg hover:bg-yellow-500 transition-all">반려</button>
+                     <button onclick="undoOrder('${o.id}')" class="px-3 py-1.5 bg-gray-900 text-white text-[10px] font-black rounded-lg border border-gray-800 hover:bg-gray-700 transition-all">UNDO</button>`;
+        } else if (status === 'rejected') {
+          buttons = `<button onclick="undoOrder('${o.id}')" class="px-3 py-1.5 bg-gray-900 text-white text-[10px] font-black rounded-lg border border-gray-800 hover:bg-gray-700 transition-all">UNDO</button>`;
         } else {
-          badge = '<span class="px-2 py-0.5 rounded text-[9px] font-black bg-red-500/20 text-red-400 border border-red-500/30 animate-pulse shrink-0">WAIT</span>';
-          buttons = `<button onclick="acceptOrder('${o.id}')" class="ml-2 px-3 py-1.5 bg-sky-700 text-white text-[10px] font-black rounded-lg hover:bg-sky-500 transition-all">접수</button>
-                     <button onclick="completeOrder('${o.id}')" class="ml-1 px-3 py-1.5 bg-emerald-600 text-white text-[10px] font-black rounded-lg hover:bg-emerald-500 transition-all">완료</button>
-                     <button onclick="rejectOrder('${o.id}')" class="ml-1 px-3 py-1.5 bg-yellow-600 text-white text-[10px] font-black rounded-lg hover:bg-yellow-500 transition-all">반려</button>`;
-          const elapsed = getElapsedText(o.timestamp);
-          timeHtml = `<span class="text-[10px] font-bold text-white shrink-0 tracking-tighter">${time}</span><span class="text-[9px] font-bold text-white shrink-0 ml-1">(${elapsed})</span>`;
+          buttons = `<button onclick="acceptOrder('${o.id}')" class="px-3 py-1.5 bg-sky-700 text-white text-[10px] font-black rounded-lg hover:bg-sky-500 transition-all">접수</button>
+                     <button onclick="completeOrder('${o.id}')" class="px-3 py-1.5 bg-emerald-600 text-white text-[10px] font-black rounded-lg hover:bg-emerald-500 transition-all">완료</button>
+                     <button onclick="rejectOrder('${o.id}')" class="px-3 py-1.5 bg-yellow-600 text-white text-[10px] font-black rounded-lg hover:bg-yellow-500 transition-all">반려</button>`;
         }
 
-        return `<div class="bg-black/30 rounded-xl border border-gray-900 hover:border-gray-800 transition-colors">
-                  <!-- 데스크탑: 한 줄 -->
-                  <div class="hidden md:flex items-center justify-between p-3.5">
-                    <div class="flex items-center gap-2 overflow-hidden">
-                      <div class="flex items-center gap-1 shrink-0">${timeHtml}</div>
-                      <span class="text-xs font-black shrink-0" style="color: ${cColor};">${crafter}</span>
-                      <span class="text-xs font-bold text-gray-300 truncate">${shortItemName}</span>
+        return `<div class="flex items-stretch bg-black/40 rounded-xl border-2 border-gray-700/70 hover:border-gray-600 transition-colors overflow-hidden">
+                  <div class="w-1.5 shrink-0" style="background:${cfg.bar};"></div>
+                  <div class="flex items-center justify-between gap-3 flex-1 min-w-0 p-3">
+                    <div class="flex flex-col gap-1 min-w-0 flex-1">
+                      <div class="flex items-center gap-1.5 text-[10px]">
+                        <span class="font-bold text-white tracking-tighter shrink-0">${time}</span>
+                        ${elapsedHtml}
+                        ${cfg.badge}
+                      </div>
+                      <div class="flex items-center gap-1.5 min-w-0">
+                        <span class="text-xs font-black shrink-0" style="color: ${cColor};">${crafter}</span>
+                        <span class="text-xs font-bold text-gray-300 truncate">${itemName}</span>
+                        ${viaHtml}
+                      </div>
                     </div>
-                    <div class="flex items-center gap-1 shrink-0 pl-2">${badge}${buttons}</div>
-                  </div>
-                  <!-- 모바일: 두 줄 -->
-                  <div class="flex md:hidden flex-col gap-1.5 p-3">
-                    <div class="flex items-center gap-2 overflow-hidden">
-                      <div class="flex items-center gap-1 shrink-0">${timeHtml}</div>
-                      <span class="text-xs font-black shrink-0" style="color: ${cColor};">${crafter}</span>
-                      <span class="text-xs font-bold text-gray-300 truncate">${shortItemName}</span>
-                      ${badge}
-                    </div>
-                    <div class="flex items-center gap-1 flex-wrap">${buttons}</div>
+                    <div class="flex items-center justify-end flex-wrap gap-1 shrink-0">${buttons}</div>
                   </div>
                 </div>`;
       }).join('');
