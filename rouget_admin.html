@@ -464,8 +464,8 @@
 
         // 2열 출처 라벨 (기존 주문은 source 없음 → 표시 안 함)
         let viaHtml = '';
-        if (o.source === 'web') viaHtml = '<span class="text-gray-500 font-bold shrink-0 ml-0.5">🌐 via Web</span>';
-        else if (o.source === 'addon') viaHtml = '<span class="text-gray-500 font-bold shrink-0 ml-0.5">⚙️ via AddOn</span>';
+        if (o.source === 'web') viaHtml = '<span class="text-gray-500 font-bold text-[10px] shrink-0 ml-0.5">🌐 via Web</span>';
+        else if (o.source === 'addon') viaHtml = '<span class="text-gray-500 font-bold text-[10px] shrink-0 ml-0.5">⚙️ via AddOn</span>';
 
         // 버튼 (onclick / id 핸들러 보존)
         let buttons = '';

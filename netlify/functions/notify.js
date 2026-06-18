@@ -248,6 +248,57 @@ function safeDecode(s) {
   try { return decodeURIComponent(s); } catch { return s; }
 }
 
+// ── 실시간 제작자 조회 (Firebase items) — 안전장치: 성공만 캐시 / 타임아웃 / 폴백 ──
+const ITEMS_URL = `${RTDB_URL}/items.json`;
+const ITEMS_TTL = 60 * 1000;          // 인스턴스 메모리 캐시 수명(ms)
+const ITEMS_FETCH_TIMEOUT = 3000;     // Firebase 읽기 타임아웃(ms)
+let _itemsCache = null;               // { maps: {full, short}, at: number } — 성공 응답만 보관
+
+const stripBracket = (name) => String(name).replace(/^\[.*?\]\s*/, "");
+
+// items.json(카테고리 → id → {name, crafter}) → { full:{이름:제작자}, short:{단축명:제작자} }
+function buildLiveMap(itemsData) {
+  if (!itemsData || typeof itemsData !== "object") return null;
+  const full = {}, short = {};
+  for (const catKey of Object.keys(itemsData)) {
+    const grp = itemsData[catKey];
+    if (!grp || typeof grp !== "object") continue;
+    for (const id of Object.keys(grp)) {
+      const it = grp[id];
+      if (!it || !it.name || !it.crafter) continue;   // 이름/제작자 누락(빈칸)은 스킵
+      full[it.name] = it.crafter;
+      short[stripBracket(it.name)] = it.crafter;
+    }
+  }
+  return Object.keys(full).length ? { full, short } : null;  // 빈 결과는 무효 처리
+}
+
+async function getLiveMap() {
+  const now = Date.now();
+  if (_itemsCache && now - _itemsCache.at < ITEMS_TTL) return _itemsCache.maps;
+  try {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), ITEMS_FETCH_TIMEOUT);
+    const res = await fetch(ITEMS_URL, { signal: ctrl.signal });
+    clearTimeout(timer);
+    if (!res.ok) return _itemsCache ? _itemsCache.maps : null;
+    const maps = buildLiveMap(await res.json());
+    if (maps) { _itemsCache = { maps, at: now }; return maps; }  // 성공 + 비어있지 않을 때만 캐시
+    return _itemsCache ? _itemsCache.maps : null;                // 빈/이상 응답: 캐시 오염 금지
+  } catch (e) {
+    return _itemsCache ? _itemsCache.maps : null;                // 읽기 실패/타임아웃: 캐시 오염 금지
+  }
+}
+
+// 제작자 결정: 실시간(전체명→단축명) 우선, 단 '토큰 보유' 시에만. 아니면 고정맵 폴백.
+function resolveCrafter(liveMaps, fullItem, shortItem) {
+  const baked = ITEM_TO_CRAFTER[shortItem] || ITEM_TO_CRAFTER[fullItem] || null;
+  const live  = liveMaps ? (liveMaps.full[fullItem] || liveMaps.short[shortItem] || null) : null;
+  if (live && getCrafterToken(live)) return live;     // 실시간 값 + 토큰 OK → 실시간 우선
+  if (baked && getCrafterToken(baked)) return baked;  // 토큰 없는 실시간/실시간 없음 → 고정맵
+  return baked || live || null;                       // 최후: 있는 값이라도 반환
+}
+
 exports.handler = async (event) => {
   const jsonHeaders = {
     "Access-Control-Allow-Origin": "*",
@@ -267,9 +318,10 @@ exports.handler = async (event) => {
     return { statusCode: 429, headers: jsonHeaders, body: JSON.stringify({ ok: false, error: "요청이 너무 잦습니다. 잠시 후 다시 시도해주세요." }) };
   }
 
-  // 브라켓 prefix 제거해서 ITEM_TO_CRAFTER 조회 ([사슬 머리] 원정... → 원정...)
-  const shortItem = fullItem.replace(/^\[.*?\]\s*/, "");
-  const crafter = ITEM_TO_CRAFTER[shortItem] || ITEM_TO_CRAFTER[fullItem];
+  // 브라켓 prefix 제거 후 제작자 결정 (실시간 Firebase 우선 + 고정맵 폴백)
+  const shortItem = stripBracket(fullItem);
+  const liveMaps = await getLiveMap();
+  const crafter = resolveCrafter(liveMaps, fullItem, shortItem);
 
   if (!crafter) {
     return { statusCode: 200, headers: jsonHeaders, body: JSON.stringify({ ok: false, error: `'${shortItem}' 은(는) DB에 없습니다.` }) };
@@ -287,7 +339,8 @@ exports.handler = async (event) => {
   const sourceLabel = orderSource === "web" ? "Web" : "AddOn";
 
   // 텔레그램 메시지 — 2줄 (아이템 줄 끝에 경로 표시)
-  const message = `제작자: ${crafter}\n아이템: ${fullItem} via ${sourceLabel}`;
+  const itemLine = fullItem + " via " + sourceLabel;
+  const message = "제작자: " + crafter + "\n아이템: " + itemLine;
 
   try {
     // 1. 텔레그램 전송
@@ -317,7 +370,7 @@ exports.handler = async (event) => {
           ([, o]) => o && o.itemName === fullItem && o.timestamp && now - o.timestamp < 90 * 1000
         );
         if (dupEntry) {
-          // 90초 내 동일 아이템 주문 존재 → 새로 만들지 않고 기존 주문 키에 연결
+          // 90초 내 동일 아이템 주문 존재 → 기존 주문 키에 연결
           orderKey = dupEntry[0];
         } else {
           const postRes = await fetch(`${RTDB_URL}/orders.json`, {
@@ -333,8 +386,7 @@ exports.handler = async (event) => {
       }
     }
 
-    // 3. 성공 → hooje.pro로 리디렉션
-    // (Netlify 프록시가 303을 삼켜버릴 수 있으므로 HTML meta-refresh 사용)
+    // 3. 성공 → hooje.pro로 리디렉션 (HTML meta-refresh)
     const redirectUrl = `https://hooje.pro/?notified=1&c=${encodeURIComponent(crafter)}&i=${encodeURIComponent(fullItem)}`
       + (orderKey ? `&o=${encodeURIComponent(orderKey)}` : "");
     return {
@@ -349,3 +401,6 @@ exports.handler = async (event) => {
     return { statusCode: 500, headers: jsonHeaders, body: JSON.stringify({ ok: false, error: err.message }) };
   }
 };
+
+// 로컬 시뮬레이션/검증 전용 export (Netlify 런타임 동작에는 영향 없음)
+module.exports._test = { buildLiveMap, getLiveMap, resolveCrafter, getCrafterToken, stripBracket, ITEM_TO_CRAFTER };
