@@ -442,7 +442,7 @@
     </section>
   </main>
 
-  <div id="warning-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-[#030712]/90 backdrop-blur-md transition-opacity">
+  <div id="warning-modal" onclick="if(event.target===this) closeWarningModal()" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-[#030712]/90 backdrop-blur-md transition-opacity">
     <div class="bg-gray-950 border border-[#8788EE]/50 rounded-3xl p-6 md:p-8 max-w-sm w-[90%] text-center shadow-[0_0_50px_rgba(135,136,238,0.15)] relative overflow-hidden">
       <div class="absolute -top-10 -right-10 w-32 h-32 bg-[#8788EE]/20 rounded-full blur-3xl pointer-events-none"></div>
       <div class="text-[#8788EE] text-4xl mb-4 drop-shadow-[0_0_10px_rgba(135,136,238,0.5)]">⚖️</div>
@@ -1136,7 +1136,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
     const WARN_GENERIC_TITLE = '제작 전 안내 말씀';
     const WARN_GENERIC_BODY = '<div class="mb-5">현재 이 품목은 전문화 지식 연구 단계로,<br><span class="text-[#8788EE] font-bold">3성이나 4성까지만 제작</span>이 가능합니다.<br><br>조만간 완벽한 <span class="text-white font-bold border-b border-[#8788EE]/50 pb-0.5">5성 확정 제작</span>으로<br>다시 찾아뵐 것을 약속드립니다!<br>해당 내용을 꼭 확인하신 후 의뢰를 부탁드리겠습니다.</div><p class="text-red-500 font-black text-[15px] md:text-base leading-tight drop-shadow-md">이 문구를 보시고도 의뢰하신 후<br>5성이 안된 부분에 대해서는<br>책임지지 않습니다.</p>';
     const WARN_PVP_TITLE = 'PVP 장비 안내';
-    const WARN_PVP_BODY = '<div class="leading-relaxed">등급이 상관없는 아이템입니다<br><br>편하게 재료 넣고 의뢰주시고,<br><br>반드시 5성을 원하시면 <span class="text-yellow-400 font-bold">재료를 모두 금성으로</span>,<br><br>최소 품질을 <span class="text-yellow-400 font-bold">5성</span>으로 설정 후 의뢰해 주세요</div>';
+    const WARN_PVP_BODY = '<div class="leading-relaxed">PVP 장비는 <span class="text-[#8788EE] font-bold">등급이 상관없는 아이템</span>입니다.<br>재료 자유롭게 넣고 의뢰주시고,<br><br><span class="text-sky-300 font-bold">"5성확정"이 활성화 되어있는 아이템에 한하여</span><br>반드시 5성을 원하시면 <span class="text-yellow-400 font-bold">재료를 모두 금성으로</span>,<br>최소 품질을 <span class="text-yellow-400 font-bold">5성</span>으로 설정 후 의뢰해 주세요</div>';
     function isPVPItem(it) { return !!(it && it.name && it.name.includes('[PVP')); }
     window.openWarningModal = function(item) {
       pendingItemForWarning = item;
