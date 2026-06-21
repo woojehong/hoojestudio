@@ -109,12 +109,13 @@
     .speech-bubble::after {
       content: '';
       position: absolute;
-      bottom: -6px;
-      left: 14px;
+      top: -6px;
+      left: 50%;
+      margin-left: -5px;
       width: 10px;
       height: 6px;
       background: rgba(56, 189, 248, 0.12);
-      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      clip-path: polygon(0 100%, 100% 100%, 50% 0);
     }
 
     /* 플로팅 알림 */
@@ -763,11 +764,6 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
         } else if (order.status === 'accepted') {
           statusHtml = '<span class="px-1.5 py-0.5 rounded text-[10px] md:text-[11px] font-black border text-sky-300 border-sky-400/30 bg-sky-900/20 flex items-center gap-1">🔵 접수</span>';
           borderClass = 'border-sky-400/40 border-2';
-          bubbleHtml = `<div class="flex justify-center mt-1">
-            <div class="speech-bubble px-2.5 py-1 w-fit">
-              <span class="text-[11px] md:text-xs font-black text-sky-300 whitespace-nowrap">주문 접수 완료! 잠시만 기다려주세요 🙏</span>
-            </div>
-          </div>`;
         } else if (order.status === 'rejected') {
           statusHtml = '<span class="px-1.5 py-0.5 rounded text-[10px] md:text-[11px] font-black border text-yellow-500 border-yellow-500/30 bg-yellow-500/10 flex items-center gap-1">⚠️ 반려</span>';
           borderClass = 'border-yellow-500/30';
@@ -778,16 +774,19 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
         const myOrders = getMyOrders();
         const isMyOrder = myOrders.some(o => o.key === order.id);
         const myBadge = isMyOrder ? `<div class="absolute -top-2 -left-1 z-10 bg-[#8788EE] text-white text-[8px] font-black px-1.5 py-0.5 rounded-full shadow-md">나의 주문</div>` : '';
+        if (isMyOrder && order.status === 'accepted') {
+          bubbleHtml = `<div class="flex justify-center mt-0.5"><div class="speech-bubble px-2 py-0.5 w-fit"><span class="text-[9px] md:text-[10px] font-black text-sky-300 whitespace-nowrap">접수 완료! 잠시만 기다려주세요 🙏</span></div></div>`;
+        }
 
         return `
           <div class="flex flex-col shrink-0">
-            ${bubbleHtml}
             <div class="relative flex items-center gap-2 px-3 py-1.5 rounded-lg border ${borderClass} bg-gray-950 shadow-md transition-all duration-500">
               ${myBadge}
               <span class="text-xs md:text-sm font-black text-gray-500">${timeStr}</span>
               <span class="text-[11px] md:text-xs font-bold text-white truncate max-w-[120px] md:max-w-[150px]">${escapeHTML(order.itemName)}</span>
               ${statusHtml}
             </div>
+            ${bubbleHtml}
           </div>
         `;
       }).join('');
