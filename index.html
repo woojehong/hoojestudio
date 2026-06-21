@@ -139,9 +139,9 @@
 
     /* 주문 버튼 펄스 */
     @keyframes orderPulse {
-      0%   { box-shadow: 0 0 10px rgba(135,136,238,0.3), 0 0 0px rgba(135,136,238,0); border-color: rgba(135,136,238,0.6); }
-      50%  { box-shadow: 0 0 28px rgba(135,136,238,0.7), 0 0 50px rgba(135,136,238,0.2); border-color: rgba(135,136,238,1); }
-      100% { box-shadow: 0 0 10px rgba(135,136,238,0.3), 0 0 0px rgba(135,136,238,0); border-color: rgba(135,136,238,0.6); }
+      0%   { box-shadow: 0 0 10px rgba(var(--sc-rgb,135,136,238),0.3), 0 0 0px rgba(var(--sc-rgb,135,136,238),0); border-color: rgba(var(--sc-rgb,135,136,238),0.6); }
+      50%  { box-shadow: 0 0 28px rgba(var(--sc-rgb,135,136,238),0.7), 0 0 50px rgba(var(--sc-rgb,135,136,238),0.2); border-color: rgba(var(--sc-rgb,135,136,238),1); }
+      100% { box-shadow: 0 0 10px rgba(var(--sc-rgb,135,136,238),0.3), 0 0 0px rgba(var(--sc-rgb,135,136,238),0); border-color: rgba(var(--sc-rgb,135,136,238),0.6); }
     }
     .order-pulse { animation: orderPulse 2s ease-in-out infinite; }
 
@@ -318,12 +318,12 @@
               후제공방이 명품이 될 수 있다면,<br>
               그것은 오직 여러분 덕분입니다."
             </p>
-            <!-- 서명: 커스텀 H + Great Vibes ooje -->
-            <div class="flex flex-col items-center md:items-end gap-1 shrink-0 mt-4 md:mt-0 select-none">
-              <span style="font-family:'Cinzel',serif; font-size:12px; letter-spacing:0.5em; color:rgba(255,255,255,0.5); padding-left:0.5em;">MASTER</span>
+            <!-- 서명: 커스텀 H + Great Vibes ooje (글로우 통일) -->
+            <div class="flex flex-col items-center shrink-0 mt-4 md:mt-0 select-none">
+              <span style="font-family:'Cinzel',serif; font-size:12px; letter-spacing:0.5em; color:rgba(255,255,255,0.55); padding-left:0.5em; margin-bottom:8px;">MASTER</span>
               <div style="display:flex; align-items:flex-end; line-height:1;">
-                <img src="hmark.png" alt="H" draggable="false" style="height:118px; width:auto; margin-right:-20px; margin-bottom:6px;">
-                <span style="font-family:'Great Vibes',cursive; font-size:90px; color:#ffffff; line-height:1; text-shadow:0 0 9px rgba(190,198,255,0.9),0 0 22px rgba(135,136,238,0.6),0 0 46px rgba(135,136,238,0.35);">ooje</span>
+                <img src="hmark.png" alt="H" draggable="false" style="height:110px; width:auto; margin-right:-16px; margin-bottom:4px; filter:drop-shadow(0 0 8px rgba(190,198,255,0.85)) drop-shadow(0 0 20px rgba(135,136,238,0.55)) drop-shadow(0 0 40px rgba(135,136,238,0.3));">
+                <span style="font-family:'Great Vibes',cursive; font-size:90px; color:#ffffff; line-height:1; text-shadow:0 0 8px rgba(190,198,255,0.85),0 0 20px rgba(135,136,238,0.55),0 0 40px rgba(135,136,238,0.3);">ooje</span>
               </div>
             </div>
           </div>
@@ -658,10 +658,10 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 
     let currentStatusType = '';
     const STATUS_NOTICE_CONFIG = {
-      '쐐기 중':  { color: '#eab308', bg: 'rgba(234,179,8,0.07)', border: 'rgba(234,179,8,0.3)', icon: '⏱️', msg: '현재 쐐기 진행 중 — 최대 30분 소요될 수 있습니다' },
-      '레이드 중': { color: '#ea580c', bg: 'rgba(234,88,12,0.07)', border: 'rgba(234,88,12,0.3)', icon: '⚔️', msg: '현재 레이드 중 — 최대 1시간 소요될 수 있습니다' },
-      '자리 비움': { color: '#84cc16', bg: 'rgba(132,204,22,0.07)', border: 'rgba(132,204,22,0.3)', icon: '🔔', msg: '잠시 자리를 비웠습니다 — 10분 전후로 돌아옵니다' },
-      '외출 중':  { color: '#14b8a6', bg: 'rgba(20,184,166,0.07)', border: 'rgba(20,184,166,0.3)', icon: '🙏', msg: '외출 중입니다 — 틈틈이 확인하지만 빠른 제작을 장담드리기 어렵습니다' },
+      '쐐기 중':  { color: '#3b82f6', bg: 'rgba(59,130,246,0.07)', border: 'rgba(59,130,246,0.3)', icon: '⏱️', msg: '현재 쐐기 진행 중 — 최대 30분 소요될 수 있습니다' },
+      '레이드 중': { color: '#a855f7', bg: 'rgba(168,85,247,0.07)', border: 'rgba(168,85,247,0.3)', icon: '⚔️', msg: '현재 레이드 중 — 최대 1시간 소요될 수 있습니다' },
+      '자리 비움': { color: '#eab308', bg: 'rgba(234,179,8,0.07)', border: 'rgba(234,179,8,0.3)', icon: '🔔', msg: '잠시 자리를 비웠습니다 — 10분 전후로 돌아옵니다' },
+      '외출 중':  { color: '#f97316', bg: 'rgba(249,115,22,0.07)', border: 'rgba(249,115,22,0.3)', icon: '🙏', msg: '외출 중입니다 — 틈틈이 확인하지만 빠른 제작을 장담드리기 어렵습니다' },
       '오프라인': { color: '#6b7280', bg: 'rgba(107,114,128,0.07)', border: 'rgba(107,114,128,0.3)', icon: '💤', msg: '오프라인 상태입니다 — 느긋하게 기다리실 수 있는 분만 의뢰해주세요\n(반나절은 넘기지 않습니다)' },
     };
     function generateStatusNoticeHTML() {
@@ -681,6 +681,19 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
       });
     }
 
+    const STATUS_RGB = {
+      '온라인':'34,197,94','쐐기 중':'59,130,246','레이드 중':'168,85,247','자리 비움':'234,179,8','외출 중':'249,115,22','오프라인':'107,114,128'
+    };
+    function statusRGB(){ return STATUS_RGB[currentStatusType] || '135,136,238'; }
+    function refreshOrderButtonColors(){
+      const rgb = statusRGB();
+      document.querySelectorAll('.order-action-btn.order-pulse').forEach(btn=>{
+        btn.style.setProperty('--sc-rgb', rgb);
+        btn.style.background = `linear-gradient(to right, rgba(${rgb},0.2), rgba(${rgb},0.1))`;
+        btn.style.borderColor = `rgba(${rgb},0.6)`;
+      });
+    }
+
     const STATUS_COLOR_MAP = {
       'bg-green-500':  '#22c55e',
       'bg-yellow-500': '#eab308',
@@ -695,12 +708,15 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
       if(data) {
         currentStatusType = data.type;
         document.getElementById('status-text').innerText = `${data.type} : ${data.message}`;
-        document.getElementById('status-dot').className = `w-3 h-3 md:w-3.5 md:h-3.5 rounded-full animate-pulse shrink-0 ${data.color}`;
-        const hexColor = STATUS_COLOR_MAP[data.color] || '#4b5563';
+        const rgb = statusRGB();
+        const dot = document.getElementById('status-dot');
+        dot.className = `w-3 h-3 md:w-3.5 md:h-3.5 rounded-full animate-pulse shrink-0`;
+        dot.style.background = `rgb(${rgb})`;
         const liveStatus = document.getElementById('live-status');
-        liveStatus.style.borderColor = hexColor;
-        liveStatus.style.boxShadow = `0 0 12px ${hexColor}40`;
+        liveStatus.style.borderColor = `rgb(${rgb})`;
+        liveStatus.style.boxShadow = `0 0 12px rgba(${rgb},0.28)`;
         refreshStatusNotices();
+        refreshOrderButtonColors();
       }
     });
 
@@ -1274,9 +1290,10 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
           ${showNotice ? generateStatusNoticeHTML() : ''}
         `;
       }
+      const _sc = statusRGB();
       return `
         <button onclick="sendOrder('${crafter}', '${itemName}')"
-          class="order-action-btn order-pulse w-full p-4 bg-gradient-to-r from-[#8788EE]/20 to-[#8788EE]/10 border-2 border-[#8788EE]/60 rounded-xl md:rounded-2xl font-black text-white active:scale-95 flex items-center justify-between gap-2 relative overflow-hidden group">
+          class="order-action-btn order-pulse w-full p-4 border-2 rounded-xl md:rounded-2xl font-black text-white active:scale-95 flex items-center justify-between gap-2 relative overflow-hidden group" style="--sc-rgb:${_sc}; background:linear-gradient(to right, rgba(${_sc},0.2), rgba(${_sc},0.1)); border-color:rgba(${_sc},0.6);">
           <span class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></span>
           <span class="finger-left text-lg md:text-xl select-none shrink-0 relative z-10">👉</span>
           <div class="flex flex-col items-center flex-1 gap-1 relative z-10">
