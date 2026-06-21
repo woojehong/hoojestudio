@@ -442,14 +442,8 @@
     <div class="bg-gray-950 border border-[#8788EE]/50 rounded-3xl p-6 md:p-8 max-w-sm w-[90%] text-center shadow-[0_0_50px_rgba(135,136,238,0.15)] relative overflow-hidden">
       <div class="absolute -top-10 -right-10 w-32 h-32 bg-[#8788EE]/20 rounded-full blur-3xl pointer-events-none"></div>
       <div class="text-[#8788EE] text-4xl mb-4 drop-shadow-[0_0_10px_rgba(135,136,238,0.5)]">⚖️</div>
-      <h3 class="text-xl md:text-2xl font-kr-title font-black text-white mb-3 tracking-tight">제작 전 안내 말씀</h3>
-      <div class="text-gray-300 text-sm md:text-[15px] leading-relaxed mb-5">
-        현재 이 품목은 전문화 지식 연구 단계로,<br><span class="text-[#8788EE] font-bold">3성이나 4성까지만 제작</span>이 가능합니다.<br><br>
-        조만간 완벽한 <span class="text-white font-bold border-b border-[#8788EE]/50 pb-0.5">5성 확정 제작</span>으로<br>다시 찾아뵐 것을 약속드립니다!<br>해당 내용을 꼭 확인하신 후 의뢰를 부탁드리겠습니다.
-      </div>
-      <p class="text-red-500 font-black text-[15px] md:text-base mb-6 leading-tight drop-shadow-md">
-        이 문구를 보시고도 의뢰하신 후<br>5성이 안된 부분에 대해서는<br>책임지지 않습니다.
-      </p>
+      <h3 id="warning-title" class="text-xl md:text-2xl font-kr-title font-black text-white mb-3 tracking-tight">제작 전 안내 말씀</h3>
+      <div id="warning-body" class="text-gray-300 text-sm md:text-[15px] leading-relaxed mb-6"></div>
       <div class="flex gap-2.5 justify-center">
         <button onclick="closeWarningModal()" class="flex-1 py-3 bg-gray-900 text-white font-bold rounded-xl border border-gray-800 hover:bg-gray-800 transition-colors shadow-md text-sm md:text-base">취소</button>
         <button onclick="proceedWarningModal()" class="flex-1 py-3 bg-[#8788EE]/20 text-[#8788EE] font-black rounded-xl border border-[#8788EE]/50 hover:bg-[#8788EE]/30 transition-all shadow-lg active:scale-95 text-sm md:text-base">확인했습니다</button>
@@ -1121,6 +1115,18 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
     // sendOrder는 아래 플로팅 시스템 초기화 이후에 정의됩니다
 
     let pendingItemForWarning = null;
+    const WARN_GENERIC_TITLE = '제작 전 안내 말씀';
+    const WARN_GENERIC_BODY = '<div class="mb-5">현재 이 품목은 전문화 지식 연구 단계로,<br><span class="text-[#8788EE] font-bold">3성이나 4성까지만 제작</span>이 가능합니다.<br><br>조만간 완벽한 <span class="text-white font-bold border-b border-[#8788EE]/50 pb-0.5">5성 확정 제작</span>으로<br>다시 찾아뵐 것을 약속드립니다!<br>해당 내용을 꼭 확인하신 후 의뢰를 부탁드리겠습니다.</div><p class="text-red-500 font-black text-[15px] md:text-base leading-tight drop-shadow-md">이 문구를 보시고도 의뢰하신 후<br>5성이 안된 부분에 대해서는<br>책임지지 않습니다.</p>';
+    const WARN_PVP_TITLE = 'PVP 아이템 안내';
+    const WARN_PVP_BODY = '<div class="leading-relaxed">PVP 아이템은 <span class="text-[#8788EE] font-bold">등급이 상관없는 아이템</span>입니다.<br><br>확인하신 후 5성이 아니어도 괜찮다면 편하게 의뢰 부탁드립니다.<br><br>반드시 <span class="text-white font-bold">5성 확정</span>을 원하실 경우, 반드시 <span class="text-yellow-400 font-bold">모두 금성 재료</span>로 · <span class="text-yellow-400 font-bold">최소 품질을 5성</span>으로 설정해서 의뢰해 주세요.</div>';
+    function isPVPItem(it) { return !!(it && it.name && it.name.includes('[PVP')); }
+    window.openWarningModal = function(item) {
+      pendingItemForWarning = item;
+      const pvp = isPVPItem(item);
+      document.getElementById('warning-title').textContent = pvp ? WARN_PVP_TITLE : WARN_GENERIC_TITLE;
+      document.getElementById('warning-body').innerHTML = pvp ? WARN_PVP_BODY : WARN_GENERIC_BODY;
+      document.getElementById('warning-modal').classList.remove('hidden');
+    };
     window.closeWarningModal = function() { pendingItemForWarning = null; document.getElementById('warning-modal').classList.add('hidden'); };
     window.proceedWarningModal = function() { if(pendingItemForWarning) renderDetail(pendingItemForWarning); closeWarningModal(); };
 
@@ -1464,9 +1470,8 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
       
       btn.onclick = () => { 
         if(!isLock) {
-          if(!is5Star) {
-            pendingItemForWarning = item;
-            document.getElementById('warning-modal').classList.remove('hidden');
+          if(isPVPItem(item) || !is5Star) {
+            openWarningModal(item);
           } else {
             renderDetail(item);
           }
