@@ -1,0 +1,6 @@
+# 로컬 백업 / Firebase DB 덤프 — GitHub에 올리지 않음 (민감 데이터)
+backup/
+# 임시·검증 찌꺼기
+_permtest/
+node_modules/
+*.tmp

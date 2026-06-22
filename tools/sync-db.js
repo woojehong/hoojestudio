@@ -24,7 +24,7 @@ const path = require("path");
 const RTDB_ITEMS_URL = "https://rougetsblendingroom-default-rtdb.firebaseio.com/items.json";
 
 const NOTIFY_PATH = path.resolve(__dirname, "..", "netlify", "functions", "notify.js");
-const LUA_PATH = path.resolve(__dirname, "..", "..", "HoojeStudio", "HoojeStudio.lua");
+const LUA_PATH = path.resolve(__dirname, "..", "..", "..", "HoojeStudio", "HoojeStudio.lua");
 
 // 애드온/알림 함수에서 사용하는 카테고리 표시 순서 및 이름
 const CAT_ORDER = [
