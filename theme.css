@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gowun+Batang:wght@400;700&family=Oswald:wght@400;500;600&family=Noto+Serif+KR:wght@500;600&display=swap');
+/* ============================================================
+   후제공방 리뉴얼 테마 레이어 — Method A (공용 엔진 + 테마)
+   엔진은 안 건드리고 "겉"만 토큰으로 교체. 색 매핑은 한 번만, 토큰값만 버전/모드별 교체.
+   ============================================================ */
+
+/* ===== 1) 토큰 — [data-version][data-theme] ===== */
+:root[data-version="1"][data-theme="dark"]{
+  --cv:#0a0a0f; --cv2:#08080c; --s0:#0e0e15; --s1:#13131b; --s2:#1a1a24;
+  --header:rgba(13,13,19,0.92); --hl:#24242e; --hls:#34343f;
+  --ink:#f3f3f7; --ink2:#c7c7d2; --ink3:#8d8d9b; --acText:#a9aaf2; --sb:#2b2b36;
+  --fTitle:'Jeju Myeongjo',serif; --signInk:#ffffff; --signFilter:none;
+}
+:root[data-version="1"][data-theme="light"]{
+  --cv:#f5f5f9; --cv2:#ffffff; --s0:#efeff4; --s1:#ffffff; --s2:#ffffff;
+  --header:rgba(255,255,255,0.9); --hl:#e6e6ec; --hls:#d6d6df;
+  --ink:#1b1b22; --ink2:#494955; --ink3:#7a7a86; --acText:#5b54d6; --sb:#cfcfd8;
+  --fTitle:'Jeju Myeongjo',serif; --signInk:#26214f; --signFilter:brightness(0) saturate(100%) invert(13%) sepia(30%) saturate(2000%) hue-rotate(225deg);
+}
+:root[data-version="2"][data-theme="light"]{
+  --cv:#ffffff; --cv2:#fafafb; --s0:#f6f6f8; --s1:#ffffff; --s2:#f3f3f6;
+  --header:rgba(255,255,255,0.85); --hl:#ececef; --hls:#dededf;
+  --ink:#1d1d1f; --ink2:#55555c; --ink3:#8a8a90; --acText:#5b54d6; --sb:#dcdce2;
+  --fTitle:'Pretendard',sans-serif; --signInk:#1d1d1f; --signFilter:brightness(0) saturate(100%) invert(8%);
+}
+:root[data-version="2"][data-theme="dark"]{
+  --cv:#111114; --cv2:#15151a; --s0:#141418; --s1:#1a1a20; --s2:#22222a;
+  --header:rgba(17,17,20,0.9); --hl:#2a2a32; --hls:#3a3a44;
+  --ink:#f4f4f6; --ink2:#c4c4cc; --ink3:#8c8c96; --acText:#a9aaf2; --sb:#30303a;
+  --fTitle:'Pretendard',sans-serif; --signInk:#ffffff; --signFilter:none;
+}
+:root[data-version="3"][data-theme="dark"]{
+  --cv:#000000; --cv2:#050507; --s0:#08080a; --s1:#0e0e12; --s2:#16161c;
+  --header:rgba(0,0,0,0.85); --hl:#1c1c22; --hls:#2e2e38;
+  --ink:#ffffff; --ink2:#c9c9d2; --ink3:#85858f; --acText:#a9aaf2; --sb:#26262e;
+  --fTitle:'Black Han Sans',sans-serif; --signInk:#ffffff; --signFilter:none;
+}
+:root[data-version="3"][data-theme="light"]{
+  --cv:#ffffff; --cv2:#f7f7f8; --s0:#f1f1f4; --s1:#ffffff; --s2:#f0f0f3;
+  --header:rgba(255,255,255,0.9); --hl:#e6e6ea; --hls:#d2d2d8;
+  --ink:#0a0a0c; --ink2:#44444c; --ink3:#76767e; --acText:#5b54d6; --sb:#d0d0d8;
+  --fTitle:'Black Han Sans',sans-serif; --signInk:#0a0a0c; --signFilter:brightness(0) saturate(100%) invert(4%);
+}
+:root[data-version="4"][data-theme="dark"]{
+  --cv:#14132a; --cv2:#15142c; --s0:#1a1838; --s1:#1e1c40; --s2:#262348;
+  --header:rgba(20,19,42,0.92); --hl:#2e2b54; --hls:#3d3a66;
+  --ink:#f3f2fb; --ink2:#c5c2e6; --ink3:#9b98b8; --acText:#c9b4fa; --sb:#34315e;
+  --fTitle:'Gowun Batang',serif; --signInk:#ffffff; --signFilter:none;
+}
+:root[data-version="4"][data-theme="light"]{
+  --cv:#f6f5fb; --cv2:#ffffff; --s0:#f0eff8; --s1:#ffffff; --s2:#f3f1fb;
+  --header:rgba(255,255,255,0.9); --hl:#e7e4f3; --hls:#d6d2ec;
+  --ink:#1b1938; --ink2:#4a4770; --ink3:#7d7aa0; --acText:#6b5cf0; --sb:#d4d0ea;
+  --fTitle:'Gowun Batang',serif; --signInk:#1b1938; --signFilter:brightness(0) saturate(100%) invert(11%) sepia(40%) saturate(1500%) hue-rotate(225deg);
+}
+:root[data-theme="dark"]  { --tt-bg:#15151d; --tt-bd:#34343f; --tt-fg:#e8e8ef; }
+:root[data-theme="light"] { --tt-bg:#ffffff; --tt-bd:#d6d6df; --tt-fg:#33333a; }
+
+/* ===== 2) 색 매핑 — 한 번만, 토큰 참조 (Tailwind 위로 !important) ===== */
+[data-version] body{ background-color:var(--cv) !important; color:var(--ink); }
+[data-version] .bg-\[\#030712\]{ background-color:var(--cv) !important; }
+[data-version] header.bg-gray-900\/95{ background-color:var(--header) !important; backdrop-filter:blur(18px); }
+[data-version] #sidebar{ background-color:var(--s0) !important; }
+[data-version] #sidebar .bg-\[\#030712\]{ background-color:var(--s0) !important; }
+[data-version] #detail-panel{ background-color:var(--cv2) !important; }
+[data-version] .bg-gray-900{ background-color:var(--s1) !important; }
+[data-version] .bg-gray-900\/90{ background-color:var(--s1) !important; }
+[data-version] .bg-gray-900\/80{ background-color:var(--s1) !important; }
+[data-version] .bg-gray-900\/50{ background-color:var(--s1) !important; }
+[data-version] .bg-gray-900\/40{ background-color:var(--s0) !important; }
+[data-version] .bg-gray-950{ background-color:var(--s2) !important; }
+[data-version] .bg-gray-950\/80{ background-color:var(--cv2) !important; }
+[data-version] .bg-gray-950\/50{ background-color:var(--s1) !important; }
+[data-version] .bg-gray-800{ background-color:var(--s2) !important; }
+[data-version] .bg-gray-800\/80, [data-version] .bg-gray-800\/45, [data-version] .bg-gray-800\/25{ background-color:var(--s2) !important; }
+[data-version] .bg-gray-700{ background-color:var(--s2) !important; }
+[data-version] .bg-gray-600{ background-color:var(--hls) !important; }
+[data-version] .border-gray-800{ border-color:var(--hl) !important; }
+[data-version] .border-gray-700{ border-color:var(--hl) !important; }
+[data-version] .border-gray-600{ border-color:var(--hls) !important; }
+[data-version] .text-white{ color:var(--ink) !important; }
+[data-version] .text-gray-200{ color:var(--ink) !important; }
+[data-version] .text-gray-300{ color:var(--ink2) !important; }
+[data-version] .text-gray-400{ color:var(--ink3) !important; }
+[data-version] .text-gray-500{ color:var(--ink3) !important; }
+[data-version] .text-\[\#8788EE\]{ color:var(--acText) !important; }
+[data-version] input.placeholder-gray-500::placeholder{ color:var(--ink3) !important; }
+
+/* 예외 — 색 채운 솔리드 배경 위 흰 글자는 흰색 유지 */
+[data-version] .bg-\[\#8788EE\].text-white{ color:#ffffff !important; }
+[data-theme="light"] kbd.text-yellow-400{ color:#b45309 !important; }
+
+/* 스크롤바 */
+[data-version] ::-webkit-scrollbar{ width:7px; height:7px; }
+[data-version] ::-webkit-scrollbar-thumb{ background:var(--sb) !important; border:1px solid var(--cv) !important; border-radius:10px; }
+
+/* 서명(MASTER + ooje + 흰 H) — 라이트에서 안 보이지 않게 */
+[data-version] span[style*="Great Vibes"]{ color:var(--signInk) !important; }
+[data-theme="light"] span[style*="Great Vibes"]{ text-shadow:none !important; }
+[data-theme="light"] img[src*="hmark"]{ filter:var(--signFilter) !important; }
+[data-theme="light"] span[style*="Cinzel"]{ color:rgba(0,0,0,0.5) !important; }
+
+/* 순흑 입력/팝업 배경 — 라이트에서 표면화 */
+[data-theme="light"] select[class*="bg-black"], [data-theme="light"] textarea[class*="bg-black"]{ background-color:var(--s1) !important; }
+[data-theme="light"] [style*="rgba(6,10,20"]{ background:var(--s1) !important; }
+
+/* ===== 3) 버전별 브랜드 h1 타이포 ===== */
+[data-version] h1[style*="Jeju Myeongjo"]{ font-family:var(--fTitle) !important; }
+[data-version="1"] h1[style*="Jeju Myeongjo"]{ letter-spacing:0.26em !important; }
+[data-version="2"] h1[style*="Jeju Myeongjo"]{ letter-spacing:0.12em !important; font-weight:800 !important; }
+[data-version="3"] h1[style*="Jeju Myeongjo"]{ letter-spacing:0.04em !important; }
+[data-version="4"] h1[style*="Jeju Myeongjo"]{ letter-spacing:0.16em !important; }
+
+/* ===== 4) 토글 버튼 ===== */
+#theme-toggle{ background:var(--tt-bg) !important; border:1px solid var(--tt-bd) !important; color:var(--tt-fg) !important; }
+@media (max-width:767px){ #theme-toggle{ bottom:14px; left:12px; } }
