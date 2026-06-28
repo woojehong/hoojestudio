@@ -89,16 +89,27 @@
     .pre-wrap { white-space: pre-wrap; word-break: break-all; } 
 /* 전광판 네온 및 흐르는 애니메이션 */
 /* 전광판 두근거리는(Pulse) 애니메이션 */
-    @keyframes urgentPulse {
-      0% { background-color: rgba(153, 27, 27, 0.85); box-shadow: 0 0 10px rgba(220, 38, 38, 0.4); }
-      50% { background-color: rgba(220, 38, 38, 0.95); box-shadow: 0 0 25px rgba(220, 38, 38, 0.6); }
-      100% { background-color: rgba(153, 27, 27, 0.85); box-shadow: 0 0 10px rgba(220, 38, 38, 0.4); }
+    @keyframes tickerGlow {
+      0%, 100% { box-shadow: 0 0 16px rgba(135,136,238,0.12), inset 0 0 26px rgba(135,136,238,0.04); }
+      50% { box-shadow: 0 0 30px rgba(135,136,238,0.22), inset 0 0 34px rgba(135,136,238,0.09); }
     }
-
+    @keyframes tickerSheen {
+      0% { transform: translateX(-65%); }
+      60%, 100% { transform: translateX(65%); }
+    }
     .ticker-pulse {
-      animation: urgentPulse 2s ease-in-out infinite;
-      border-top: 1px solid rgba(254, 202, 202, 0.3);
-      border-bottom: 1px solid rgba(254, 202, 202, 0.3);
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(135,136,238,0.16), rgba(135,136,238,0.07));
+      border-top: 1px solid rgba(135,136,238,0.30);
+      border-bottom: 1px solid rgba(135,136,238,0.30);
+      animation: tickerGlow 4.5s ease-in-out infinite;
+    }
+    .ticker-pulse::after {
+      content: ""; position: absolute; inset: 0; pointer-events: none;
+      background: linear-gradient(100deg, transparent 35%, rgba(255,255,255,0.06) 50%, transparent 65%);
+      transform: translateX(-65%);
+      animation: tickerSheen 5.5s ease-in-out infinite;
     }
 
     /* 말풍선 */
@@ -304,6 +315,17 @@
       background-size: 170px 170px;
     }
   </style>
+  <style id="hj-lo">
+    /* 전광판 고급화: 우측 엣지 페이드(마키) + 카드 호버 + 상태 도트 펄스 */
+    #live-order-feed{
+      -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 42px), transparent);
+      mask-image: linear-gradient(to right, #000 calc(100% - 42px), transparent);
+    }
+    .lo-card{ transition: transform .35s cubic-bezier(.22,1,.36,1), border-color .35s, box-shadow .35s; }
+    .lo-card:hover{ transform: translateY(-1px); border-color: rgba(135,136,238,.4) !important; box-shadow: 0 6px 18px rgba(0,0,0,.45); }
+    @keyframes loDot{ 0%,100%{ opacity:1; transform:scale(1);} 50%{ opacity:.4; transform:scale(.8);} }
+    .lo-dot-pulse{ animation: loDot 1.6s ease-in-out infinite; }
+  </style>
 </head>
 <body>
 <div id="app-container" class="text-gray-200 relative">
@@ -361,9 +383,9 @@
     </div>
   </header>
 
-  <div id="live-order-feed" class="hidden w-full bg-gray-900/80 border-b border-gray-800 shrink-0 z-10 overflow-x-auto whitespace-nowrap custom-scrollbar py-3 px-4 shadow-inner relative" style="min-height: 72px;">
+  <div id="live-order-feed" class="hidden w-full bg-gray-950/70 backdrop-blur-sm border-b border-white/[0.06] shrink-0 z-10 overflow-x-auto whitespace-nowrap custom-scrollbar py-3 px-4 relative" style="min-height: 72px;">
     <div class="flex items-center gap-3 h-full">
-      <div class="sticky left-0 bg-gray-900/90 shadow-[10px_0_15px_rgba(3,7,18,1)] z-10 pr-3 flex items-center gap-2 font-black text-white text-xs md:text-sm tracking-widest uppercase shrink-0 self-center">
+      <div class="sticky left-0 bg-gray-950/95 shadow-[12px_0_18px_rgba(3,7,18,1)] z-10 pr-3.5 flex items-center gap-2 font-black text-white text-xs md:text-sm tracking-[0.18em] uppercase shrink-0 self-center">
         <span class="relative flex h-3 w-3"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span><span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span></span>
         Live Orders
       </div>
@@ -373,13 +395,11 @@
   </div>
 
   <div id="ticker-container" class="hidden w-full ticker-pulse shrink-0 z-10">
-    <div class="py-3 px-6 flex items-center justify-center gap-3">
-      <span class="text-yellow-400 text-lg md:text-xl animate-bounce shrink-0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-3px;margin:0"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></span>
-      
-      <div id="ticker-text" class="font-black text-sm md:text-base tracking-widest text-white text-center pre-wrap leading-relaxed drop-shadow-lg">
-        </div>
-
-      <span class="text-yellow-400 text-lg md:text-xl animate-bounce shrink-0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-3px;margin:0"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></span>
+    <div class="py-2.5 px-5 md:px-6 flex items-center justify-center gap-3 relative" style="z-index:1;">
+      <span class="shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-full" style="background:rgba(135,136,238,0.18);box-shadow:inset 0 0 0 1px rgba(135,136,238,0.38);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c7c8f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+      </span>
+      <div id="ticker-text" class="font-bold text-sm md:text-base tracking-wide text-white text-center pre-wrap leading-relaxed drop-shadow"></div>
     </div>
   </div>
 
@@ -965,22 +985,20 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
         const timeObj = order.timestamp ? new Date(order.timestamp) : new Date();
         const timeStr = timeObj.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false });
 
-        let statusHtml = '';
-        let borderClass = 'border-gray-700 border-2';
         let bubbleHtml = '';
-
-        if (order.status === 'done') {
-          statusHtml = '<span class="px-1.5 py-0.5 rounded text-[10px] md:text-[11px] font-black border text-gray-400 border-gray-600/40 bg-gray-700/20 flex items-center gap-1">✓ 완료</span>';
-          borderClass = 'border-gray-700/50 opacity-60';
-        } else if (order.status === 'accepted') {
-          statusHtml = '<span class="px-1.5 py-0.5 rounded text-[10px] md:text-[11px] font-black border text-sky-300 border-sky-400/30 bg-sky-900/20 flex items-center gap-1">🔵 접수</span>';
-          borderClass = 'border-sky-400/40 border-2';
-        } else if (order.status === 'rejected') {
-          statusHtml = '<span class="px-1.5 py-0.5 rounded text-[10px] md:text-[11px] font-black border text-yellow-500 border-yellow-500/30 bg-yellow-500/10 flex items-center gap-1">⚠️ 반려</span>';
-          borderClass = 'border-yellow-500/30';
-        } else {
-          statusHtml = '<span class="px-1.5 py-0.5 rounded text-[10px] md:text-[11px] font-black border text-red-400 border-red-500/30 bg-red-500/10 flex items-center gap-1"><span class="animate-pulse">🔴</span> 대기</span>';
-        }
+        const LO_ST = {
+          pending:  { label: '대기', cls: 'text-red-300',   dot: '#f87171', pulse: true  },
+          accepted: { label: '접수', cls: 'text-sky-300',   dot: '#38bdf8', pulse: false },
+          done:     { label: '완료', cls: 'text-gray-400',  dot: '#9ca3af', pulse: false, check: true },
+          rejected: { label: '반려', cls: 'text-amber-300', dot: '#fbbf24', pulse: false },
+        };
+        const st = LO_ST[order.status] || LO_ST.pending;
+        const dotHtml = st.check
+          ? `<svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>`
+          : `<span class="inline-block w-1.5 h-1.5 rounded-full ${st.pulse ? 'lo-dot-pulse' : ''}" style="background:${st.dot};box-shadow:0 0 6px ${st.dot}aa;"></span>`;
+        const statusHtml = `<span class="inline-flex items-center gap-1.5 pl-1.5 pr-2 py-0.5 rounded-full border border-white/10 bg-white/[0.03] text-[10px] md:text-[11px] font-black ${st.cls}">${dotHtml}${st.label}</span>`;
+        const cColor = CLS_COLOR[order.crafter] || '#6B7280';
+        const dimCls = order.status === 'done' ? 'opacity-55' : '';
 
         const myOrders = getMyOrders();
         const isMyOrder = myOrders.some(o => o.key === order.id);
@@ -991,9 +1009,10 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 
         return `
           <div class="flex flex-col shrink-0">
-            <div class="relative flex items-center gap-2 px-3 py-1.5 rounded-lg border ${borderClass} bg-gray-950 shadow-md transition-all duration-500">
+            <div class="lo-card relative flex items-center gap-2 pl-2 pr-2.5 py-1.5 rounded-xl border border-white/[0.08] bg-gradient-to-b from-white/[0.05] to-white/[0.01] shadow-[0_2px_8px_rgba(0,0,0,0.35)] ${dimCls}">
               ${myBadge}
-              <span class="text-xs md:text-sm font-black text-gray-500">${timeStr}</span>
+              <span class="w-[3px] self-stretch rounded-full shrink-0" style="background:${cColor};"></span>
+              <span class="text-[11px] md:text-xs font-bold text-gray-500 tabular-nums">${timeStr}</span>
               <span class="text-[11px] md:text-xs font-bold text-white truncate max-w-[120px] md:max-w-[150px]">${escapeHTML((order.itemName.match(/^\[[^\]]*\]/)||[order.itemName])[0])}</span>
               ${statusHtml}
             </div>
