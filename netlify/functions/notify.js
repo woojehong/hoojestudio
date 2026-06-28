@@ -299,6 +299,25 @@ function resolveCrafter(liveMaps, fullItem, shortItem) {
   return baked || live || null;                       // 최후: 있는 값이라도 반환
 }
 
+// RTDB 카운터 원자적 +1 (ETag compare-and-swap, 재시도) — 7일 정리와 무관한 영구 카운터
+async function incrStat(path) {
+  const url = `${RTDB_URL}/${path}.json`;
+  for (let i = 0; i < 5; i++) {
+    const getRes = await fetch(url, { headers: { "X-Firebase-ETag": "true" } });
+    const etag = getRes.headers.get("ETag");
+    let cur = await getRes.json();
+    cur = typeof cur === "number" ? cur : 0;
+    const putRes = await fetch(url, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json", "if-match": etag },
+      body: JSON.stringify(cur + 1),
+    });
+    if (putRes.ok) return cur + 1;
+    if (putRes.status !== 412) return null; // 412=ETag 불일치 → 재시도
+  }
+  return null;
+}
+
 exports.handler = async (event) => {
   const jsonHeaders = {
     "Access-Control-Allow-Origin": "*",
@@ -379,7 +398,23 @@ exports.handler = async (event) => {
             body: JSON.stringify({ crafter, itemName: fullItem, status: "pending", source: "addon", timestamp: { ".sv": "timestamp" } }),
           });
           const postData = await postRes.json();
-          if (postData && postData.name) orderKey = postData.name;
+          if (postData && postData.name) {
+            orderKey = postData.name;
+            // 주문 카운터 +1 (영구 누적 + 현재 시즌). 중복 주문은 위 dupEntry로 걸러져 여기 안 옴
+            try {
+              let seasonKey = "midnight_s1";
+              try {
+                const k = await (await fetch(`${RTDB_URL}/stats/current_season/key.json`)).json();
+                if (typeof k === "string" && k) seasonKey = k;
+              } catch (e2) {}
+              await incrStat("stats/orders_total");
+              await incrStat("stats/season/" + seasonKey);
+              const _d = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
+              const _sk = (x) => String(x).replace(/[.#$\[\]\/]/g, "_");
+              await incrStat("stats/orders_daily/" + _d + "/t");
+              await incrStat("stats/orders_daily/" + _d + "/c/" + _sk(crafter));
+            } catch (e3) {}
+          }
         }
       } catch (e) {
         // 기록 실패해도 알림 흐름은 유지

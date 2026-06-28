@@ -281,7 +281,7 @@
   /* #3 샴페인골드 럭셔리 액센트: 섹션 제목 골드 헤어라인 + 세리프 숫자 */
   #notice-state h2.font-kr-title{ position:relative; }
   #notice-state h2.font-kr-title::after{ content:""; display:block; width:48px; height:2px; margin-top:12px; background:linear-gradient(to right,#c9a227,rgba(201,162,39,0)); border-radius:2px; }
-  #footer-visit-count, #footer-order-count, #footer-today-count, #footer-cf-count{ font-family:'Jeju Myeongjo',serif; letter-spacing:.02em; font-weight:400; }
+  #footer-visit-count, #footer-order-count, #footer-today-count, #footer-cf-count, #footer-season-count{ font-family:'Jeju Myeongjo',serif; letter-spacing:.02em; font-weight:400; }
   /* #4 여백·헤어라인 리듬 */
   #notice-state .space-y-4 > * + *, #notice-state .space-y-5 > * + *{ margin-top:1.15rem !important; }
   #notice-state .rounded-2xl{ border-radius:18px !important; }
@@ -860,11 +860,11 @@
       <span style="font-family:'Montserrat',sans-serif;font-weight:300;letter-spacing:0.42em;text-indent:0.42em;" class="text-gray-300 text-[11px] uppercase">Studio Hooje</span>
     </span>
     <span class="text-gray-400 font-bold whitespace-nowrap flex items-center gap-2 md:gap-3">
-      <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-1px;margin-right:4px"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="2.6"/></svg>방문 <span class="hidden sm:inline text-gray-500 ml-0.5">오늘</span> <span id="footer-today-count" class="text-[#8788EE]">–</span><span class="text-gray-600 mx-0.5">/</span><span class="hidden sm:inline text-gray-500">누적</span> <span id="footer-visit-count" class="text-[#8788EE]">–</span></span>
+      <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-1px;margin-right:4px"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="2.6"/></svg>방문 <span class="hidden sm:inline text-gray-500">오늘</span> <span id="footer-today-count" class="text-white">–</span><span class="text-gray-600 mx-0.5">/</span><span class="hidden sm:inline text-gray-500">누적</span> <span id="footer-visit-count" class="text-white">–</span></span>
       <span class="text-gray-700">·</span>
-      <span><img src="assets/curseforge.png" alt="CF" style="width:12px;height:12px;object-fit:contain;margin-right:4px;display:inline-block;vertical-align:-2px;">다운로드 <span id="footer-cf-count" class="text-[#8788EE] ml-0.5">–</span></span>
+      <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-1px;margin-right:4px"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>주문 <span class="hidden sm:inline text-gray-500" id="footer-season-label">시즌</span> <span id="footer-season-count" class="text-white">–</span><span class="text-gray-600 mx-0.5">/</span><span class="hidden sm:inline text-gray-500">누적</span> <span id="footer-order-count" class="text-white">–</span></span>
       <span class="text-gray-700">·</span>
-      <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-1px;margin-right:4px"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>누적 주문 <span id="footer-order-count" class="text-[#8788EE] ml-0.5">–</span></span>
+      <span><img src="assets/curseforge.png" alt="CF" style="width:12px;height:12px;object-fit:contain;margin-right:4px;display:inline-block;vertical-align:-2px;"><span class="hidden sm:inline">다운로드 </span><span id="footer-cf-count" class="text-white ml-0.5">–</span></span>
     </span>
   </footer>
 </div>
@@ -887,8 +887,8 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
       try {
         if(!sessionStorage.getItem('hj_visited')){
           sessionStorage.setItem('hj_visited','1');
-          runTransaction(vref, c => (c||0)+1).catch(()=>{});
-          runTransaction(tref, c => (c||0)+1).catch(()=>{});
+          runTransaction(vref, c => (c||0)+1, { applyLocally: false }).catch(()=>{});
+          runTransaction(tref, c => (c||0)+1, { applyLocally: false }).catch(()=>{});
         }
       } catch(e){}
       try { fetch('/.netlify/functions/cf-downloads').catch(()=>{}); } catch(e){}
@@ -982,9 +982,16 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
       }
     });
 // [신규] 실시간 주문 현황 수신 및 피드 그리기
+    // ── 주문 카운터(영구·7일정리 무관): 누적 + 현재 시즌 ──
+    let CURRENT_SEASON_KEY = 'midnight_s1';
+    onValue(ref(db, 'stats/orders_total'), s => { const el=document.getElementById('footer-order-count'); if(el) el.textContent=(s.val()||0).toLocaleString(); });
+    onValue(ref(db, 'stats/current_season'), s => {
+      const cs = s.val() || {}; CURRENT_SEASON_KEY = cs.key || 'midnight_s1';
+      const lbl = document.getElementById('footer-season-label'); if(lbl) lbl.textContent = cs.label || '시즌';
+      onValue(ref(db, 'stats/season/' + CURRENT_SEASON_KEY), s2 => { const el=document.getElementById('footer-season-count'); if(el) el.textContent=(s2.val()||0).toLocaleString(); });
+    });
     onValue(ref(db, 'orders'), (snap) => {
       const ordersData = snap.val();
-      { const _oc=document.getElementById('footer-order-count'); if(_oc) _oc.textContent=(ordersData?Object.keys(ordersData).length:0).toLocaleString(); }
       const feedBox = document.getElementById('live-order-feed');
       const container = document.getElementById('live-order-container');
 
@@ -2108,6 +2115,18 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
       // key 저장 (serverTimestamp 대신 로컬 시각 사용)
       saveMyOrderKey(orderRef.key, Date.now());
 
+      // 주문 카운터 +1 (누적 + 시즌 + 일일 통계: 총합/제작자/카테고리) — 영구, 7일 정리와 무관
+      try {
+        const _sk = x => String(x).replace(/[.#$\[\]\/]/g, '_');
+        const _d = new Date(Date.now() + 9*3600*1000).toISOString().slice(0,10);
+        const _cat = (allItemsFlat.find(i => i.name === itemName) || {}).cat || '기타';
+        runTransaction(ref(db, 'stats/orders_total'), c => (c||0)+1).catch(()=>{});
+        runTransaction(ref(db, 'stats/season/' + CURRENT_SEASON_KEY), c => (c||0)+1).catch(()=>{});
+        runTransaction(ref(db, 'stats/orders_daily/' + _d + '/t'), c => (c||0)+1).catch(()=>{});
+        runTransaction(ref(db, 'stats/orders_daily/' + _d + '/c/' + _sk(crafter)), c => (c||0)+1).catch(()=>{});
+        runTransaction(ref(db, 'stats/orders_daily/' + _d + '/g/' + _sk(_cat)), c => (c||0)+1).catch(()=>{});
+      } catch(e){}
+
       refreshOrderButtons();
 
       // 토큰은 서버(notify.js)에서만 관리 — src=web: 주문 기록은 위에서 이미 했으므로 서버 측 중복 기록 방지
@@ -2309,7 +2328,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
   var yl=document.getElementById('youtube-list');
   if(yl){ new MutationObserver(function(){ Array.prototype.forEach.call(yl.children, rv); }).observe(yl,{childList:true}); }
   function cu(el){ var t=parseInt((el.textContent||'').replace(/[^0-9]/g,''),10); if(!t||el.dataset.cu)return; el.dataset.cu='1'; var s=performance.now(),d=1100; function k(n){var p=Math.min(1,(n-s)/d);el.textContent=Math.floor((1-Math.pow(1-p,3))*t).toLocaleString();if(p<1)requestAnimationFrame(k);else el.textContent=t.toLocaleString();} requestAnimationFrame(k); }
-  ['footer-order-count','footer-visit-count','footer-today-count','footer-cf-count'].forEach(function(id){ var el=document.getElementById(id); if(!el)return; new MutationObserver(function(){ if(/[0-9]/.test(el.textContent)) cu(el); }).observe(el,{childList:true,characterData:true,subtree:true}); });
+  ['footer-order-count','footer-season-count','footer-cf-count','footer-visit-count','footer-today-count'].forEach(function(id){ var el=document.getElementById(id); if(!el)return; new MutationObserver(function(){ if(/[0-9]/.test(el.textContent)) cu(el); }).observe(el,{childList:true,characterData:true,subtree:true}); });
 })();
 </script>
   <div id="hj-grain" aria-hidden="true"></div>

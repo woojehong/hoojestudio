@@ -8,6 +8,7 @@
   <link rel="apple-touch-icon" href="assets/icon-192.png?v=20260622">
   <link rel="manifest" href="manifest.json">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <style>
     @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
     body { font-family: 'Pretendard', sans-serif; background-color: #030712; color: white; overflow-x: hidden; }
@@ -220,6 +221,43 @@
       </div>
 
       <div id="addon-save-msg" class="hidden text-green-400 text-xs font-black text-center py-1"></div>
+    </div>
+  </div>
+
+  <!-- 데이터센터 -->
+  <div class="w-full max-w-2xl mb-5 p-5 rounded-2xl glass-panel border-[#8788EE]/20 shadow-xl">
+    <div class="flex items-center justify-between pb-4 cursor-pointer" onclick="toggleDataCenter()">
+      <h3 class="text-[#a9aaf7] font-black tracking-tighter text-lg flex items-center gap-2">📊 데이터센터</h3>
+      <span id="datacenter-chevron" class="text-[#a9aaf7] font-black text-sm transition-transform">▼</span>
+    </div>
+    <div id="datacenter-body" class="hidden border-t border-[#8788EE]/10 pt-4 flex flex-col gap-6">
+      <div class="grid grid-cols-3 gap-2">
+        <div class="bg-black/40 rounded-xl p-3 text-center border border-white/5">
+          <div class="text-[10px] text-gray-500 font-black uppercase tracking-widest mb-1">누적 방문</div>
+          <div id="dc-total-visits" class="text-xl font-black text-white">–</div>
+        </div>
+        <div class="bg-black/40 rounded-xl p-3 text-center border border-white/5">
+          <div class="text-[10px] text-gray-500 font-black uppercase tracking-widest mb-1">누적 제작</div>
+          <div id="dc-total-orders" class="text-xl font-black text-white">–</div>
+        </div>
+        <div class="bg-black/40 rounded-xl p-3 text-center border border-white/5">
+          <div id="dc-season-label" class="text-[10px] text-gray-500 font-black uppercase tracking-widest mb-1">시즌 제작</div>
+          <div id="dc-season-orders" class="text-xl font-black text-white">–</div>
+        </div>
+      </div>
+      <div>
+        <p class="text-[#a9aaf7] text-xs font-black uppercase tracking-widest mb-2">일일 방문 수</p>
+        <div class="bg-black/30 rounded-xl p-3 border border-white/5" style="height:170px;"><canvas id="dc-visits-chart"></canvas></div>
+      </div>
+      <div>
+        <div class="flex items-center justify-between mb-2 gap-2">
+          <p class="text-[#a9aaf7] text-xs font-black uppercase tracking-widest shrink-0">일일 제작 수</p>
+          <select id="dc-orders-filter" onchange="renderOrdersChart()" class="bg-black/50 border border-[#8788EE]/30 rounded-lg text-xs text-white font-bold px-2 py-1.5 outline-none focus:border-[#8788EE] max-w-[62%]">
+            <option value="total">전체</option>
+          </select>
+        </div>
+        <div class="bg-black/30 rounded-xl p-3 border border-white/5" style="height:170px;"><canvas id="dc-orders-chart"></canvas></div>
+      </div>
     </div>
   </div>
 
@@ -1109,6 +1147,64 @@
         showAddonMsg('초기화 실패: ' + e.message, false);
       }
     };
+    // ════════ 데이터센터 ════════
+    let _dailyVisits = {}, _ordersDaily = {}, _visitsChart = null, _ordersChart = null;
+    function _dcOpen(){ const b=document.getElementById('datacenter-body'); return b && !b.classList.contains('hidden'); }
+    function _last30(obj){ return Object.keys(obj).filter(k=>/^\d{4}-\d{2}-\d{2}$/.test(k)).sort().slice(-30); }
+    function _mkChart(id, prev, labels, data, color){
+      if(typeof Chart==='undefined') return prev;
+      if(prev) prev.destroy();
+      const ctx=document.getElementById(id).getContext('2d');
+      return new Chart(ctx,{ type:'bar',
+        data:{ labels, datasets:[{ data, backgroundColor:color, borderRadius:4, maxBarThickness:22 }] },
+        options:{ responsive:true, maintainAspectRatio:false,
+          plugins:{ legend:{display:false}, tooltip:{
+            callbacks:{ title:it=>it[0].label, label:c=>' '+c.parsed.y+'건' },
+            backgroundColor:'rgba(10,10,16,0.95)', borderColor:'rgba(135,136,238,0.5)', borderWidth:1,
+            titleColor:'#fff', bodyColor:'#a9aaf7', padding:8, displayColors:false }},
+          scales:{ x:{ ticks:{color:'#6b7280',font:{size:9},maxRotation:0,autoSkip:true,maxTicksLimit:8}, grid:{display:false} },
+                   y:{ beginAtZero:true, ticks:{color:'#6b7280',font:{size:9},precision:0}, grid:{color:'rgba(255,255,255,0.04)'} } } }
+      });
+    }
+    window.renderVisitsChart = function(){
+      if(!_dcOpen()) return;
+      const ds=_last30(_dailyVisits);
+      _visitsChart=_mkChart('dc-visits-chart',_visitsChart, ds.map(d=>d.slice(5)), ds.map(d=>_dailyVisits[d]||0), 'rgba(135,136,238,0.65)');
+    };
+    window.renderOrdersChart = function(){
+      if(!_dcOpen()) return;
+      const f=(document.getElementById('dc-orders-filter')||{}).value||'total';
+      const ds=_last30(_ordersDaily);
+      const data=ds.map(d=>{ const day=_ordersDaily[d]||{};
+        if(f==='total') return day.t||0;
+        const i=f.indexOf(':'); const kind=f.slice(0,i), key=f.slice(i+1);
+        if(kind==='c') return (day.c&&day.c[key])||0;
+        if(kind==='g') return (day.g&&day.g[key])||0;
+        return 0; });
+      _ordersChart=_mkChart('dc-orders-chart',_ordersChart, ds.map(d=>d.slice(5)), data, 'rgba(201,162,39,0.6)');
+    };
+    function _rebuildOrderFilter(){
+      const sel=document.getElementById('dc-orders-filter'); if(!sel) return;
+      const cur=sel.value, crafters=new Set(), cats=new Set();
+      Object.values(_ordersDaily).forEach(day=>{ if(day&&day.c) Object.keys(day.c).forEach(k=>crafters.add(k)); if(day&&day.g) Object.keys(day.g).forEach(k=>cats.add(k)); });
+      let html='<option value="total">전체</option>';
+      if(crafters.size){ html+='<optgroup label="제작자별">'; [...crafters].sort().forEach(c=>html+=`<option value="c:${c}">${c}</option>`); html+='</optgroup>'; }
+      if(cats.size){ html+='<optgroup label="카테고리별">'; [...cats].sort().forEach(g=>html+=`<option value="g:${g}">${g}</option>`); html+='</optgroup>'; }
+      sel.innerHTML=html;
+      if(cur && html.indexOf('value="'+cur+'"')>=0) sel.value=cur;
+    }
+    window.toggleDataCenter = function(){
+      const body=document.getElementById('datacenter-body'), chev=document.getElementById('datacenter-chevron');
+      body.classList.toggle('hidden');
+      chev.style.transform = body.classList.contains('hidden') ? '' : 'rotate(180deg)';
+      if(_dcOpen()){ renderVisitsChart(); renderOrdersChart(); }
+    };
+    onValue(ref(db,'stats/daily'), s=>{ _dailyVisits=s.val()||{}; renderVisitsChart(); });
+    onValue(ref(db,'stats/orders_daily'), s=>{ _ordersDaily=s.val()||{}; _rebuildOrderFilter(); renderOrdersChart(); });
+    onValue(ref(db,'stats/visits'), s=>{ const el=document.getElementById('dc-total-visits'); if(el) el.textContent=(s.val()||0).toLocaleString(); });
+    onValue(ref(db,'stats/orders_total'), s=>{ const el=document.getElementById('dc-total-orders'); if(el) el.textContent=(s.val()||0).toLocaleString(); });
+    onValue(ref(db,'stats/current_season'), s=>{ const cs=s.val()||{}; const lbl=document.getElementById('dc-season-label'); if(lbl) lbl.textContent=(cs.label||'시즌')+' 제작';
+      onValue(ref(db,'stats/season/'+(cs.key||'midnight_s1')), s2=>{ const el=document.getElementById('dc-season-orders'); if(el) el.textContent=(s2.val()||0).toLocaleString(); }); });
 
   </script>
 </body>
