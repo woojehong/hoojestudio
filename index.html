@@ -211,22 +211,6 @@
   /* 유튜브 최신영상 썸네일 톤다운(호버 시 원색) */
   #youtube-list img{ filter:saturate(.72) brightness(.96); transition:filter .3s ease; }
   #youtube-list a:hover img{ filter:saturate(1) brightness(1); }
-  /* === 온기·생동감 회복 === */
-  body{ background-color:#0c0a10 !important; background-image:
-      radial-gradient(circle at 28% 18%, rgba(135,136,238,0.22), transparent 42%),
-      radial-gradient(circle at 78% 12%, rgba(176,128,214,0.13), transparent 46%),
-      radial-gradient(circle at 55% 86%, rgba(203,160,116,0.08), transparent 52%) !important;
-      background-size:200% 200% !important; background-position:0% 0% !important; background-attachment:fixed !important; animation:hjAurora 20s ease-in-out infinite !important; }
-  @keyframes hjAurora{ 0%{ background-position:0% 0%; } 50%{ background-position:100% 55%; } 100%{ background-position:0% 0%; } }
-  .bg-gray-900{ background-color:#16131c !important; }
-  .bg-gray-900\/80{ background-color:rgba(22,19,28,0.8) !important; }
-  .bg-gray-900\/40{ background-color:rgba(20,17,26,0.5) !important; }
-  .bg-gray-900\/50{ background-color:rgba(22,19,28,0.55) !important; }
-  .bg-gray-950{ background-color:#100d15 !important; }
-  .bg-gray-950\/80{ background-color:rgba(14,11,18,0.7) !important; }
-  .bg-gray-950\/50{ background-color:rgba(22,19,28,0.55) !important; }
-  .bg-gray-800{ background-color:#1c1824 !important; }
-  header.bg-gray-900\/95{ background-color:rgba(20,17,26,0.85) !important; }
   /* 서명 은은한 숨쉬는 글로우 */
   @keyframes hjSign{ 0%,100%{ text-shadow:0 0 8px rgba(190,198,255,.7),0 0 18px rgba(135,136,238,.42); } 50%{ text-shadow:0 0 13px rgba(202,206,255,.92),0 0 30px rgba(135,136,238,.62); } }
   span[style*="Great Vibes"]{ animation:hjSign 4.8s ease-in-out infinite; }
