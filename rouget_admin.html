@@ -494,7 +494,7 @@
           else if (mins !== null && mins >= 15) elapsedColor = 'text-amber-400';
           else elapsedColor = 'text-gray-300';
         }
-        const elapsedHtml = elapsedText ? `<span class="${elapsedColor} font-bold">· ${elapsedText}</span>` : '';
+        const elapsedHtml = elapsedText ? `<span class="${elapsedColor} font-bold whitespace-nowrap shrink-0">· ${elapsedText}</span>` : '';
 
         // 2열 출처 라벨 (기존 주문은 source 없음 → 표시 안 함)
         let viaHtml = '';
@@ -519,9 +519,9 @@
 
         return `<div class="flex items-stretch shrink-0 bg-black/40 rounded-xl border-2 border-gray-700/70 hover:border-gray-600 transition-colors overflow-hidden">
                   <div class="w-1.5 shrink-0" style="background:${cfg.bar};"></div>
-                  <div class="flex items-center justify-between gap-3 flex-1 min-w-0 p-3">
+                  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3 flex-1 min-w-0 p-3">
                     <div class="flex flex-col gap-1 min-w-0 flex-1">
-                      <div class="flex items-center gap-1.5 text-[10px]">
+                      <div class="flex items-center flex-wrap gap-1.5 text-[10px]">
                         <span class="font-bold text-white tracking-tighter shrink-0">${time}</span>
                         ${elapsedHtml}
                         ${cfg.badge}
@@ -533,7 +533,7 @@
                         ${viaHtml}
                       </div>
                     </div>
-                    <div class="flex items-center justify-end flex-wrap gap-1 shrink-0">${buttons}</div>
+                    <div class="flex items-center justify-end flex-wrap gap-1 shrink-0 w-full sm:w-auto">${buttons}</div>
                   </div>
                 </div>`;
       }).join('');
