@@ -281,7 +281,7 @@
   /* #3 샴페인골드 럭셔리 액센트: 섹션 제목 골드 헤어라인 + 세리프 숫자 */
   #notice-state h2.font-kr-title{ position:relative; }
   #notice-state h2.font-kr-title::after{ content:""; display:block; width:48px; height:2px; margin-top:12px; background:linear-gradient(to right,#c9a227,rgba(201,162,39,0)); border-radius:2px; }
-  #footer-visit-count, #footer-order-count{ font-family:'Jeju Myeongjo',serif; letter-spacing:.02em; font-weight:400; }
+  #footer-visit-count, #footer-order-count, #footer-today-count, #footer-cf-count{ font-family:'Jeju Myeongjo',serif; letter-spacing:.02em; font-weight:400; }
   /* #4 여백·헤어라인 리듬 */
   #notice-state .space-y-4 > * + *, #notice-state .space-y-5 > * + *{ margin-top:1.15rem !important; }
   #notice-state .rounded-2xl{ border-radius:18px !important; }
@@ -297,7 +297,7 @@
   .bg-gray-900\/80.rounded-3xl{ box-shadow:inset 0 1px 0 rgba(255,255,255,.05), 0 24px 60px -30px rgba(0,0,0,.85) !important; }
   #app-container::after{ content:""; position:fixed; inset:0; pointer-events:none; z-index:5; box-shadow:none; }
   /* #5 세리프 숫자(수수료·재료 수량) */
-  #fee-crafter-section .mat-status, #req-mats-container .mat-status{ font-family:'Jeju Myeongjo',serif !important; }
+  #fee-crafter-section .mat-status, #req-mats-container .mat-status{ font-family:'Pretendard',sans-serif !important; }
 </style>
   <style id="hj-bg">
     /* 은은한 배경: 보라 글로우 + 비네팅 + 필름 그레인 (정적·과하지 않게) */
@@ -326,6 +326,7 @@
     @keyframes loDot{ 0%,100%{ opacity:1; transform:scale(1);} 50%{ opacity:.4; transform:scale(.8);} }
     .lo-dot-pulse{ animation: loDot 1.6s ease-in-out infinite; }
   </style>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap" rel="stylesheet">
 </head>
 <body>
 <div id="app-container" class="text-gray-200 relative">
@@ -344,17 +345,18 @@
         <h1 class="text-2xl md:text-4xl font-extrabold text-white" style="font-family:'Jeju Myeongjo',serif; letter-spacing: 0.25em;">후제공방</h1>
         <div class="mt-1 text-[10px] md:text-xs text-white/50 font-bold uppercase tracking-[0.2em]">World of Warcraft KR · Azshara</div>
       </div>
-      <a id="addon-download-link" href="https://github.com/woojehong/hoojestudio/releases/download/hoojestudio1.4/HoojeStudio.zip"
-         class="mt-3 flex items-center justify-center gap-2 w-full max-w-xs px-8 py-2.5 rounded-xl font-black text-xs md:text-sm tracking-tight transition-all
-                bg-gradient-to-r from-amber-500/20 to-yellow-400/10
-                border border-amber-400/50 hover:border-amber-300/80
-                text-amber-200 hover:text-white hover:from-amber-500/30 hover:to-yellow-400/20
-                shadow-[0_0_16px_rgba(251,191,36,0.25)] hover:shadow-[0_0_24px_rgba(251,191,36,0.45)]">
-        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"/>
-        </svg>
-        <span id="addon-btn-label">후제공방 애드온 다운로드</span>
-      </a>
+      <div class="mt-3 w-full max-w-[360px] mx-auto flex gap-2">
+        <a id="addon-download-link" href="https://github.com/woojehong/hoojestudio/releases/download/hoojestudio1.4/HoojeStudio.zip"
+           class="flex-1 inline-flex items-center justify-center gap-1.5 px-2.5 py-2.5 rounded-xl font-black text-[11px] md:text-xs tracking-tight transition-all bg-gradient-to-r from-amber-500/20 to-yellow-400/10 border border-amber-400/50 hover:border-amber-300/80 text-amber-200 hover:text-white">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"/></svg>
+          <span class="whitespace-nowrap">애드온 직접 다운로드</span>
+        </a>
+        <a href="https://www.curseforge.com/wow/addons/hoojestudio" target="_blank" rel="noopener"
+           class="flex-1 inline-flex items-center justify-center gap-1.5 px-2.5 py-2.5 rounded-xl font-black text-[11px] md:text-xs tracking-tight transition-all bg-gray-950 border border-orange-500/55 text-orange-300 hover:text-white hover:border-orange-400 hover:bg-orange-500/10">
+          <img src="assets/curseforge.png" alt="CurseForge" class="w-4 h-4 shrink-0 object-contain">
+          <span class="whitespace-nowrap">커스포지에서 다운로드</span>
+        </a>
+      </div>
     </div>
 
     <div class="w-full md:w-1/3 flex justify-center md:justify-end order-3 gap-2 items-center">
@@ -529,16 +531,16 @@
                 인게임에서 바로 재료 확인과 주문이 가능합니다.<br><br>
                 다운로드는 <span class="text-[#8788EE] font-bold">CurseForge</span>에서 <span class="text-[#8788EE] font-bold">Hooje</span> 검색, 또는 아래 버튼을 눌러주세요.
               </p>
-              <div class="mt-4 flex flex-col sm:flex-row gap-2.5">
+              <div class="mt-4 w-full max-w-[360px] flex gap-2">
                 <a id="addon-download-link-2" href="https://github.com/woojehong/hoojestudio/releases/download/hoojestudio1.4/HoojeStudio.zip"
-                   class="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl font-black text-sm tracking-tight transition-all bg-gradient-to-r from-amber-500/20 to-yellow-400/10 border border-amber-400/50 hover:border-amber-300/80 text-amber-200 hover:text-white shadow-[0_0_16px_rgba(251,191,36,0.25)]">
+                   class="flex-1 inline-flex items-center justify-center gap-1.5 px-2.5 py-2.5 rounded-xl font-black text-[11px] md:text-xs tracking-tight transition-all bg-gradient-to-r from-amber-500/20 to-yellow-400/10 border border-amber-400/50 hover:border-amber-300/80 text-amber-200 hover:text-white">
                   <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"/></svg>
-                  <span id="addon-btn-label-2">후제공방 애드온 다운로드</span>
+                  <span class="whitespace-nowrap">애드온 직접 다운로드</span>
                 </a>
                 <a href="https://www.curseforge.com/wow/addons/hoojestudio" target="_blank" rel="noopener"
-                   class="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl font-black text-sm tracking-tight transition-all bg-gray-950 border border-orange-500/55 text-orange-300 hover:text-white hover:border-orange-400 hover:bg-orange-500/10">
-                  <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
-                  커스포지에서 받기
+                   class="flex-1 inline-flex items-center justify-center gap-1.5 px-2.5 py-2.5 rounded-xl font-black text-[11px] md:text-xs tracking-tight transition-all bg-gray-950 border border-orange-500/55 text-orange-300 hover:text-white hover:border-orange-400 hover:bg-orange-500/10">
+                  <img src="assets/curseforge.png" alt="CurseForge" class="w-4 h-4 shrink-0 object-contain">
+                  <span class="whitespace-nowrap">커스포지에서 다운로드</span>
                 </a>
               </div>
             </div>
@@ -852,12 +854,17 @@
   </div>
 
   <footer id="hj-footer" class="shrink-0 z-20 flex items-center justify-between gap-3 px-4 md:px-6 border-t border-gray-800 bg-gray-950/80 backdrop-blur text-[10px] md:text-[11px]">
-    <span class="text-gray-500 font-bold whitespace-nowrap">© 2026 후제공방 · Hooje Studio</span>
-    <span class="hidden md:inline text-gray-400 truncate tracking-wide">World of Warcraft KR · 아즈샤라 제작 서비스</span>
+    <span class="text-gray-500 font-bold whitespace-nowrap">© 2026 후제공방<span class="hidden sm:inline"> · Hooje Studio</span></span>
+    <span class="hidden md:flex items-center gap-2 shrink-0">
+      <img src="assets/hmark.png" alt="H" style="height:14px;width:auto;opacity:0.9;filter:drop-shadow(0 0 5px rgba(135,136,238,0.5));">
+      <span style="font-family:'Montserrat',sans-serif;font-weight:300;letter-spacing:0.42em;text-indent:0.42em;" class="text-gray-300 text-[11px] uppercase">Studio Hooje</span>
+    </span>
     <span class="text-gray-400 font-bold whitespace-nowrap flex items-center gap-2 md:gap-3">
-      <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-1px;margin-right:4px"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="2.6"/></svg>방문 <span id="footer-visit-count" class="text-[#8788EE]">–</span></span>
+      <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-1px;margin-right:4px"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="2.6"/></svg>방문 <span class="hidden sm:inline text-gray-500 ml-0.5">오늘</span> <span id="footer-today-count" class="text-[#8788EE]">–</span><span class="text-gray-600 mx-0.5">/</span><span class="hidden sm:inline text-gray-500">누적</span> <span id="footer-visit-count" class="text-[#8788EE]">–</span></span>
       <span class="text-gray-700">·</span>
-      <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-1px;margin-right:4px"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>누적 주문 <span id="footer-order-count" class="text-[#8788EE]">–</span></span>
+      <span><img src="assets/curseforge.png" alt="CF" style="width:12px;height:12px;object-fit:contain;margin-right:4px;display:inline-block;vertical-align:-2px;">다운로드 <span id="footer-cf-count" class="text-[#8788EE] ml-0.5">–</span></span>
+      <span class="text-gray-700">·</span>
+      <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-1px;margin-right:4px"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>누적 주문 <span id="footer-order-count" class="text-[#8788EE] ml-0.5">–</span></span>
     </span>
   </footer>
 </div>
@@ -870,9 +877,21 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
     // ── 방문 카운트(세션당 1회) + 표시 ──
-    (function(){ const vref = ref(db, 'stats/visits');
+    (function(){
+      const vref = ref(db, 'stats/visits');
+      const kstDay = new Date(Date.now() + 9*3600*1000).toISOString().slice(0,10);
+      const tref = ref(db, 'stats/daily/' + kstDay);
       onValue(vref, s => { const el=document.getElementById('footer-visit-count'); if(el) el.textContent=(s.val()||0).toLocaleString(); });
-      try { if(!sessionStorage.getItem('hj_visited')){ sessionStorage.setItem('hj_visited','1'); runTransaction(vref, c => (c||0)+1).catch(()=>{}); } } catch(e){}
+      onValue(tref, s => { const el=document.getElementById('footer-today-count'); if(el) el.textContent=(s.val()||0).toLocaleString(); });
+      onValue(ref(db, 'stats/cf_downloads'), s => { const v=s.val(); const el=document.getElementById('footer-cf-count'); if(el && v!=null) el.textContent=Number(v).toLocaleString(); });
+      try {
+        if(!sessionStorage.getItem('hj_visited')){
+          sessionStorage.setItem('hj_visited','1');
+          runTransaction(vref, c => (c||0)+1).catch(()=>{});
+          runTransaction(tref, c => (c||0)+1).catch(()=>{});
+        }
+      } catch(e){}
+      try { fetch('/.netlify/functions/cf-downloads').catch(()=>{}); } catch(e){}
     })();
 
     const FIXED_VIDEO_ID = ''; 
@@ -1366,7 +1385,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
     const WARN_GENERIC_TITLE = '제작 전 안내 말씀';
     const WARN_GENERIC_BODY = '<div class="mb-5">현재 이 품목은 전문화 지식 연구 단계로,<br><span class="text-[#8788EE] font-bold">3성이나 4성까지만 제작</span>이 가능합니다.<br><br>조만간 완벽한 <span class="text-white font-bold border-b border-[#8788EE]/50 pb-0.5">5성 확정 제작</span>으로<br>다시 찾아뵐 것을 약속드립니다!<br>해당 내용을 꼭 확인하신 후 의뢰를 부탁드리겠습니다.</div><p class="text-red-500 font-black text-[15px] md:text-base leading-tight drop-shadow-md">이 문구를 보시고도 의뢰하신 후<br>5성이 안된 부분에 대해서는<br>책임지지 않습니다.</p>';
     const WARN_PVP_TITLE = 'PVP 장비 안내';
-    const WARN_PVP_BODY = '<div class="leading-relaxed">PVP 장비는 <span class="text-[#8788EE] font-bold">등급이 상관없는 아이템</span>입니다.<br>재료 자유롭게 넣고 의뢰주시고,<br><br><span class="text-sky-300 font-bold">"5성확정"이 활성화 되어있는 아이템에 한하여</span><br>반드시 5성을 원하시면 <span class="text-yellow-400 font-bold">재료를 모두 금성으로</span>,<br>최소 품질을 <span class="text-yellow-400 font-bold">5성</span>으로 설정 후 의뢰해 주세요</div>';
+    const WARN_PVP_BODY = '<div class="leading-relaxed">PVP 장비는 <span class="text-[#8788EE] font-bold">등급이 상관없는 아이템</span>입니다.<br>재료 자유롭게 넣고 의뢰주시고,<br><br><span class="text-sky-300 font-bold">"5성확정"이 활성화 되어있는 아이템에 한하여</span><br>반드시 5성을 원하시면<br><span class="text-yellow-400 font-bold">서신과 장식을 포함한 모든 재료를 금성으로</span>,<br>최소 품질을 <span class="text-yellow-400 font-bold">5성</span>으로 설정 후 의뢰해 주세요<div class="mt-5 p-3.5 rounded-xl border border-red-500/55 bg-red-500/12 flex gap-2 text-left"><svg class="w-5 h-5 shrink-0 text-red-400 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg><p class="text-red-400 font-black text-[13px] md:text-sm leading-relaxed" style="word-break:keep-all;">PVP 장비는 재료나 장식에 <span class="text-red-300">은성이 혼입</span>된 채로 의뢰하시거나, <span class="text-red-300 underline">‘5성확정’으로 의뢰하지 않아</span> 5성으로 제작되지 않을 경우,<br><span class="text-red-300">제작자는 책임지지 않습니다.</span></p></div></div>';
     function isPVPItem(it) { return !!(it && it.name && it.name.includes('[PVP')); }
     window.openWarningModal = function(item) {
       pendingItemForWarning = item;
@@ -1576,7 +1595,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
       // [신규] 상세페이지 장바구니 버튼 생성
       const cartBtnWrapper = document.getElementById('detail-cart-btn-wrapper');
       cartBtnWrapper.innerHTML = `
-        <button onclick="addToCart('${item.name}')" class="px-3 py-2 md:px-4 md:py-2.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/50 rounded-xl hover:bg-emerald-500/20 hover:scale-105 transition-all font-black text-xs md:text-sm flex items-center gap-2 shadow-md shrink-0">
+        <button onclick="addToCart('${item.name}')" class="px-3 py-2 md:px-4 md:py-2.5 bg-[#8788EE]/10 text-[#a9aaf7] border border-[#8788EE]/50 rounded-xl hover:bg-[#8788EE]/20 hover:scale-105 transition-all font-black text-xs md:text-sm flex items-center gap-2 shadow-md shrink-0">
           <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>
           <span class="hidden md:inline">장바구니</span> 담기
         </button>
@@ -2290,7 +2309,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
   var yl=document.getElementById('youtube-list');
   if(yl){ new MutationObserver(function(){ Array.prototype.forEach.call(yl.children, rv); }).observe(yl,{childList:true}); }
   function cu(el){ var t=parseInt((el.textContent||'').replace(/[^0-9]/g,''),10); if(!t||el.dataset.cu)return; el.dataset.cu='1'; var s=performance.now(),d=1100; function k(n){var p=Math.min(1,(n-s)/d);el.textContent=Math.floor((1-Math.pow(1-p,3))*t).toLocaleString();if(p<1)requestAnimationFrame(k);else el.textContent=t.toLocaleString();} requestAnimationFrame(k); }
-  ['footer-order-count','footer-visit-count'].forEach(function(id){ var el=document.getElementById(id); if(!el)return; new MutationObserver(function(){ if(/[0-9]/.test(el.textContent)) cu(el); }).observe(el,{childList:true,characterData:true,subtree:true}); });
+  ['footer-order-count','footer-visit-count','footer-today-count','footer-cf-count'].forEach(function(id){ var el=document.getElementById(id); if(!el)return; new MutationObserver(function(){ if(/[0-9]/.test(el.textContent)) cu(el); }).observe(el,{childList:true,characterData:true,subtree:true}); });
 })();
 </script>
   <div id="hj-grain" aria-hidden="true"></div>
