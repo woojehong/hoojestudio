@@ -218,7 +218,7 @@
   .fixed.bottom-5.right-4 a, .fixed.bottom-5.right-4 button{ filter:saturate(.72); transition:filter .3s ease; }
   .fixed.bottom-5.right-4 a:hover, .fixed.bottom-5.right-4 button:hover{ filter:saturate(1); }
   /* 제보(편지) 버튼 핑크 + 흰 편지 */
-  #report-btn{ background-color:#e84d92 !important; border-color:#f4a6c8 !important; }
+  #report-btn{ background-color:#e84d92 !important; border-color:#f4a6c8 !important; border-width:3px !important; }
   /* 유튜브 최신영상 썸네일 톤다운(호버 시 원색) */
   #youtube-list img{ filter:saturate(.72) brightness(.96); transition:filter .3s ease; }
   #youtube-list a:hover img{ filter:saturate(1) brightness(1); }
@@ -241,7 +241,7 @@
     #hj-footer svg{ width:11px; height:11px; }
   }
   /* 장바구니(플로팅+헤더) 보라 톤 */
-  #cart-float-btn{ border-color:rgba(135,136,238,0.5) !important; }
+  #cart-float-btn{ border-color:rgba(135,136,238,0.5) !important; border-width:3px !important; }
   #cart-float-btn:hover{ border-color:#8788EE !important; }
   #cart-float-btn svg{ color:#a9aaf7 !important; }
   #cart-float-count{ background-color:#6b6cd6 !important; }
@@ -249,9 +249,14 @@
   #cart-btn:hover{ border-color:rgba(135,136,238,0.8) !important; background-color:rgba(135,136,238,0.10) !important; }
   #cart-btn svg, #cart-count{ color:#a9aaf7 !important; }
   /* 커스포지 플로팅 흰 테두리 */
-  .fixed.bottom-5.right-4 a[href*="curseforge"]{ border:1.5px solid rgba(255,255,255,0.7) !important; }
+  .fixed.bottom-5.right-4 a[href*="curseforge"]{ border:3px solid rgba(255,255,255,0.72) !important; }
   /* 커피(후원) 플로팅 밝은 브라운 테두리 */
-  [onclick="showDonationPopup()"]{ border:1.5px solid #cba074 !important; }
+  [onclick="showDonationPopup()"]{ border:3px solid #43301d !important; }
+  [onclick="showDonationPopup()"]{ position:relative !important; }
+  [onclick="showDonationPopup()"]:hover{ box-shadow:0 0 18px rgba(240,200,78,0.6) !important; }
+  #coffee-fx{ animation:hjCoffeeBob 3.2s ease-in-out infinite; will-change:transform; }
+  @keyframes hjCoffeeBob{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(-3px);} }
+  @media (prefers-reduced-motion: reduce){ #coffee-fx{ animation:none !important; } }
   /* ===== 일류 보완: 모션·타이포·색토큰·접근성 ===== */
   /* #1 모션 */
   #app-container a, #app-container button, #category-list > div, #category-list .border-b, .hjg-card, #req-mats-container button, #fee-crafter-section button, #opt-mats-container button, #embellish-mats-container button{ transition: transform .25s cubic-bezier(.22,.61,.36,1), border-color .25s ease, background-color .25s ease, box-shadow .25s ease, filter .3s ease, color .2s ease; }
@@ -685,10 +690,10 @@
   <div class="fixed bottom-5 right-4 z-50 flex flex-col items-center gap-2">
 
     <!-- 커피(후원) 버튼 -->
-    <div class="flex flex-col items-center gap-1">
-      <span class="text-white text-[9px] font-black px-2 py-0.5 rounded-full border select-none" style="border-color:#92400e; letter-spacing:0.05em;">Support me!</span>
+    <div id="coffee-fx" class="flex flex-col items-center gap-1">
+      <span class="text-[9px] font-black px-2 py-0.5 rounded-full border select-none" style="background-color:#eac15b; border-color:#43301d; color:#43301d; letter-spacing:0.05em;">Support me!</span>
       <button onclick="showDonationPopup()" class="w-11 h-11 rounded-full overflow-hidden shadow-lg transition-all hover:scale-110 hover:brightness-110 p-0 border-0 bg-transparent">
-        <img src="assets/coffee.webp" alt="Support me" class="w-full h-full object-cover rounded-full">
+        <img src="assets/coffee.webp?v=260628h" alt="Support me" class="w-full h-full object-cover rounded-full">
       </button>
     </div>
 
