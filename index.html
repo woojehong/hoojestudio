@@ -1019,16 +1019,21 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
       const feedBox = document.getElementById('live-order-feed');
       const container = document.getElementById('live-order-container');
 
-      if (!ordersData) {
-        feedBox.classList.add('hidden');
-        container.innerHTML = '';
+      feedBox.classList.remove('hidden');
+
+      // 일반 유저에게는 "본인 주문"만 표시 (localStorage로 내 주문 판별)
+      const myKeys = new Set(getMyOrders().map(o => o.key));
+      const ordersArray = ordersData
+        ? Object.keys(ordersData).map(key => ({ id: key, ...ordersData[key] })).filter(o => myKeys.has(o.id))
+        : [];
+      ordersArray.sort((a, b) => b.timestamp - a.timestamp);
+
+      if (ordersArray.length === 0) {
+        container.innerHTML = `<span class="text-gray-500 text-[11px] md:text-xs font-medium whitespace-nowrap pl-1">주문 알림을 보내시면 여기에 내 주문 현황이 실시간으로 표시됩니다.</span>`;
+        updateFloating(ordersData || {});
         return;
       }
 
-      feedBox.classList.remove('hidden');
-
-      const ordersArray = Object.keys(ordersData).map(key => ({ id: key, ...ordersData[key] }));
-      ordersArray.sort((a, b) => b.timestamp - a.timestamp);
       const top10 = ordersArray.slice(0, 10);
 
       container.innerHTML = top10.map(order => {
