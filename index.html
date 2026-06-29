@@ -1059,7 +1059,6 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 
         const myOrders = getMyOrders();
         const isMyOrder = myOrders.some(o => o.key === order.id);
-        const myBadge = isMyOrder ? `<div class="absolute -top-2 -left-1 z-10 bg-[#8788EE] text-white text-[8px] font-black px-1.5 py-0.5 rounded-full shadow-md">나의 주문</div>` : '';
         if (isMyOrder && order.status === 'accepted') {
           bubbleHtml = `<div class="flex justify-center mt-0.5"><div class="speech-bubble px-2 py-0.5 w-fit"><span class="text-[9px] md:text-[10px] font-black text-sky-300 whitespace-nowrap">접수 완료! 잠시만 기다려주세요 🙏</span></div></div>`;
         }
@@ -1067,7 +1066,6 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
         return `
           <div class="flex flex-col shrink-0">
             <div class="lo-card relative flex items-center gap-2 pl-2 pr-2.5 py-1.5 rounded-xl border border-white/[0.08] bg-gradient-to-b from-white/[0.05] to-white/[0.01] shadow-[0_2px_8px_rgba(0,0,0,0.35)] ${dimCls}">
-              ${myBadge}
               <span class="w-[3px] self-stretch rounded-full shrink-0" style="background:${cColorEff};"></span>
               <span class="text-[11px] md:text-xs font-bold text-gray-500 tabular-nums">${timeStr}</span>
               <span class="text-[11px] md:text-xs font-bold ${isRej ? 'text-gray-500' : 'text-white'} truncate max-w-[120px] md:max-w-[150px]">${escapeHTML((order.itemName.match(/^\[[^\]]*\]/)||[order.itemName])[0])}</span>
