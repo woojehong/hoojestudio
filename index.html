@@ -1934,14 +1934,17 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
             const thumb = v.snippet.thumbnails.medium ? v.snippet.thumbnails.medium.url : v.snippet.thumbnails.default.url;
             
             const isFixed = (FIXED_VIDEO_ID && FIXED_VIDEO_ID.trim() !== '' && index === 0);
-            const borderClass = isFixed ? "border-yellow-500 shadow-[0_0_10px_rgba(234,179,8,0.3)]" : "border-gray-800 hover:border-[#8788EE]/60";
+            const borderClass = isFixed ? "shadow-[0_0_12px_rgba(234,179,8,0.45)]" : "";
             const badgeHtml = isFixed ? `<div class="absolute top-1 left-1 bg-gradient-to-r from-yellow-600 to-yellow-500 text-black text-[9px] font-black px-1.5 py-0.5 rounded z-10 shadow-md">필독!</div>` : '';
             
             return `
-              <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank" class="group relative bg-gray-950 rounded-lg md:rounded-xl overflow-hidden border ${borderClass} transition-all shadow-md flex flex-col">
+              <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank" class="group relative bg-gray-950 rounded-lg md:rounded-xl overflow-hidden ${borderClass} transition-all shadow-md flex flex-col">
                 ${badgeHtml}
                 <div class="aspect-[16/8] overflow-hidden bg-[#030712]">
                   <img src="${thumb}" class="w-full h-full object-contain">
+                </div>
+                <div class="p-2 md:p-2.5">
+                  <p class="text-[9px] md:text-[11px] font-bold text-gray-400 line-clamp-1 group-hover:text-white transition-colors leading-snug">${title}</p>
                 </div>
               </a>
             `;
