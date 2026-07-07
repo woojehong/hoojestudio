@@ -286,6 +286,16 @@
         </div>
         <div class="bg-black/30 rounded-xl p-3 border border-white/5" style="height:170px;"><canvas id="dc-orders-chart"></canvas></div>
       </div>
+      <div>
+        <div class="flex items-center justify-between mb-2 gap-2">
+          <p class="text-[#a9aaf7] text-xs font-black uppercase tracking-widest shrink-0">제작자별 주문 순위</p>
+          <select id="dc-crafter-period" onchange="renderCrafterChart()" class="bg-black/50 border border-[#8788EE]/30 rounded-lg text-xs text-white font-bold px-2 py-1.5 outline-none focus:border-[#8788EE] max-w-[62%]">
+            <option value="w">주간 (최근 7일)</option>
+            <option value="m">월간 (최근 30일)</option>
+          </select>
+        </div>
+        <div class="bg-black/30 rounded-xl p-3 border border-white/5" style="height:260px;"><canvas id="dc-crafter-chart"></canvas></div>
+      </div>
     </div>
   </div>
 
@@ -1176,7 +1186,7 @@
       }
     };
     // ════════ 데이터센터 ════════
-    let _dailyVisits = {}, _ordersDaily = {}, _visitsChart = null, _ordersChart = null;
+    let _dailyVisits = {}, _ordersDaily = {}, _visitsChart = null, _ordersChart = null, _crafterChart = null;
     let _seasons = {}, _dcSeasonUnsub = null, _dcSeasonTimer = null;
     function _dcOpen(){ const b=document.getElementById('datacenter-body'); return b && !b.classList.contains('hidden'); }
     function _last30(obj){ return Object.keys(obj).filter(k=>/^\d{4}-\d{2}-\d{2}$/.test(k)).sort().slice(-30); }
@@ -1229,14 +1239,37 @@
       sel.innerHTML=html;
       if(cur && html.indexOf('value="'+cur+'"')>=0) sel.value=cur;
     }
+    window.renderCrafterChart = function(){
+      if(!_dcOpen() || typeof Chart==='undefined') return;
+      const sel=(document.getElementById('dc-crafter-period')||{}).value||'w';
+      let ks=Object.keys(_ordersDaily).filter(k=>/^\d{4}-\d{2}-\d{2}$/.test(k)).sort();
+      if(sel==='w') ks=ks.slice(-7);
+      else if(sel==='m') ks=ks.slice(-30);
+      else if(sel.indexOf('s:')===0){ const r=_seasonRange(sel.slice(2)); if(r) ks=ks.filter(d=> d>=r.from && (r.to?d<r.to:true)); }
+      const sums={};
+      ks.forEach(d=>{ const c=(_ordersDaily[d]||{}).c||{}; Object.keys(c).forEach(k=>{ sums[k]=(sums[k]||0)+(c[k]||0); }); });
+      const entries=Object.entries(sums).sort((a,b)=> b[1]-a[1]);
+      const labels=entries.map(e=>e[0]), data=entries.map(e=>e[1]);
+      if(_crafterChart) _crafterChart.destroy();
+      const ctx=document.getElementById('dc-crafter-chart').getContext('2d');
+      _crafterChart=new Chart(ctx,{ type:'bar',
+        data:{ labels, datasets:[{ data, backgroundColor:'rgba(232,77,146,0.62)', borderRadius:4, maxBarThickness:20 }] },
+        options:{ indexAxis:'y', responsive:true, maintainAspectRatio:false,
+          plugins:{ legend:{display:false}, tooltip:{ callbacks:{ title:it=>it[0].label, label:c=>' '+c.parsed.x+'건' },
+            backgroundColor:'rgba(10,10,16,0.95)', borderColor:'rgba(232,77,146,0.5)', borderWidth:1, titleColor:'#fff', bodyColor:'#f4a6c8', padding:8, displayColors:false } },
+          scales:{ x:{ beginAtZero:true, ticks:{color:'#6b7280',font:{size:9},precision:0}, grid:{color:'rgba(255,255,255,0.04)'} },
+                   y:{ ticks:{color:'#cbd5e1',font:{size:10,weight:'bold'}}, grid:{display:false} } } }
+      });
+    };
+    function _rebuildCrafterPeriod(){ const sel=document.getElementById('dc-crafter-period'); if(!sel) return; const cur=sel.value; let html='<option value="w">주간 (최근 7일)</option><option value="m">월간 (최근 30일)</option>'; seasonsSorted(_seasons).forEach(s=>html+=`<option value="s:${s.id}">${escapeHTML(s.name)}</option>`); sel.innerHTML=html; if(cur && html.indexOf('value="'+cur+'"')>=0) sel.value=cur; }
     window.toggleDataCenter = function(){
       const body=document.getElementById('datacenter-body'), chev=document.getElementById('datacenter-chevron');
       body.classList.toggle('hidden');
       chev.style.transform = body.classList.contains('hidden') ? '' : 'rotate(180deg)';
-      if(_dcOpen()){ renderVisitsChart(); renderOrdersChart(); }
+      if(_dcOpen()){ renderVisitsChart(); renderOrdersChart(); renderCrafterChart(); }
     };
     onValue(ref(db,'stats/daily'), s=>{ _dailyVisits=s.val()||{}; renderVisitsChart(); });
-    onValue(ref(db,'stats/orders_daily'), s=>{ _ordersDaily=s.val()||{}; _rebuildOrderFilter(); renderOrdersChart(); });
+    onValue(ref(db,'stats/orders_daily'), s=>{ _ordersDaily=s.val()||{}; _rebuildOrderFilter(); renderOrdersChart(); renderCrafterChart(); });
     onValue(ref(db,'stats/visits'), s=>{ const el=document.getElementById('dc-total-visits'); if(el) el.textContent=(s.val()||0).toLocaleString(); });
     onValue(ref(db,'stats/orders_total'), s=>{ const el=document.getElementById('dc-total-orders'); if(el) el.textContent=(s.val()||0).toLocaleString(); });
     // ════════ 시즌(분기점) 시스템 ════════
@@ -1248,20 +1281,32 @@
     window.toggleSeasonPanel = function(){ const b=document.getElementById('seasonpanel-body'), c=document.getElementById('seasonpanel-chevron'); if(!b)return; b.classList.toggle('hidden'); c.style.transform=b.classList.contains('hidden')?'':'rotate(180deg)'; };
     function renderSeasonPanel(){
       const cur=currentSeasonOf(_seasons);
-      const curEl=document.getElementById('sp-current'); if(curEl) curEl.textContent = cur ? (cur.name+'  ('+cur.start+' 08:00~)') : '없음';
+      const curEl=document.getElementById('sp-current'); if(curEl) curEl.textContent = cur ? (cur.name+'  ('+cur.start+' ~)') : '없음';
       const list=document.getElementById('sp-list'); if(!list) return;
-      list.innerHTML = seasonsSorted(_seasons).map(s=>{
+      const arr=seasonsSorted(_seasons);
+      list.innerHTML = arr.map((s,i)=>{
         const isCur = cur && s.id===cur.id, isAnchor = s.id==='midnight_s1';
-        return `<div class="flex items-center gap-2 bg-black/30 rounded-lg p-2 border ${isCur?'border-emerald-500/40':'border-white/5'}">`
-          + `<input value="${escapeHTML(s.name)}" onchange="updateSeason('${s.id}','name',this.value)" class="flex-1 min-w-0 bg-black/40 border border-[#8788EE]/20 rounded px-2 py-1 text-xs text-white font-black outline-none focus:border-[#8788EE]">`
-          + `<div class="flex flex-col items-end shrink-0"><input type="date" value="${s.start}" onchange="updateSeason('${s.id}','start',this.value)" class="bg-black/40 border border-[#8788EE]/20 rounded px-2 py-1 text-[11px] text-white font-bold outline-none focus:border-[#8788EE]">${isAnchor?'<span class="text-[8px] text-gray-500 font-black mt-0.5">카운팅 시작일</span>':''}</div>`
-          + `${isCur?'<span class="text-[8px] font-black text-emerald-400 px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 shrink-0">현재</span>':''}`
-          + `<button onclick="deleteSeason('${s.id}')" title="삭제" class="text-red-400 hover:text-red-300 font-black text-sm px-1 shrink-0 ${isAnchor?'opacity-20 pointer-events-none':''}">✕</button>`
-          + `</div>`;
+        const nextStart = (i+1<arr.length) ? arr[i+1].start : '';
+        return `<div class="bg-black/30 rounded-lg p-2.5 border ${isCur?'border-emerald-500/40':'border-white/5'} flex flex-col gap-2">`
+          + `<div class="flex items-center gap-2">`
+            + `<input value="${escapeHTML(s.name)}" onchange="updateSeason('${s.id}','name',this.value)" class="flex-1 min-w-0 bg-black/40 border border-[#8788EE]/20 rounded px-2 py-1 text-xs text-white font-black outline-none focus:border-[#8788EE]">`
+            + `${isCur?'<span class="text-[8px] font-black text-emerald-400 px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 shrink-0">현재</span>':''}`
+            + `<button onclick="deleteSeason('${s.id}')" title="삭제" class="text-red-400 hover:text-red-300 font-black text-sm px-1 shrink-0 ${isAnchor?'opacity-20 pointer-events-none':''}">✕</button>`
+          + `</div>`
+          + `<div class="flex items-center gap-1.5 flex-wrap">`
+            + `<span class="text-[9px] text-gray-500 font-black shrink-0">시작</span>`
+            + `<input type="date" value="${s.start}" onchange="updateSeason('${s.id}','start',this.value)" class="bg-black/40 border border-[#8788EE]/20 rounded px-1.5 py-1 text-[11px] text-white font-bold outline-none focus:border-[#8788EE]">`
+            + `<span class="text-[9px] text-gray-500 font-black shrink-0 ml-1">종료</span>`
+            + (nextStart
+                ? `<input type="date" value="${nextStart}" onchange="updateSeasonEnd('${s.id}',this.value)" class="bg-black/40 border border-[#8788EE]/20 rounded px-1.5 py-1 text-[11px] text-white font-bold outline-none focus:border-[#8788EE]">`
+                : `<span class="text-[10px] text-emerald-400/80 font-black px-1">진행 중</span>`)
+          + `</div>`
+        + `</div>`;
       }).join('');
     }
     function saveSeasons(){ return set(ref(db,'stats/seasons'), _seasons); }
     window.updateSeason = function(id,field,val){ if(!_seasons[id]) return; if(field==='start' && !/^\d{4}-\d{2}-\d{2}$/.test(val)) return; if(field==='name' && !String(val).trim()){ renderSeasonPanel(); return; } _seasons[id][field]=val; saveSeasons(); };
+    window.updateSeasonEnd = function(id,val){ if(!/^\d{4}-\d{2}-\d{2}$/.test(val)){ renderSeasonPanel(); return; } const arr=seasonsSorted(_seasons); const i=arr.findIndex(x=>x.id===id); if(i<0 || i+1>=arr.length) return; _seasons[arr[i+1].id].start=val; saveSeasons(); };  // 이 시즌 종료 = 다음 시즌 시작
     window.deleteSeason = function(id){ if(id==='midnight_s1') return; if(!confirm('이 시즌 분기점을 삭제할까요?')) return; delete _seasons[id]; saveSeasons(); };
     window.addSeason = function(){ const d=(document.getElementById('sp-new-date')||{}).value||'', n=((document.getElementById('sp-new-name')||{}).value||'').trim(); if(!/^\d{4}-\d{2}-\d{2}$/.test(d)){ alert('변경일을 선택하세요'); return; } if(!n){ alert('새 시즌 이름을 입력하세요'); return; } const id='s_'+Date.now(); _seasons[id]={name:n, start:d}; const de=document.getElementById('sp-new-date'), ne=document.getElementById('sp-new-name'); if(de)de.value=''; if(ne)ne.value=''; saveSeasons(); };
 
@@ -1282,9 +1327,9 @@
     onValue(ref(db,'stats/seasons'), s=>{
       const v=s.val();
       if(!v || !Object.keys(v).length){ set(ref(db,'stats/seasons'), { midnight_s1:{ name:'한밤 시즌1', start:'2026-06-28' } }); return; }
-      _seasons=v; renderSeasonPanel(); rebuildSeasonFilter(); bindDcCurrentSeason(); updateSeasonSum(); if(_dcOpen()){ renderVisitsChart(); renderOrdersChart(); }
+      _seasons=v; renderSeasonPanel(); rebuildSeasonFilter(); _rebuildCrafterPeriod(); bindDcCurrentSeason(); updateSeasonSum(); if(_dcOpen()){ renderVisitsChart(); renderOrdersChart(); renderCrafterChart(); }
     });
 
   </script>
 </body>
-</html>
+</
