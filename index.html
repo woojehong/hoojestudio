@@ -1305,6 +1305,15 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
       const overlay = document.getElementById('report-overlay');
       const isHidden = menu.classList.toggle('hidden');
       overlay.classList.toggle('hidden', isHidden);
+      if (!isHidden) {
+        // 핑크 버튼의 실제 위치를 읽어 박스 바닥을 버튼 바닥에 정확히 정렬 + 바로 왼쪽 배치
+        const btn = document.getElementById('report-btn');
+        if (btn) {
+          const r = btn.getBoundingClientRect();
+          menu.style.bottom = Math.max(8, window.innerHeight - r.bottom) + 'px';
+          menu.style.right  = (window.innerWidth - r.left + 12) + 'px';
+        }
+      }
     };
 
     window.closeReportMenu = function() {
