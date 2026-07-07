@@ -1021,11 +1021,21 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
     // ── 주문 카운터(영구·7일정리 무관): 누적 + 현재 시즌 ──
     let CURRENT_SEASON_KEY = 'midnight_s1';
     onValue(ref(db, 'stats/orders_total'), s => { const el=document.getElementById('footer-order-count'); if(el) el.textContent=(s.val()||0).toLocaleString(); });
-    onValue(ref(db, 'stats/current_season'), s => {
-      const cs = s.val() || {}; CURRENT_SEASON_KEY = cs.key || 'midnight_s1';
-      const lbl = document.getElementById('footer-season-label'); if(lbl) lbl.textContent = cs.label || '시즌';
-      onValue(ref(db, 'stats/season/' + CURRENT_SEASON_KEY), s2 => { const el=document.getElementById('footer-season-count'); if(el) el.textContent=(s2.val()||0).toLocaleString(); });
-    });
+    let _seasons = {}, _seasonCountUnsub = null, _seasonTimer = null;
+    function _seasonStartEpoch(d){ return Date.parse(d + 'T08:00:00+09:00'); }   // 해당 날짜 KST 오전 8시
+    function _seasonsSorted(o){ return Object.entries(o).map(([id,v])=>({id, name:(v&&v.name)||'', start:(v&&v.start)||''})).filter(x=>/^\d{4}-\d{2}-\d{2}$/.test(x.start)).sort((a,b)=> a.start<b.start?-1:a.start>b.start?1:0); }
+    function _currentSeason(o){ const a=_seasonsSorted(o); if(!a.length) return null; const t=Date.now(); let c=a[0]; for(const s of a){ if(_seasonStartEpoch(s.start)<=t) c=s; else break; } return c; }
+    function _bindSeasonCount(){
+      const cur = _currentSeason(_seasons); CURRENT_SEASON_KEY = cur ? cur.id : 'midnight_s1';
+      // 라벨은 '시즌' 고정(HTML 기본값 유지) — 숫자만 현재 시즌 기준으로 갱신
+      if(_seasonCountUnsub){ _seasonCountUnsub(); _seasonCountUnsub=null; }
+      _seasonCountUnsub = onValue(ref(db, 'stats/season/' + CURRENT_SEASON_KEY), s2 => { const el=document.getElementById('footer-season-count'); if(el) el.textContent=(s2.val()||0).toLocaleString(); });
+      if(_seasonTimer) clearTimeout(_seasonTimer);
+      const a=_seasonsSorted(_seasons), now=Date.now();
+      const nx=a.map(x=>_seasonStartEpoch(x.start)).filter(t=>t>now).sort((p,q)=>p-q)[0];
+      if(nx) _seasonTimer=setTimeout(_bindSeasonCount, Math.min(nx-now+1000, 2147483000));  // 다음 8시 경계에 자동 전환
+    }
+    onValue(ref(db, 'stats/seasons'), s => { _seasons = s.val() || {}; _bindSeasonCount(); });
     onValue(ref(db, 'orders'), (snap) => {
       const ordersData = snap.val();
       const feedBox = document.getElementById('live-order-feed');
@@ -2164,7 +2174,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
         const _d = new Date(Date.now() + 9*3600*1000).toISOString().slice(0,10);
         const _cat = (allItemsFlat.find(i => i.name === itemName) || {}).cat || '기타';
         runTransaction(ref(db, 'stats/orders_total'), c => (c||0)+1).catch(()=>{});
-        runTransaction(ref(db, 'stats/season/' + CURRENT_SEASON_KEY), c => (c||0)+1).catch(()=>{});
+        runTransaction(ref(db, 'stats/season/' + ((_currentSeason(_seasons)||{}).id || CURRENT_SEASON_KEY)), c => (c||0)+1).catch(()=>{});
         runTransaction(ref(db, 'stats/orders_daily/' + _d + '/t'), c => (c||0)+1).catch(()=>{});
         runTransaction(ref(db, 'stats/orders_daily/' + _d + '/c/' + _sk(crafter)), c => (c||0)+1).catch(()=>{});
         runTransaction(ref(db, 'stats/orders_daily/' + _d + '/g/' + _sk(_cat)), c => (c||0)+1).catch(()=>{});

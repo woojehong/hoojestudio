@@ -404,8 +404,20 @@ exports.handler = async (event) => {
             try {
               let seasonKey = "midnight_s1";
               try {
-                const k = await (await fetch(`${RTDB_URL}/stats/current_season/key.json`)).json();
-                if (typeof k === "string" && k) seasonKey = k;
+                // 시즌 목록에서 '지금 기준 가장 최근에 시작된(해당일 오전8시 KST) 시즌' 파생
+                const seasons = await (await fetch(`${RTDB_URL}/stats/seasons.json`)).json();
+                if (seasons && typeof seasons === "object") {
+                  const arr = Object.entries(seasons)
+                    .map(([id, v]) => ({ id, start: v && v.start }))
+                    .filter((x) => /^\d{4}-\d{2}-\d{2}$/.test(x.start))
+                    .sort((a, b) => (a.start < b.start ? -1 : a.start > b.start ? 1 : 0));
+                  const nowMs = Date.now();
+                  let cur = null;
+                  for (const sn of arr) {
+                    if (Date.parse(sn.start + "T08:00:00+09:00") <= nowMs) cur = sn; else break;
+                  }
+                  if (cur) seasonKey = cur.id;
+                }
               } catch (e2) {}
               await incrStat("stats/orders_total");
               await incrStat("stats/season/" + seasonKey);

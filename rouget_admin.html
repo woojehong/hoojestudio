@@ -138,8 +138,8 @@
         <div class="text-gray-600 text-center py-8 text-xs font-bold uppercase tracking-widest">No active orders</div>
       </div>
       <div class="shrink-0 w-28 flex flex-col gap-1">
-        <div class="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-1.5 px-1">잔여 주문</div>
-        <div id="pending-summary" class="flex flex-col gap-1 max-h-[400px] overflow-y-auto custom-scrollbar"></div>
+        <div class="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-1.5 px-1">제작자별 잔여</div>
+        <div id="pending-summary" class="flex flex-col gap-1.5 max-h-[400px] overflow-y-auto custom-scrollbar"></div>
       </div>
     </div>
   </div>
@@ -224,6 +224,27 @@
     </div>
   </div>
 
+  <!-- 분기점(시즌) 설정 -->
+  <div class="w-full max-w-2xl mb-5 p-5 rounded-2xl glass-panel border-[#8788EE]/20 shadow-xl">
+    <div class="flex items-center justify-between pb-4 cursor-pointer" onclick="toggleSeasonPanel()">
+      <h3 class="text-[#a9aaf7] font-black tracking-tighter text-lg flex items-center gap-2">🗓️ 분기점 설정</h3>
+      <span id="seasonpanel-chevron" class="text-[#a9aaf7] font-black text-sm transition-transform">▼</span>
+    </div>
+    <div id="seasonpanel-body" class="hidden border-t border-[#8788EE]/10 pt-4 flex flex-col gap-4">
+      <div class="text-xs font-black text-gray-400">현재 시즌: <span id="sp-current" class="text-white">–</span></div>
+      <div id="sp-list" class="flex flex-col gap-2"></div>
+      <div class="border-t border-white/5 pt-3 flex flex-col gap-2">
+        <div class="text-[10px] text-gray-500 font-black uppercase tracking-widest">새 시즌 추가</div>
+        <div class="flex gap-2 flex-wrap items-center">
+          <input type="date" id="sp-new-date" class="bg-black/50 border border-[#8788EE]/30 rounded-lg text-xs text-white font-bold px-2 py-1.5 outline-none focus:border-[#8788EE]">
+          <input type="text" id="sp-new-name" placeholder="새 시즌 이름 (예: 한밤 시즌2)" class="flex-1 min-w-[150px] bg-black/50 border border-[#8788EE]/30 rounded-lg text-xs text-white font-bold px-2 py-1.5 outline-none focus:border-[#8788EE]">
+          <button onclick="addSeason()" class="px-3 py-1.5 rounded-lg text-xs font-black bg-[#8788EE]/20 text-[#a9aaf7] border border-[#8788EE]/40 hover:bg-[#8788EE]/30">추가</button>
+        </div>
+        <p class="text-[9px] text-gray-600 font-bold leading-relaxed">입력한 날짜 <span class="text-gray-400">아침 8시(KST)</span>부터 새 시즌으로 전환됩니다. 미래 날짜를 미리 넣어둬도 그날 8시에 자동 반영돼요. 이름 칸은 언제든 수정 가능합니다.</p>
+      </div>
+    </div>
+  </div>
+
   <!-- 데이터센터 -->
   <div class="w-full max-w-2xl mb-5 p-5 rounded-2xl glass-panel border-[#8788EE]/20 shadow-xl">
     <div class="flex items-center justify-between pb-4 cursor-pointer" onclick="toggleDataCenter()">
@@ -244,6 +265,13 @@
           <div id="dc-season-label" class="text-[10px] text-gray-500 font-black uppercase tracking-widest mb-1">시즌 제작</div>
           <div id="dc-season-orders" class="text-xl font-black text-white">–</div>
         </div>
+      </div>
+      <div class="flex items-center gap-2 flex-wrap -mt-2">
+        <span class="text-[10px] text-gray-500 font-black uppercase tracking-widest">시즌 필터</span>
+        <select id="dc-season-filter" onchange="onSeasonFilterChange()" class="bg-black/50 border border-[#8788EE]/30 rounded-lg text-xs text-white font-bold px-2 py-1.5 outline-none focus:border-[#8788EE]">
+          <option value="all">전체 기간</option>
+        </select>
+        <span id="dc-season-sum" class="text-[10px] font-black text-[#a9aaf7]"></span>
       </div>
       <div>
         <p class="text-[#a9aaf7] text-xs font-black uppercase tracking-widest mb-2">일일 방문 수</p>
@@ -489,7 +517,7 @@
       summary.innerHTML = `
         ${sorted.map(([crafter, count]) => {
           const color = CLS_COLOR[crafter] || '#6B7280';
-          return `<div onclick="completeCrafterOrders(this.dataset.crafter)" data-crafter="${escapeHTML(crafter)}" class="flex items-center justify-between px-2 py-1 rounded-lg bg-black/30 border border-gray-900 hover:border-emerald-500/40 hover:bg-emerald-500/5 transition-all cursor-pointer" title="${escapeHTML(crafter)} 전체 완료">
+          return `<div onclick="completeCrafterOrders(this.dataset.crafter)" data-crafter="${escapeHTML(crafter)}" class="flex items-center justify-between px-2 py-2.5 rounded-lg bg-black/30 border border-gray-900 hover:border-emerald-500/40 hover:bg-emerald-500/5 transition-all cursor-pointer" title="${escapeHTML(crafter)} 전체 완료">
             <span class="text-[10px] font-black" style="color:${color}">${escapeHTML(crafter)}</span>
             <span class="text-[10px] font-black text-white">${count}</span>
           </div>`;
@@ -1149,8 +1177,16 @@
     };
     // ════════ 데이터센터 ════════
     let _dailyVisits = {}, _ordersDaily = {}, _visitsChart = null, _ordersChart = null;
+    let _seasons = {}, _dcSeasonUnsub = null, _dcSeasonTimer = null;
     function _dcOpen(){ const b=document.getElementById('datacenter-body'); return b && !b.classList.contains('hidden'); }
     function _last30(obj){ return Object.keys(obj).filter(k=>/^\d{4}-\d{2}-\d{2}$/.test(k)).sort().slice(-30); }
+    function _datesFor(obj){
+      const sel=(document.getElementById('dc-season-filter')||{}).value||'all';
+      let ks=Object.keys(obj).filter(k=>/^\d{4}-\d{2}-\d{2}$/.test(k)).sort();
+      if(sel!=='all'){ const r=_seasonRange(sel); if(r) ks=ks.filter(d=> d>=r.from && (r.to?d<r.to:true)); }
+      else { ks=ks.slice(-30); }
+      return ks;
+    }
     function _mkChart(id, prev, labels, data, color){
       if(typeof Chart==='undefined') return prev;
       if(prev) prev.destroy();
@@ -1168,13 +1204,13 @@
     }
     window.renderVisitsChart = function(){
       if(!_dcOpen()) return;
-      const ds=_last30(_dailyVisits);
+      const ds=_datesFor(_dailyVisits);
       _visitsChart=_mkChart('dc-visits-chart',_visitsChart, ds.map(d=>d.slice(5)), ds.map(d=>_dailyVisits[d]||0), 'rgba(135,136,238,0.65)');
     };
     window.renderOrdersChart = function(){
       if(!_dcOpen()) return;
       const f=(document.getElementById('dc-orders-filter')||{}).value||'total';
-      const ds=_last30(_ordersDaily);
+      const ds=_datesFor(_ordersDaily);
       const data=ds.map(d=>{ const day=_ordersDaily[d]||{};
         if(f==='total') return day.t||0;
         const i=f.indexOf(':'); const kind=f.slice(0,i), key=f.slice(i+1);
@@ -1203,8 +1239,51 @@
     onValue(ref(db,'stats/orders_daily'), s=>{ _ordersDaily=s.val()||{}; _rebuildOrderFilter(); renderOrdersChart(); });
     onValue(ref(db,'stats/visits'), s=>{ const el=document.getElementById('dc-total-visits'); if(el) el.textContent=(s.val()||0).toLocaleString(); });
     onValue(ref(db,'stats/orders_total'), s=>{ const el=document.getElementById('dc-total-orders'); if(el) el.textContent=(s.val()||0).toLocaleString(); });
-    onValue(ref(db,'stats/current_season'), s=>{ const cs=s.val()||{}; const lbl=document.getElementById('dc-season-label'); if(lbl) lbl.textContent=(cs.label||'시즌')+' 제작';
-      onValue(ref(db,'stats/season/'+(cs.key||'midnight_s1')), s2=>{ const el=document.getElementById('dc-season-orders'); if(el) el.textContent=(s2.val()||0).toLocaleString(); }); });
+    // ════════ 시즌(분기점) 시스템 ════════
+    function seasonStartEpoch(d){ return Date.parse(d+'T08:00:00+09:00'); }   // 해당 날짜 KST 오전 8시
+    function seasonsSorted(o){ return Object.entries(o).map(([id,v])=>({id, name:(v&&v.name)||'', start:(v&&v.start)||''})).filter(x=>/^\d{4}-\d{2}-\d{2}$/.test(x.start)).sort((a,b)=> a.start<b.start?-1:a.start>b.start?1:0); }
+    function currentSeasonOf(o){ const a=seasonsSorted(o); if(!a.length) return null; const t=Date.now(); let c=a[0]; for(const sn of a){ if(seasonStartEpoch(sn.start)<=t) c=sn; else break; } return c; }
+    function _seasonRange(id){ const a=seasonsSorted(_seasons); const i=a.findIndex(s=>s.id===id); if(i<0) return null; return { from:a[i].start, to:(i+1<a.length)?a[i+1].start:null }; }
+
+    window.toggleSeasonPanel = function(){ const b=document.getElementById('seasonpanel-body'), c=document.getElementById('seasonpanel-chevron'); if(!b)return; b.classList.toggle('hidden'); c.style.transform=b.classList.contains('hidden')?'':'rotate(180deg)'; };
+    function renderSeasonPanel(){
+      const cur=currentSeasonOf(_seasons);
+      const curEl=document.getElementById('sp-current'); if(curEl) curEl.textContent = cur ? (cur.name+'  ('+cur.start+' 08:00~)') : '없음';
+      const list=document.getElementById('sp-list'); if(!list) return;
+      list.innerHTML = seasonsSorted(_seasons).map(s=>{
+        const isCur = cur && s.id===cur.id, isAnchor = s.id==='midnight_s1';
+        return `<div class="flex items-center gap-2 bg-black/30 rounded-lg p-2 border ${isCur?'border-emerald-500/40':'border-white/5'}">`
+          + `<input value="${escapeHTML(s.name)}" onchange="updateSeason('${s.id}','name',this.value)" class="flex-1 min-w-0 bg-black/40 border border-[#8788EE]/20 rounded px-2 py-1 text-xs text-white font-black outline-none focus:border-[#8788EE]">`
+          + `<div class="flex flex-col items-end shrink-0"><input type="date" value="${s.start}" onchange="updateSeason('${s.id}','start',this.value)" class="bg-black/40 border border-[#8788EE]/20 rounded px-2 py-1 text-[11px] text-white font-bold outline-none focus:border-[#8788EE]">${isAnchor?'<span class="text-[8px] text-gray-500 font-black mt-0.5">카운팅 시작일</span>':''}</div>`
+          + `${isCur?'<span class="text-[8px] font-black text-emerald-400 px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 shrink-0">현재</span>':''}`
+          + `<button onclick="deleteSeason('${s.id}')" title="삭제" class="text-red-400 hover:text-red-300 font-black text-sm px-1 shrink-0 ${isAnchor?'opacity-20 pointer-events-none':''}">✕</button>`
+          + `</div>`;
+      }).join('');
+    }
+    function saveSeasons(){ return set(ref(db,'stats/seasons'), _seasons); }
+    window.updateSeason = function(id,field,val){ if(!_seasons[id]) return; if(field==='start' && !/^\d{4}-\d{2}-\d{2}$/.test(val)) return; if(field==='name' && !String(val).trim()){ renderSeasonPanel(); return; } _seasons[id][field]=val; saveSeasons(); };
+    window.deleteSeason = function(id){ if(id==='midnight_s1') return; if(!confirm('이 시즌 분기점을 삭제할까요?')) return; delete _seasons[id]; saveSeasons(); };
+    window.addSeason = function(){ const d=(document.getElementById('sp-new-date')||{}).value||'', n=((document.getElementById('sp-new-name')||{}).value||'').trim(); if(!/^\d{4}-\d{2}-\d{2}$/.test(d)){ alert('변경일을 선택하세요'); return; } if(!n){ alert('새 시즌 이름을 입력하세요'); return; } const id='s_'+Date.now(); _seasons[id]={name:n, start:d}; const de=document.getElementById('sp-new-date'), ne=document.getElementById('sp-new-name'); if(de)de.value=''; if(ne)ne.value=''; saveSeasons(); };
+
+    function bindDcCurrentSeason(){
+      const cur=currentSeasonOf(_seasons);
+      const lbl=document.getElementById('dc-season-label'); if(lbl) lbl.textContent=(cur?cur.name:'시즌')+' 제작';
+      if(_dcSeasonUnsub){ _dcSeasonUnsub(); _dcSeasonUnsub=null; }
+      if(cur){ _dcSeasonUnsub=onValue(ref(db,'stats/season/'+cur.id), s2=>{ const el=document.getElementById('dc-season-orders'); if(el) el.textContent=(s2.val()||0).toLocaleString(); }); }
+      if(_dcSeasonTimer) clearTimeout(_dcSeasonTimer);
+      const a=seasonsSorted(_seasons), now=Date.now();
+      const nx=a.map(x=>seasonStartEpoch(x.start)).filter(t=>t>now).sort((p,q)=>p-q)[0];
+      if(nx) _dcSeasonTimer=setTimeout(bindDcCurrentSeason, Math.min(nx-now+1000, 2147483000));
+    }
+    function rebuildSeasonFilter(){ const sel=document.getElementById('dc-season-filter'); if(!sel) return; const cur=sel.value; let html='<option value="all">전체 기간</option>'; seasonsSorted(_seasons).forEach(s=>html+=`<option value="${s.id}">${escapeHTML(s.name)}</option>`); sel.innerHTML=html; if(cur && html.indexOf('value="'+cur+'"')>=0) sel.value=cur; }
+    window.onSeasonFilterChange = function(){ renderVisitsChart(); renderOrdersChart(); updateSeasonSum(); };
+    function updateSeasonSum(){ const el=document.getElementById('dc-season-sum'); if(!el) return; const sel=(document.getElementById('dc-season-filter')||{}).value||'all'; if(sel==='all'){ el.textContent=''; return; } const r=_seasonRange(sel); if(!r){ el.textContent=''; return; } const inR=d=> d>=r.from && (r.to?d<r.to:true); let ord=0, vis=0; Object.keys(_ordersDaily).forEach(d=>{ if(/^\d{4}-\d{2}-\d{2}$/.test(d)&&inR(d)) ord+=((_ordersDaily[d]||{}).t||0); }); Object.keys(_dailyVisits).forEach(d=>{ if(/^\d{4}-\d{2}-\d{2}$/.test(d)&&inR(d)) vis+=(_dailyVisits[d]||0); }); el.textContent=`주문 ${ord.toLocaleString()} · 방문 ${vis.toLocaleString()}`; }
+
+    onValue(ref(db,'stats/seasons'), s=>{
+      const v=s.val();
+      if(!v || !Object.keys(v).length){ set(ref(db,'stats/seasons'), { midnight_s1:{ name:'한밤 시즌1', start:'2026-06-28' } }); return; }
+      _seasons=v; renderSeasonPanel(); rebuildSeasonFilter(); bindDcCurrentSeason(); updateSeasonSum(); if(_dcOpen()){ renderVisitsChart(); renderOrdersChart(); }
+    });
 
   </script>
 </body>
