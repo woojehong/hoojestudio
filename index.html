@@ -381,7 +381,7 @@
         <a id="addon-download-link" href="https://github.com/woojehong/hoojestudio/releases/download/hoojestudio1.4/HoojeStudio.zip"
            class="flex-1 inline-flex items-center justify-center gap-1.5 px-2.5 py-2.5 rounded-xl font-black text-[11px] md:text-xs tracking-tight transition-all bg-gradient-to-r from-amber-500/20 to-yellow-400/10 border border-amber-400/50 hover:border-amber-300/80 text-amber-200 hover:text-white">
           <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"/></svg>
-          <span class="whitespace-nowrap">애드온 직접 다운로드</span>
+          <span id="addon-btn-label" class="whitespace-nowrap">애드온 직접 다운로드</span>
         </a>
       </div>
     </div>
@@ -571,7 +571,7 @@
                   <a id="addon-download-link-2" href="https://github.com/woojehong/hoojestudio/releases/download/hoojestudio1.4/HoojeStudio.zip"
                      class="flex-1 inline-flex items-center justify-center gap-1.5 px-2.5 py-2.5 rounded-xl font-black text-[11px] md:text-xs tracking-tight transition-all bg-gradient-to-r from-amber-500/20 to-yellow-400/10 border border-amber-400/50 hover:border-amber-300/80 text-amber-200 hover:text-white">
                     <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"/></svg>
-                    <span class="whitespace-nowrap">애드온 직접 다운로드</span>
+                    <span id="addon-btn-label-2" class="whitespace-nowrap">애드온 직접 다운로드</span>
                   </a>
                 </div>
                 <a href="guide.html#addon-install" class="inline-flex items-center justify-center gap-1.5 px-2.5 py-2.5 rounded-xl font-black text-[11px] md:text-xs tracking-tight transition-all bg-[#8788EE]/12 border border-[#8788EE]/45 text-[#a9aaf7] hover:text-white hover:border-[#8788EE] hover:bg-[#8788EE]/20">
@@ -1286,8 +1286,12 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
     // 애드온 다운로드 버튼 문구 동기화
     onValue(ref(db, 'addon_label'), (snap) => {
       const label = snap.val();
-      const el = document.getElementById('addon-btn-label');
-      if (el) el.textContent = label || '후제공방 애드온 다운로드'; var el2=document.getElementById('addon-btn-label-2'); if(el2) el2.textContent = label || '후제공방 애드온 다운로드';
+      if (label) {
+        const el = document.getElementById('addon-btn-label');
+        if (el) el.textContent = label;
+        const el2 = document.getElementById('addon-btn-label-2');
+        if (el2) el2.textContent = label;
+      }
     }, { onlyOnce: true });
 
     // 애드온 다운로드 링크 동기화
@@ -2398,4 +2402,4 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 </script>
   <div id="hj-grain" aria-hidden="true"></div>
 </body>
-</html>    
+</html>

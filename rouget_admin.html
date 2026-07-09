@@ -17,7 +17,7 @@
     .custom-scrollbar::-webkit-scrollbar-thumb { background: #374151; border-radius: 10px; }
     .glass-panel { background: rgba(10, 10, 10, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(135, 136, 238, 0.2); }
     /* [핵심] 줄바꿈을 화면에 그대로 보여주는 마법의 코드 */
-    .pre-wrap { white-space: pre-wrap; word-break: break-all; }
+    .pre-wrap { white-space: pre-wrap; word-break: keep-all; overflow-wrap: anywhere; }
 
     /* ════════ 관제탑 정갈화 (adm-polish) · 대표님 전용 ════════ */
     :root { --adm-line: rgba(255,255,255,0.08); --adm-accent: #8788EE; }
@@ -166,6 +166,31 @@
       <div class="text-gray-600 text-center py-8 text-[10px] font-black tracking-widest">로그인 후 표시됩니다</div>
     </div>
     </div><!-- /item-manager-body -->
+  </div>
+
+  <!-- 검색 도우미 (서신/장식) -->
+  <div class="w-full max-w-2xl mb-5 mt-2 p-5 rounded-2xl glass-panel border-purple-500/30 shadow-xl">
+    <div class="flex items-center justify-between pb-4 cursor-pointer" onclick="toggleSearchHelper()">
+      <h3 class="text-purple-400 font-black tracking-tighter text-lg">🔎 검색 도우미 (서신/장식)</h3>
+      <span id="search-helper-chevron" class="text-purple-400 font-black text-sm transition-transform">▼</span>
+    </div>
+    <div id="search-helper-body" class="hidden border-t border-purple-500/10 pt-4">
+      <div class="flex gap-2 mb-3 flex-wrap items-center">
+        <select id="shType" class="bg-black/40 border border-gray-800 rounded-lg px-2 py-2 text-white text-xs font-bold outline-none">
+          <option value="missive">서신</option>
+          <option value="embellish">장식</option>
+        </select>
+        <input id="shName" type="text" placeholder="아이템 이름 (경매장 검색에 쓰일 정확한 이름)"
+          class="flex-1 min-w-[160px] bg-black/40 border border-gray-800 rounded-lg px-3 py-2 text-white text-xs font-bold outline-none focus:border-purple-500/50 placeholder-gray-600">
+        <input id="shDesc" type="text" placeholder="괄호 안내 (예: 가속+특화)"
+          class="w-44 bg-black/40 border border-gray-800 rounded-lg px-3 py-2 text-white text-xs font-bold outline-none focus:border-purple-500/50 placeholder-gray-600">
+        <button onclick="addSearchItem()" class="px-4 py-2 bg-purple-500/10 text-purple-300 border border-purple-500/30 font-black rounded-lg text-xs hover:bg-purple-500 hover:text-black transition-all">+ 추가</button>
+      </div>
+      <div class="text-[10px] text-gray-500 font-bold mb-2">애드온 반영: <span class="text-purple-300">node tools/sync-db.js</span> 실행 후 커밋 · 이름이 경매장 검색어로 그대로 쓰입니다 (괄호 안내는 검색에 미포함)</div>
+      <div id="searchHelperList" class="flex flex-col gap-1.5 max-h-[300px] overflow-y-auto custom-scrollbar pr-1">
+        <div class="text-gray-600 text-center py-6 text-[10px] font-black tracking-widest">로그인 후 표시됩니다</div>
+      </div>
+    </div>
   </div>
 
   <!-- 제보 메뉴 -->
@@ -479,7 +504,7 @@
 
     onValue(ref(db, 'notice'), (snap) => {
       const txt = snap.val();
-      document.getElementById('monitor-notice').innerHTML = txt ? `🚨 ${txt}` : "없음";
+      document.getElementById('monitor-notice').innerHTML = txt ? `🚨 ${escapeHTML(txt)}` : "없음";
       document.getElementById('notice-input').value = txt || "";
     });
 
@@ -902,6 +927,52 @@
       const chevron = document.getElementById('item-manager-chevron');
       const isHidden = body.classList.toggle('hidden');
       chevron.style.transform = isHidden ? '' : 'rotate(180deg)';
+    };
+
+    // ── 검색 도우미 (서신/장식) ──────────────────────────────────────────
+    window.toggleSearchHelper = () => {
+      const body = document.getElementById('search-helper-body');
+      const chev = document.getElementById('search-helper-chevron');
+      body.classList.toggle('hidden');
+      chev.style.transform = body.classList.contains('hidden') ? '' : 'rotate(180deg)';
+    };
+    let shData = { missive: {}, embellish: {} };
+    onValue(ref(db, 'searchItems'), (snap) => {
+      const v = snap.val() || {};
+      shData = { missive: v.missive || {}, embellish: v.embellish || {} };
+      renderSearchHelper();
+    });
+    window.renderSearchHelper = () => {
+      const list = document.getElementById('searchHelperList');
+      if (!list) return;
+      const rows = [];
+      const label = { missive: '서신', embellish: '장식' };
+      const color = { missive: 'text-purple-300 border-purple-500/40', embellish: 'text-teal-300 border-teal-500/40' };
+      for (const type of ['missive', 'embellish']) {
+        for (const [key, it] of Object.entries(shData[type] || {})) {
+          if (!it || !it.name) continue;
+          rows.push(`<div class="flex items-center gap-2 px-3 py-2 rounded-lg bg-black/30 border border-gray-900">
+            <span class="text-[10px] font-black px-1.5 py-0.5 rounded border ${color[type]}">${label[type]}</span>
+            <span class="text-white text-xs font-bold">${escapeHTML(it.name)}</span>
+            <span class="text-gray-500 text-[11px] font-bold">${it.desc ? '(' + escapeHTML(it.desc) + ')' : ''}</span>
+            <button onclick="delSearchItem('${type}','${key}')" class="ml-auto text-gray-600 hover:text-red-400 font-black text-xs transition-colors">삭제</button>
+          </div>`);
+        }
+      }
+      list.innerHTML = rows.length ? rows.join('') : '<div class="text-gray-600 text-center py-6 text-[10px] font-black tracking-widest">등록된 항목 없음</div>';
+    };
+    window.addSearchItem = async () => {
+      const type = document.getElementById('shType').value;
+      const name = document.getElementById('shName').value.trim();
+      const desc = document.getElementById('shDesc').value.trim();
+      if (!name) { alert('이름을 입력하세요'); return; }
+      await push(ref(db, `searchItems/${type}`), { name, desc, active: true });
+      document.getElementById('shName').value = '';
+      document.getElementById('shDesc').value = '';
+    };
+    window.delSearchItem = async (type, key) => {
+      if (!confirm('삭제할까요?')) return;
+      await remove(ref(db, `searchItems/${type}/${key}`));
     };
 
     // ── 아이템 관리 ──────────────────────────────────────────────────────
@@ -1332,4 +1403,4 @@
 
   </script>
 </body>
-</
+</html>

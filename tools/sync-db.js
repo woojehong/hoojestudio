@@ -6,7 +6,7 @@
  * AUTO-GENERATED 마커 블록을 다시 생성합니다.
  *
  *   1. netlify/functions/notify.js  →  ITEM_TO_CRAFTER (아이템명 → 제작자)
- *   2. ../HoojeStudio/HoojeStudio.lua  →  CATEGORIES, MATS_DB
+ *   2. ../../../AddOn/HoojeStudio/HoojeStudio.lua  →  CATEGORIES, MATS_DB
  *
  * 사용법:
  *   node tools/sync-db.js                  # Firebase에서 직접 가져오기 (네트워크 필요)
@@ -21,10 +21,11 @@
 const fs = require("fs");
 const path = require("path");
 
-const RTDB_ITEMS_URL = "https://rougetsblendingroom-default-rtdb.firebaseio.com/items.json";
+const RTDB_ITEMS_URL  = "https://rougetsblendingroom-default-rtdb.firebaseio.com/items.json";
+const RTDB_SEARCH_URL = "https://rougetsblendingroom-default-rtdb.firebaseio.com/searchItems.json";
 
 const NOTIFY_PATH = path.resolve(__dirname, "..", "netlify", "functions", "notify.js");
-const LUA_PATH = path.resolve(__dirname, "..", "..", "..", "HoojeStudio", "HoojeStudio.lua");
+const LUA_PATH = path.resolve(__dirname, "..", "..", "..", "AddOn", "HoojeStudio", "HoojeStudio.lua");
 
 // 애드온/알림 함수에서 사용하는 카테고리 표시 순서 및 이름
 const CAT_ORDER = [
@@ -118,18 +119,47 @@ function replaceBetweenMarkers(source, startMarker, endMarker, replacement, file
 // ── 데이터 로드 ─────────────────────────────────────────────────
 async function loadItems(jsonPath) {
   let raw;
+  let search = null;
   if (jsonPath) {
     raw = JSON.parse(fs.readFileSync(jsonPath, "utf8"));
+    search = raw && raw.searchItems ? raw.searchItems : null;
   } else {
     console.log(`Firebase에서 items 가져오는 중: ${RTDB_ITEMS_URL}`);
     const res = await fetch(RTDB_ITEMS_URL);
     if (!res.ok) throw new Error(`Firebase 응답 오류: HTTP ${res.status}`);
     raw = await res.json();
+    try {
+      const res2 = await fetch(RTDB_SEARCH_URL);
+      if (res2.ok) search = await res2.json();
+    } catch (_) { /* 검색 도우미 데이터는 선택 사항 */ }
   }
   // 루트 export(items 키 포함) / items 단독 모두 허용
   const items = raw && raw.items ? raw.items : raw;
   if (!items || typeof items !== "object") throw new Error("items 데이터를 찾을 수 없습니다.");
-  return items;
+  return { items, search };
+}
+
+// ── 검색 도우미(서신/장식) → SEARCH_ITEMS 블록 ────────────────
+function buildSearchBlock(search) {
+  const groups = [
+    ["missive", "서신 — 경매장 검색"],
+    ["embellish", "장식 — 경매장 검색"],
+  ];
+  const lines = ["local SEARCH_ITEMS = {"];
+  let count = 0;
+  for (const [key, name] of groups) {
+    const entries = Object.values((search && search[key]) || {})
+      .filter((it) => it && it.name && it.active !== false)
+      .sort((a, b) => String(a.name).localeCompare(String(b.name), "ko"));
+    lines.push(`    { key = "${key}", name = "${name}", items = {`);
+    for (const it of entries) {
+      lines.push(`        { n = "${luaEscape(it.name)}", d = "${luaEscape(it.desc || "")}" },`);
+      count++;
+    }
+    lines.push("    } },");
+  }
+  lines.push("}");
+  return { block: lines.join("\n"), count };
 }
 
 // ── 생성기 ──────────────────────────────────────────────────────
@@ -207,10 +237,11 @@ function buildAll(itemsData) {
   const jsonPath = args.find((a) => !a.startsWith("--"));
 
   try {
-    const items = await loadItems(jsonPath);
+    const { items, search } = await loadItems(jsonPath);
     const { notifyBlock, luaCatBlock, luaMatBlock, totalItems, totalMats, warnings } = buildAll(items);
+    const { block: searchBlock, count: searchCount } = buildSearchBlock(search);
 
-    console.log(`아이템 ${totalItems}개 / 재료 보유 ${totalMats}개 생성 완료`);
+    console.log(`아이템 ${totalItems}개 / 재료 보유 ${totalMats}개 / 검색 도우미 ${searchCount}개 생성 완료`);
     warnings.forEach((w) => console.warn(`⚠ ${w}`));
 
     if (dry) {
@@ -245,6 +276,13 @@ function buildAll(itemsData) {
       "-- AUTO-GENERATED:MATS_DB:END",
       luaMatBlock,
       "HoojeStudio.lua (MATS_DB)"
+    );
+    luaSrc = replaceBetweenMarkers(
+      luaSrc,
+      "-- AUTO-GENERATED:SEARCH_ITEMS:START (tools/sync-db.js 가 자동 생성 — 직접 수정 금지)",
+      "-- AUTO-GENERATED:SEARCH_ITEMS:END",
+      searchBlock,
+      "HoojeStudio.lua (SEARCH_ITEMS)"
     );
     fs.writeFileSync(LUA_PATH, luaSrc);
     console.log(`갱신: ${LUA_PATH}`);
