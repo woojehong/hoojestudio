@@ -277,13 +277,16 @@ function buildAll(itemsData) {
       luaMatBlock,
       "HoojeStudio.lua (MATS_DB)"
     );
-    luaSrc = replaceBetweenMarkers(
-      luaSrc,
-      "-- AUTO-GENERATED:SEARCH_ITEMS:START (tools/sync-db.js 가 자동 생성 — 직접 수정 금지)",
-      "-- AUTO-GENERATED:SEARCH_ITEMS:END",
-      searchBlock,
-      "HoojeStudio.lua (SEARCH_ITEMS)"
-    );
+    if (searchCount > 0) {
+      // Firebase searchItems가 비어 있으면 기존 블록(index.html 유래 데이터)을 보존
+      luaSrc = replaceBetweenMarkers(
+        luaSrc,
+        "-- AUTO-GENERATED:SEARCH_ITEMS:START (tools/sync-db.js 가 자동 생성 — 직접 수정 금지)",
+        "-- AUTO-GENERATED:SEARCH_ITEMS:END",
+        searchBlock,
+        "HoojeStudio.lua (SEARCH_ITEMS)"
+      );
+    }
     fs.writeFileSync(LUA_PATH, luaSrc);
     console.log(`갱신: ${LUA_PATH}`);
     console.log("완료. 변경분을 확인한 뒤 GitHub에 커밋하세요.");
