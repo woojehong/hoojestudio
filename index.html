@@ -254,9 +254,22 @@
   /* 커스포지 플로팅 흰 테두리 */
   .fixed.bottom-5.right-4 a[href*="curseforge"]{ border:3px solid rgba(255,255,255,0.72) !important; }
   /* 커피(후원) 플로팅 밝은 브라운 테두리 */
-  [onclick="showDonationPopup()"]{ border:3px solid #ffd84d !important; }
+  /* 커피 버튼: border 대신 box-shadow 링 → 안쪽을 파먹지 않아 어두운 경계선/틈이 없음 */
+  [onclick="showDonationPopup()"]{ border:0 !important; background-color:#eac15b !important; box-shadow:0 0 0 3px #ffd84d !important; }
   [onclick="showDonationPopup()"]{ position:relative !important; }
-  [onclick="showDonationPopup()"]:hover{ box-shadow:0 0 18px rgba(240,200,78,0.6) !important; }
+  [onclick="showDonationPopup()"]:hover{ box-shadow:0 0 0 3px #ffd84d, 0 0 18px rgba(240,200,78,0.6) !important; }
+  /* ☕ 김(steam) — 커피잔에서 피어오름 */
+  .hj-steam{ position:absolute; left:50%; bottom:100%; transform:translateX(-50%); margin-bottom:2px; pointer-events:none; z-index:0; }
+  .hj-steam path{ fill:none; stroke:rgba(255,238,200,0.8); stroke-width:1.7; stroke-linecap:round; opacity:0; transform-origin:bottom center; }
+  @keyframes hjSteam{ 0%{opacity:0; transform:translateY(3px) scaleY(.65);} 25%{opacity:.85;} 100%{opacity:0; transform:translateY(-7px) scaleY(1.2);} }
+  .hj-steam .s1{ animation:hjSteam 2.9s ease-out infinite; }
+  .hj-steam .s2{ animation:hjSteam 2.9s ease-out infinite .95s; }
+  .hj-steam .s3{ animation:hjSteam 2.9s ease-out infinite 1.9s; }
+  /* 주문 완료 직후 '원샷' 어텐션 (파동 링 + 팝) */
+  @keyframes hjAttnPop{ 0%{transform:scale(1);} 18%{transform:scale(1.24);} 42%{transform:scale(.95);} 68%{transform:scale(1.09);} 100%{transform:scale(1);} }
+  @keyframes hjAttnRing{ 0%{box-shadow:0 0 0 3px #ffd84d, 0 0 0 0 rgba(255,216,77,.6);} 100%{box-shadow:0 0 0 3px #ffd84d, 0 0 0 26px rgba(255,216,77,0);} }
+  #coffee-fx.hj-attn [onclick="showDonationPopup()"]{ animation:hjAttnPop .95s cubic-bezier(.34,1.56,.64,1) 2, hjAttnRing 1.3s ease-out 2 !important; }
+  @media (prefers-reduced-motion: reduce){ .hj-steam path, #coffee-fx.hj-attn [onclick="showDonationPopup()"]{ animation:none !important; } }
   #coffee-fx{ animation:hjCoffeeBob 3.2s ease-in-out infinite; will-change:transform; }
   @keyframes hjCoffeeBob{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(-3px);} }
   @media (prefers-reduced-motion: reduce){ #coffee-fx{ animation:none !important; } }
@@ -722,11 +735,18 @@
   <div id="float-cluster" class="fixed bottom-5 right-4 z-50 flex flex-col items-center gap-2">
 
     <!-- 커피(후원) 버튼 -->
-    <div id="coffee-fx" class="flex flex-col items-center gap-1">
-      <span class="text-[9px] font-black px-2 py-0.5 rounded-full border select-none" style="background-color:#eac15b; border-color:#43301d; color:#43301d; letter-spacing:0.05em;">Support me!</span>
-      <button onclick="showDonationPopup()" class="w-11 h-11 rounded-full overflow-hidden shadow-lg transition-all hover:scale-110 hover:brightness-110 p-0 border-0 bg-transparent">
-        <img src="assets/coffee.webp?v=260628h" alt="Support me" class="w-full h-full object-cover rounded-full">
-      </button>
+    <div id="coffee-fx" class="relative flex flex-col items-center gap-4">
+      <span class="relative z-10 text-[9px] font-black px-2 py-0.5 rounded-full border select-none" style="background-color:#eac15b; border-color:#43301d; color:#43301d; letter-spacing:0.05em;">Support me!</span>
+      <div class="relative">
+        <svg class="hj-steam" width="32" height="20" viewBox="0 0 32 20" aria-hidden="true">
+          <path class="s1" d="M11 20 C8 15, 14 12, 11 7 C9.5 4, 12 2, 12 0"/>
+          <path class="s2" d="M16 20 C13 14, 19 11, 16 6 C14.5 3, 17 1, 17 0"/>
+          <path class="s3" d="M21 20 C18 15, 24 12, 21 7 C19.5 4, 22 2, 22 0"/>
+        </svg>
+        <button onclick="showDonationPopup()" class="w-11 h-11 rounded-full overflow-hidden shadow-lg transition-all hover:scale-110 hover:brightness-110 p-0 border-0 bg-transparent">
+          <img src="assets/coffee.webp?v=260628h" alt="Support me" class="w-full h-full object-cover rounded-full">
+        </button>
+      </div>
     </div>
 
     <!-- 봉투+하트 제보 버튼 -->
@@ -758,33 +778,51 @@
   <!-- 후원 팝업 오버레이 -->
   <div id="donation-overlay" class="hidden fixed inset-0 z-[70]" style="background:rgba(0,0,0,0.6);backdrop-filter:blur(2px);" onclick="hideDonationPopup()"></div>
   <!-- 후원 팝업 -->
-  <div id="donation-popup" class="hidden fixed z-[71] left-1/2 top-1/2 w-[96%] max-w-2xl" style="transform:translate(-50%,-50%);">
-    <div class="rounded-3xl p-9 md:p-12 shadow-2xl border border-amber-700/40" style="background:rgba(6,10,20,0.97);">
-      <div class="flex items-center justify-between mb-7">
-        <span class="text-amber-400 font-black text-2xl flex items-center gap-3">☕ 후원 계좌</span>
+  <div id="donation-popup" class="hidden fixed z-[71] left-1/2 top-1/2 w-[94%] max-w-2xl max-h-[88vh] overflow-y-auto custom-scrollbar" style="transform:translate(-50%,-50%);">
+    <div class="rounded-3xl p-6 md:p-8 shadow-2xl border border-amber-700/40" style="background:rgba(6,10,20,0.97);">
+      <div class="flex items-center justify-between mb-6">
+        <span class="text-amber-400 font-black text-2xl flex items-center gap-3">☕ 후원 방법</span>
         <button onclick="hideDonationPopup()" class="text-gray-500 hover:text-white font-black text-3xl leading-none">✕</button>
       </div>
 
-      <!-- 계좌번호 -->
-      <div class="flex items-center justify-between bg-gray-900 border border-amber-700/30 rounded-2xl px-7 py-5 mb-8">
-        <div>
-          <div class="text-base text-gray-500 font-bold mb-1.5">토스뱅크</div>
-          <div class="text-white font-black text-2xl md:text-3xl tracking-widest">1002-6027-8503</div>
-          <div class="text-gray-500 text-base font-bold mt-1.5">김문현</div>
+      <!-- QR 2종 -->
+      <div class="grid grid-cols-2 gap-3 md:gap-4 mb-3">
+        <div class="bg-white rounded-2xl p-3 md:p-4 flex flex-col">
+          <img src="assets/qr_toss.png" alt="토스 송금 QR" class="w-full max-w-[230px] mx-auto aspect-square object-contain">
+          <div class="mt-2.5 flex items-center justify-center gap-2 rounded-xl py-2" style="background:#0064FF;">
+            <span class="w-6 h-6 rounded-full bg-white flex items-center justify-center shrink-0">
+              <img src="assets/toss_logo.png" alt="" class="w-3.5 h-3.5 object-contain">
+            </span>
+            <span class="text-white font-black text-sm md:text-base">토스</span>
+          </div>
         </div>
-        <button id="donation-copy-btn" onclick="copyAccountNumber()" class="ml-5 shrink-0 w-14 h-14 rounded-2xl bg-amber-800/40 border border-amber-600/40 flex items-center justify-center hover:bg-amber-700/60 transition-all">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f5c842" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-          </svg>
-        </button>
+        <div class="bg-white rounded-2xl p-3 md:p-4 flex flex-col">
+          <img src="assets/qr_kakaopay.png" alt="카카오페이 송금 QR" class="w-full max-w-[230px] mx-auto aspect-square object-contain">
+          <div class="mt-2.5 flex items-center justify-center gap-2 rounded-xl py-2" style="background:#FEE500;">
+            <img src="assets/kakao_mark.png" alt="" class="h-4 md:h-[17px] w-auto object-contain shrink-0">
+            <span class="font-black text-sm md:text-base" style="color:#191919;">카카오페이</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 혹은 직접 송금 (박스 전체 클릭 = 계좌번호 복사) -->
+      <div id="donation-acct-box" onclick="copyAccountNumber()" class="cursor-pointer flex items-center justify-between bg-gray-900 border border-amber-700/30 hover:border-amber-500/60 hover:bg-gray-800/60 rounded-xl px-4 py-2.5 mb-5 transition-all">
+        <div class="min-w-0">
+          <div class="text-[10px] md:text-[11px] text-gray-500 font-bold mb-0.5">혹은 직접 송금</div>
+          <div class="text-white font-black text-xs md:text-sm tracking-wider">토스뱅크 1002-6027-8503</div>
+        </div>
+        <span id="donation-copy-label" class="shrink-0 ml-3 flex items-center gap-1 text-[10px] md:text-[11px] font-black text-amber-400">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          복사하기
+        </span>
       </div>
 
       <!-- 감사 멘트 -->
-      <div class="text-gray-300 text-lg leading-relaxed space-y-5">
-        <p>이 사이트는 제 개인 서버로 운영되고 있습니다.<br>제가 아직 미숙한 탓에 불필요한 서버 비용이 여러 번 발생하였지만,<br>여러분과 함께하는 이 공간을 계속 이어가고 싶어요.</p>
-        <p>부담은 절대 갖지 마세요.<br>커피 한 잔 값만으로도 넘치게 감사합니다 ☕<br>물론, 찾아주시는 것만으로도 이미 충분한 힘이 됩니다 💪</p>
+      <div class="text-gray-300 text-sm md:text-base leading-relaxed space-y-3.5">
+        <p>이 사이트는 제 개인 서버로 운영되고 있습니다.<br>개발자가 아니다 보니 배워가며 만드느라, 여전히 시행착오가 많습니다 🥲<br>그 과정에서 안 써도 될 비용이 나가기도 했지만,<br>여러분과 함께하는 이 공간을 계속 이어가고 싶어요.</p>
+        <p>부담은 갖지 말아주세요.<br>커피 한 잔 값만으로도 넘치게 감사합니다 ☕<br>물론, 찾아주시는 것만으로도 이미 충분한 힘이 됩니다 💪</p>
         <p>늘 감사드립니다 🙏</p>
-        <p class="font-black text-xl" style="color:#8788EE;">후제</p>
+        <p class="font-black text-lg" style="color:#8788EE;">후제</p>
       </div>
     </div>
   </div>
@@ -1399,7 +1437,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 
     window.showDonationPopup = function() {
       // 자동 복사
-      navigator.clipboard.writeText('토스뱅크 1002-6027-8503').catch(()=>{});
+      navigator.clipboard.writeText('1002-6027-8503').catch(()=>{});
       document.getElementById('donation-popup').classList.remove('hidden');
       document.getElementById('donation-overlay').classList.remove('hidden');
     };
@@ -1407,14 +1445,23 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
       document.getElementById('donation-popup').classList.add('hidden');
       document.getElementById('donation-overlay').classList.add('hidden');
     };
+    // 주문 완료 직후 커피 버튼 '원샷' 어텐션 (반복 애니메이션 피로감 없이 한 번만 강하게)
+    window.coffeeAttention = function() {
+      const fx = document.getElementById('coffee-fx');
+      if (!fx) return;
+      fx.classList.remove('hj-attn');
+      void fx.offsetWidth;               // 리플로우로 애니메이션 재시작
+      fx.classList.add('hj-attn');
+      setTimeout(() => fx.classList.remove('hj-attn'), 2800);
+    };
     window.copyAccountNumber = function() {
-      navigator.clipboard.writeText('토스뱅크 1002-6027-8503').then(() => {
-        const btn = document.getElementById('donation-copy-btn');
-        btn.innerHTML = '<span class="text-amber-400 font-black text-[10px]">✓</span>';
-        setTimeout(() => {
-          btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f5c842" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
-        }, 1500);
-      });
+      navigator.clipboard.writeText('1002-6027-8503').then(() => {
+        const el = document.getElementById('donation-copy-label');
+        if (!el) return;
+        const orig = el.innerHTML;
+        el.innerHTML = '✓ 복사됨!';
+        setTimeout(() => { el.innerHTML = orig; }, 1500);
+      }).catch(()=>{});
     };
 
     window.showBookmarkToast = function() {
@@ -2051,6 +2098,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
     window.dismissFloating = function() {
       const el = document.getElementById('order-floating');
       const ov = document.getElementById('order-floating-overlay');
+      const wasDone = (floatingStatus === 'done');   // 완료 알림을 닫는 순간 = 가장 만족한 타이밍
       el.classList.add('hiding');
       setTimeout(() => {
         el.classList.add('hidden');
@@ -2060,6 +2108,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
         // 지금 표시된 주문들만 seen으로 기록
         floatingShownKeys.forEach(({ key, status }) => markSeen(key, status));
         floatingShownKeys = [];
+        if (wasDone && window.coffeeAttention) setTimeout(window.coffeeAttention, 450);
       }, 260);
     };
 
