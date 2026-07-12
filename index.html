@@ -221,6 +221,9 @@
   #report-btn{ background-color:#e84d92 !important; border-color:#f4a6c8 !important; border-width:3px !important; }
   /* 유튜브 최신영상 썸네일 톤다운(호버 시 원색) */
   #youtube-list img{ filter:saturate(.72) brightness(.96); transition:filter .3s ease; }
+  /* 고정(가이드) 영상: 썸네일 박스에만 딱 맞는 골드 인셋 라인 + 항상 원색 */
+  #youtube-list a.hj-fixed .hj-thumb{ box-shadow: inset 0 0 0 1.5px rgba(201,168,106,0.9); }
+  #youtube-list a.hj-fixed img{ filter:saturate(1) brightness(1) !important; }
   #youtube-list a:hover img{ filter:saturate(1) brightness(1); }
   /* 서명 은은한 숨쉬는 글로우 */
   @keyframes hjSign{ 0%,100%{ text-shadow:0 0 8px rgba(190,198,255,.7),0 0 18px rgba(135,136,238,.42); } 50%{ text-shadow:0 0 13px rgba(202,206,255,.92),0 0 30px rgba(135,136,238,.62); } }
@@ -232,7 +235,7 @@
   .fixed.bottom-5.right-4 > a[href*="kakao"]{ display:none !important; }
   /* === 모바일/터치 호환 === */
   @media (hover:none){
-    .starfall-pulse img, .ugdog-pulse img, .hooje-pulse img, .yt-pulse img,
+    .starfall-pulse img, .ugdog-pulse img, .hooje-pulse img, .yt-pulse img, .sawang-pulse img,
     #youtube-list img,
     .fixed.bottom-5.right-4 a, .fixed.bottom-5.right-4 button{ filter:none !important; }
   }
@@ -277,6 +280,7 @@
   #app-container :focus-visible, #search-input:focus-visible{ outline:2px solid var(--hj-accent) !important; outline-offset:2px; border-radius:8px; }
   /* 길드원 모집: 차분한 샴페인 펄 */
   .hj-guild-badge{ background:rgba(201,162,39,0.16) !important; color:#e7d09a !important; border:1px solid rgba(201,162,39,0.42) !important; }
+  .hj-sawang-badge{ background:rgba(55,108,169,0.20) !important; color:#a3cdf2 !important; border:1px solid rgba(90,150,220,0.50) !important; }
   /* === 럭셔리 고급화 패스 === */
   /* #2 모션 절제 */
   .animate-bounce{ animation:none !important; }
@@ -292,13 +296,13 @@
   #notice-state .space-y-4 > * + *, #notice-state .space-y-5 > * + *{ margin-top:1.15rem !important; }
   #notice-state .rounded-2xl{ border-radius:18px !important; }
   /* #5 파트너 배너 톤 통일 (색 글로우 제거 + 균일 헤어라인) */
-  .starfall-pulse, .ugdog-pulse, .hooje-pulse, .yt-pulse{ box-shadow:none !important; border:1px solid #2b2b38 !important; transition:border-color .28s, transform .28s !important; }
-  .starfall-pulse:hover, .ugdog-pulse:hover, .hooje-pulse:hover, .yt-pulse:hover{ border-color:#3a3a4a !important; transform:translateY(-2px); }
+  .starfall-pulse, .ugdog-pulse, .hooje-pulse, .yt-pulse, .sawang-pulse{ box-shadow:none !important; border:1px solid #2b2b38 !important; transition:border-color .28s, transform .28s !important; }
+  .starfall-pulse:hover, .ugdog-pulse:hover, .hooje-pulse:hover, .yt-pulse:hover, .sawang-pulse:hover{ border-color:#3a3a4a !important; transform:translateY(-2px); }
   /* #1 폰트 무게 정제(헤비 9Black → Pretendard 700) + 헤더 자간 */
   .font-kr-title{ font-family:'Pretendard',sans-serif !important; font-weight:700 !important; letter-spacing:-0.01em; }
   /* #3 파트너 배너: 평소 채도↓, 호버 시 살아남 */
-  .starfall-pulse img, .ugdog-pulse img, .hooje-pulse img, .yt-pulse img{ filter:grayscale(.45) brightness(.92); transition:filter .4s ease; }
-  .starfall-pulse:hover img, .ugdog-pulse:hover img, .hooje-pulse:hover img, .yt-pulse:hover img{ filter:saturate(1) brightness(1); }
+  .starfall-pulse img, .ugdog-pulse img, .hooje-pulse img, .yt-pulse img, .sawang-pulse img{ filter:grayscale(.45) brightness(.92); transition:filter .4s ease; }
+  .starfall-pulse:hover img, .ugdog-pulse:hover img, .hooje-pulse:hover img, .yt-pulse:hover img, .sawang-pulse:hover img{ filter:saturate(1) brightness(1); }
   /* #4 패널 상단 1px 하이라이트 + 미세 비네팅 */
   .bg-gray-900\/80.rounded-3xl{ box-shadow:inset 0 1px 0 rgba(255,255,255,.05), 0 24px 60px -30px rgba(0,0,0,.85) !important; }
   #app-container::after{ content:""; position:fixed; inset:0; pointer-events:none; z-index:5; box-shadow:none; }
@@ -332,7 +336,7 @@
     @keyframes loDot{ 0%,100%{ opacity:1; transform:scale(1);} 50%{ opacity:.4; transform:scale(.8);} }
     .lo-dot-pulse{ animation: loDot 1.6s ease-in-out infinite; }
   </style>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&family=Noto+Serif+KR:wght@300;400;700&family=Playfair+Display:wght@900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&family=Noto+Serif+KR:wght@300;400;500;700&family=Playfair+Display:wght@900&display=swap" rel="stylesheet">
   <style id="hj-hdr">
     @keyframes hjTitleRise{ from{opacity:0; transform:translateY(12px);} to{opacity:1; transform:translateY(0);} }
     @keyframes hjLineGrow{ from{width:0; opacity:0;} to{width:92px; opacity:1;} }
@@ -368,7 +372,7 @@
 
     <div class="w-full md:w-1/3 flex flex-col items-center text-center order-1 md:order-2 shrink-0">
       <div onclick="window.showNotice()" class="cursor-pointer hover:opacity-80 transition-opacity flex flex-col items-center">
-        <h1 id="hj-title" class="text-2xl md:text-4xl text-white" style="font-family:'Noto Serif KR',serif; font-weight:300; letter-spacing:0.36em; text-indent:0.36em;">후제공방</h1>
+        <h1 id="hj-title" class="text-2xl md:text-4xl text-white" style="font-family:'Noto Serif KR',serif; font-weight:500; letter-spacing:0.36em; text-indent:0.36em;">후제공방</h1>
         <div id="hj-goldline" style="height:2px; width:92px; margin:9px auto 2px; background:linear-gradient(to right,rgba(201,162,39,0),#d8b13a,rgba(201,162,39,0)); border-radius:2px;"></div>
         <div class="mt-1 text-[10px] md:text-xs text-white/50 font-bold uppercase tracking-[0.2em]">World of Warcraft KR · Azshara</div>
       </div>
@@ -486,7 +490,7 @@
       </div>
     </div>
 
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 w-full">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-x-2 gap-y-7 md:gap-4 w-full">
 
     <!-- Starfall Forest — 골드 glow -->
     <a href="https://starfallforest.netlify.app/" target="_blank" class="block w-full overflow-hidden rounded-xl md:rounded-2xl border-2 border-yellow-500/50 transition-all group aspect-[3/1] relative starfall-pulse">
@@ -498,14 +502,19 @@
       <img src="assets/sad_banner.webp?v=260628" alt="유기견 공격대" class="w-full h-full object-cover">
     </a>
 
+    <!-- 사왕이 와우 로그분석 — 스틸블루 (말풍선 뱃지) -->
+    <div class="relative w-full">
+      <div class="absolute bottom-full left-0 right-0 mb-1 flex justify-center pointer-events-none z-20">
+        <div class="hj-sawang-badge text-[9px] md:text-[11px] font-black px-2 py-1 md:px-3 rounded-full whitespace-nowrap">📊 로그 점수 높이고 싶다면? 와우로그.kr</div>
+      </div>
+      <a href="https://와우로그.kr/go/hooje" target="_blank" rel="noopener" class="block w-full overflow-hidden rounded-xl md:rounded-2xl transition-all group aspect-[3/1] sawang-pulse">
+        <img src="assets/sawang.jpg" alt="사왕이님의 와우 로그분석 사이트" class="w-full h-full object-cover">
+      </a>
+    </div>
+
     <!-- 후제공방 — 흑마법사 퍼플 glow -->
     <a href="https://hooje.pro/" class="block w-full overflow-hidden rounded-xl md:rounded-2xl transition-all group aspect-[3/1] hooje-pulse" style="border: 1px solid rgba(160,100,50,0.4);">
-      <img src="assets/hooje_banner.webp" alt="후제공방" class="w-full h-full object-cover">
-    </a>
-
-    <!-- YouTube — 레드 glow -->
-    <a href="https://www.youtube.com/@warlockhooje" target="_blank" class="block w-full overflow-hidden rounded-xl md:rounded-2xl border border-red-500/40 transition-all group aspect-[3/1] yt-pulse">
-      <img src="assets/youtube_banner.webp" alt="흑마법사 후제 Youtube" class="w-full h-full object-cover">
+      <img src="assets/hooje_banner.webp?v=260712" alt="후제공방" class="w-full h-full object-cover">
     </a>
 
     </div><!-- /grid -->
@@ -930,7 +939,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
       try { fetch('/.netlify/functions/cf-downloads').catch(()=>{}); } catch(e){}
     })();
 
-    const FIXED_VIDEO_ID = ''; 
+    const FIXED_VIDEO_ID = 'pwBkyutXkIE'; 
 
     
     // 사용자 입력/외부 데이터 HTML 이스케이프 (XSS 방지)
@@ -1125,7 +1134,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
     };
 
     const starIconSVG = `<svg class="w-3.5 h-3.5 mb-0.5 inline-block" viewBox="0 0 24 24" fill="#EAB308"><polygon points="12 2, 22 9, 18 21, 6 21, 2 9"/></svg>`;
-    function applyGoldStar(text) { return text.replace('(금색)', `<span class="inline-flex items-center text-[#EAB308] gap-0.5 font-black ml-0.5">(금색)${starIconSVG}</span>`); }
+    function applyGoldStar(text) { return text.replace('(금색)', `<span class="inline-flex items-center text-[#EAB308] gap-0.5 font-black ml-0.5">(금성)${starIconSVG}</span>`); }
 
     const MISSIVES = [
       { label: "유연+가속<br>(금색)", copy: "서광의 탈라시안 서신", icon: "inv_10_inscription2_repcontracts_scroll_02_uprez" },
@@ -1553,7 +1562,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
         const btn = document.createElement('button');
         btn.className = "flex items-center justify-between p-2.5 md:p-3 bg-gray-900 rounded-xl border border-gray-800 hover:border-emerald-500/50 hover:bg-emerald-500/5 transition-all group";
         btn.onclick = () => {
-          const textToCopy = `${mat.n.replace(/\s*\(금색\)/g, ' (금색)')} x ${mat.c}`;
+          const textToCopy = `${mat.n.replace(/\s*\(금색\)/g, ' (금성)')} x ${mat.c}`;
           navigator.clipboard.writeText(textToCopy).then(() => {
             const oldHtml = btn.innerHTML;
             btn.innerHTML = `<span class="text-emerald-400 font-bold text-xs md:text-sm w-full text-center">✅ 복사됨!</span>`;
@@ -1585,7 +1594,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 
       // 재료 이름과 수량만 뽑아서 ' / '로 연결 (수식어 제거)
       const matsList = Object.values(matsMap)
-        .map(m => `${m.n.replace(/\s*\(금색\)/g, ' (금색)')} x ${m.c}`)
+        .map(m => `${m.n.replace(/\s*\(금색\)/g, ' (금성)')} x ${m.c}`)
         .join(" / ");
       
       // 클립보드에 matsList(재료 목록)만 복사
@@ -1687,7 +1696,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
       });
 
       const copyAllSec = document.getElementById('copy-all-section');
-      const copyString = item.reqMats.map(m => `${m.n.replace(/\s*\(금색\)/g, ' (금색)')} x ${m.c}`).join(" / ");
+      const copyString = item.reqMats.map(m => `${m.n.replace(/\s*\(금색\)/g, ' (금성)')} x ${m.c}`).join(" / ");
       
       copyAllSec.innerHTML = `
         <button onclick="copyTextExact('${copyString.replace(/'/g, "\\'")}', this, '${color}')" class="w-full py-2.5 px-4 bg-gray-900 border border-gray-700 hover:border-[${color}]/50 hover:bg-gray-800 transition-all rounded-lg text-left group shadow-md flex flex-col gap-1.5">
@@ -1978,14 +1987,14 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
             const thumb = v.snippet.thumbnails.medium ? v.snippet.thumbnails.medium.url : v.snippet.thumbnails.default.url;
             
             const isFixed = (FIXED_VIDEO_ID && FIXED_VIDEO_ID.trim() !== '' && index === 0);
-            const borderClass = isFixed ? "shadow-[0_0_12px_rgba(234,179,8,0.45)]" : "";
-            const badgeHtml = isFixed ? `<div class="absolute top-1 left-1 bg-gradient-to-r from-yellow-600 to-yellow-500 text-black text-[9px] font-black px-1.5 py-0.5 rounded z-10 shadow-md">필독!</div>` : '';
+            const fixedClass = isFixed ? "hj-fixed" : "";
+            const badgeHtml = isFixed ? `<div class="absolute top-1 right-1 bg-gradient-to-r from-yellow-600 to-yellow-500 text-black text-[9px] font-black px-1.5 py-0.5 rounded z-10 shadow-md whitespace-nowrap">가이드 영상</div>` : '';
             
             return `
-              <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank" class="group relative bg-gray-950 rounded-lg md:rounded-xl overflow-hidden ${borderClass} transition-all shadow-md flex flex-col">
+              <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank" class="group relative bg-gray-950 rounded-lg md:rounded-xl overflow-hidden ${fixedClass} transition-all shadow-md flex flex-col">
                 ${badgeHtml}
-                <div class="aspect-[16/8] overflow-hidden bg-[#030712]">
-                  <img src="${thumb}" class="w-full h-full object-contain">
+                <div class="hj-thumb relative aspect-video overflow-hidden bg-[#030712]">
+                  <img src="${thumb}" class="w-full h-full object-cover">
                 </div>
                 <div class="p-2 md:p-2.5">
                   <p class="text-[9px] md:text-[11px] font-bold text-gray-400 line-clamp-1 group-hover:text-white transition-colors leading-snug">${title}</p>
