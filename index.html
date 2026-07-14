@@ -967,11 +967,40 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
       onValue(vref, s => { const el=document.getElementById('footer-visit-count'); if(el) el.textContent=(s.val()||0).toLocaleString(); });
       onValue(tref, s => { const el=document.getElementById('footer-today-count'); if(el) el.textContent=(s.val()||0).toLocaleString(); });
       onValue(ref(db, 'stats/cf_downloads'), s => { const v=s.val(); const el=document.getElementById('footer-cf-count'); if(el && v!=null) el.textContent=Number(v).toLocaleString(); });
+      // 유입 경로 판별: utm_source 우선 → 리퍼러 도메인 → 직접
+      function refSource(){
+        try{
+          const utm = (new URLSearchParams(location.search).get('utm_source') || '').trim();
+          if (utm) return utm.toLowerCase().slice(0, 30);
+          const r = document.referrer;
+          if (!r) return '직접';
+          const h = new URL(r).hostname.replace(/^www\./, '').toLowerCase();
+          if (!h || h === location.hostname) return null;   // 사이트 내부 이동은 집계 제외
+          const MAP = [
+            ['inven.co.kr','인벤'],
+            ['xn--2i0b10r1sl2ma.kr','와우로그'],
+            ['youtube.com','유튜브'], ['youtu.be','유튜브'],
+            ['google.','구글'], ['naver.','네이버'], ['daum.','다음'], ['bing.com','빙'],
+            ['curseforge.com','커스포지'],
+            ['starfallforest','스타폴포레스트'],
+            ['woojehong.github.io','유기견공격대'],
+            ['x.com','X'], ['twitter.com','X'],
+          ];
+          for (const [k,v] of MAP) if (h.includes(k)) return v;
+          return h;   // 그 외는 도메인 그대로
+        }catch(e){ return '직접'; }
+      }
       try {
         if(!sessionStorage.getItem('hj_visited')){
           sessionStorage.setItem('hj_visited','1');
           runTransaction(vref, c => (c||0)+1, { applyLocally: false }).catch(()=>{});
           runTransaction(tref, c => (c||0)+1, { applyLocally: false }).catch(()=>{});
+          const src = refSource();
+          if (src) {
+            const sk = String(src).replace(/[.#$\[\]\/]/g, '_').slice(0, 40);
+            runTransaction(ref(db, 'stats/referrers/' + sk), c => (c||0)+1, { applyLocally: false }).catch(()=>{});
+            runTransaction(ref(db, 'stats/referrers_daily/' + kstDay + '/' + sk), c => (c||0)+1, { applyLocally: false }).catch(()=>{});
+          }
         }
       } catch(e){}
       try { fetch('/.netlify/functions/cf-downloads').catch(()=>{}); } catch(e){}

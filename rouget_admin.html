@@ -70,6 +70,7 @@
 <!-- ── 메인 콘텐츠 ── -->
 <div id="mainContent" class="hidden w-full flex flex-col items-center">
 <button onclick="doLogout()" class="fixed top-4 right-4 z-50 px-3 py-1.5 bg-gray-900 border border-gray-700 text-gray-400 text-[10px] font-black rounded-lg hover:border-red-500 hover:text-red-400 transition-all tracking-widest">로그아웃</button>
+<button id="sound-toggle-btn" onclick="toggleOrderSound()" title="새 주문 효과음" class="fixed top-4 right-24 z-50 px-3 py-1 bg-gray-900 border border-gray-700 text-sm rounded-lg hover:border-[#8788EE] transition-all">🔔</button>
 
   <!-- 미확인 메시지 배지 -->
   <div id="unread-badge" class="hidden w-full max-w-2xl mb-3 mt-4 px-4 py-3 rounded-xl border border-red-500/40 bg-red-500/10 flex items-center justify-between gap-3">
@@ -79,8 +80,6 @@
     </div>
     <button onclick="confirmAllReports()" class="px-3 py-1.5 bg-red-900/30 text-red-400 border border-red-500/30 font-black rounded-lg text-[10px] hover:bg-red-600 hover:text-white transition-all">일괄 확인</button>
   </div>
-
-  <audio id="order-sound" src="https://t1.daumcdn.net/kakaotv/resource/bk/6f3b7d7f7690460cb71b876f2d9061c5/media/sound/alarm.mp3" preload="auto"></audio>
 
   <div class="w-full max-w-2xl mb-5 p-6 rounded-2xl glass-panel border-[#8788EE]/40 flex flex-col gap-4 shadow-2xl">
     <div class="flex items-center justify-between">
@@ -324,6 +323,25 @@
     </div>
   </div>
 
+  <!-- 유입 경로 -->
+  <div class="w-full max-w-2xl mb-5 p-5 rounded-2xl glass-panel border-[#8788EE]/20 shadow-xl">
+    <div class="flex items-center justify-between pb-4 cursor-pointer" onclick="toggleRefPanel()">
+      <h3 class="text-[#a9aaf7] font-black tracking-tighter text-lg flex items-center gap-2">🔗 유입 경로</h3>
+      <span id="refpanel-chevron" class="text-[#a9aaf7] font-black text-sm transition-transform">▼</span>
+    </div>
+    <div id="refpanel-body" class="hidden border-t border-[#8788EE]/10 pt-4 flex flex-col gap-4">
+      <div class="flex items-center justify-between gap-2 flex-wrap">
+        <select id="ref-period" onchange="renderRefChart()" class="bg-black/50 border border-[#8788EE]/30 rounded-lg text-xs text-white font-bold px-2 py-1.5 outline-none focus:border-[#8788EE]">
+          <option value="all">전체 누적</option>
+          <option value="w">주간 (최근 7일)</option>
+          <option value="m">월간 (최근 30일)</option>
+        </select>
+        <span id="ref-sum" class="text-[10px] font-black text-[#a9aaf7]"></span>
+      </div>
+      <div class="bg-black/30 rounded-xl p-3 border border-white/5" style="height:280px;"><canvas id="ref-chart"></canvas></div>
+    </div>
+  </div>
+
   <div class="mt-6 mb-4 text-gray-700 text-[9px] font-black opacity-40 tracking-[0.4em] uppercase">Hooje Studio Tower v5.0</div>
 
 </div><!-- /mainContent -->
@@ -511,7 +529,106 @@
     const ONE_ACCOUNT_CRAFTERS = ['메오', '후제', '그로', '무통', '장테'];
     const PRIORITY_ORDER = ['포므리','돔페리뇽','오베르','메오','라피트','디켐','뒤작','아르망','크뤼그','르루아','앙리자이에','그로','무통','후제'];
 
-    let lastOrderCount = 0;
+    // ── 새 주문 효과음: Web Audio로 차임을 직접 생성 (외부 파일 의존 없음) ──
+    // 크롬 자동재생 정책: 첫 사용자 입력(클릭/키) 이후부터 재생 허용 → 입력 1회로 언락
+    let _sndCtx = null;
+    window.__seenOrderIds = null;
+    function _sndEnabled() { return localStorage.getItem('hj_order_sound') !== 'off'; }
+    function _sndUnlock() {
+      try {
+        if (!_sndCtx) _sndCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (_sndCtx.state === 'suspended') _sndCtx.resume();
+      } catch (e) {}
+    }
+    document.addEventListener('pointerdown', _sndUnlock);
+    document.addEventListener('keydown', _sndUnlock);
+    // notes: [주파수Hz, 시작지연s, 감쇠길이s, 음량, 파형]
+    function _playSeq(notes) {
+      if (!_sndEnabled()) return;
+      try {
+        _sndUnlock();
+        if (!_sndCtx || _sndCtx.state !== 'running') return;
+        const t0 = _sndCtx.currentTime;
+        notes.forEach(([freq, dt, dur, vol, wave]) => {
+          dur = dur || 0.65; vol = vol || 0.35; wave = wave || 'sine';
+          const o = _sndCtx.createOscillator(), g = _sndCtx.createGain();
+          o.type = wave;
+          o.frequency.value = freq;
+          g.gain.setValueAtTime(0, t0 + dt);
+          g.gain.linearRampToValueAtTime(vol, t0 + dt + 0.02);
+          g.gain.exponentialRampToValueAtTime(0.0001, t0 + dt + dur);
+          o.connect(g);
+          g.connect(_sndCtx.destination);
+          o.start(t0 + dt);
+          o.stop(t0 + dt + dur + 0.05);
+        });
+      } catch (e) {}
+    }
+    // ① 신규 주문: 상향 딩동
+    function playOrderChime() { _playSeq([[880, 0], [1174.66, 0.13]]); }
+    // ② 10분 미수락: 긴급 삼연타 + 상향 마무리 (두드러지게)
+    function playStaleChime() {
+      _playSeq([
+        [1046.5, 0,    0.16, 0.4, 'triangle'],
+        [1046.5, 0.20, 0.16, 0.4, 'triangle'],
+        [1046.5, 0.40, 0.16, 0.4, 'triangle'],
+        [1318.5, 0.62, 0.55, 0.45, 'triangle'],
+      ]);
+    }
+    // ③ 수락 후 5분 미완료: 하향 동딩 (리마인더)
+    function playUnfinishedChime() { _playSeq([[659.25, 0], [523.25, 0.16, 0.7, 0.35]]); }
+
+    // ── 지연 경보 (주문·단계당 1회만) ──
+    const PENDING_ALERT_MS  = 10 * 60 * 1000; // 미수락 10분
+    const ACCEPTED_ALERT_MS =  5 * 60 * 1000; // 수락 후 5분
+    const _orderStage = {};                    // id → { status, since }
+    const _alerted = { pend: {}, acc: {} };    // 단계별 1회 알림 플래그
+
+    function trackOrderStages(orders) {
+      const now = Date.now();
+      orders.forEach(o => {
+        const prev = _orderStage[o.id];
+        if (!prev) {
+          // 최초 관측: pending은 접수시각, accepted는 수락시각(있으면)을 기준으로
+          const base = (o.status === 'pending' && o.timestamp)
+                    || (o.status === 'accepted' && o.acceptedAt) || now;
+          _orderStage[o.id] = { status: o.status, since: base };
+        } else if (prev.status !== o.status) {
+          _orderStage[o.id] = { status: o.status, since: (o.status === 'accepted' && o.acceptedAt) || now };
+          delete _alerted.pend[o.id];
+          delete _alerted.acc[o.id];
+        }
+      });
+    }
+
+    setInterval(() => {
+      const now = Date.now();
+      (allOrdersCache || []).forEach(o => {
+        const st = _orderStage[o.id];
+        if (!st || st.status !== o.status) return;
+        if (o.status === 'pending' && !_alerted.pend[o.id] && (now - st.since) > PENDING_ALERT_MS) {
+          _alerted.pend[o.id] = true;
+          playStaleChime();
+        } else if (o.status === 'accepted' && !_alerted.acc[o.id] && (now - st.since) > ACCEPTED_ALERT_MS) {
+          _alerted.acc[o.id] = true;
+          playUnfinishedChime();
+        }
+      });
+    }, 30000);
+    function _updateSoundBtn() {
+      const b = document.getElementById('sound-toggle-btn');
+      if (!b) return;
+      b.textContent = _sndEnabled() ? '🔔' : '🔕';
+      b.title = _sndEnabled() ? '새 주문 효과음: 켜짐' : '새 주문 효과음: 꺼짐';
+    }
+    window.toggleOrderSound = () => {
+      const wasOn = _sndEnabled();
+      localStorage.setItem('hj_order_sound', wasOn ? 'off' : 'on');
+      _updateSoundBtn();
+      if (!wasOn) { _sndUnlock(); setTimeout(playOrderChime, 60); } // 켤 때 미리듣기
+    };
+    _updateSoundBtn();
+
     let isFirstLoad = true;
     let currentPendingOrders = {};
     let allOrdersCache = [];
@@ -670,9 +787,16 @@
         if (Object.keys(prune).length) update(ref(db), prune).catch(() => {});
       }
 
-      if(!isFirstLoad && orders.length > lastOrderCount) document.getElementById('order-sound').play().catch(()=>{});
-      lastOrderCount = orders.length;
+      // 새 주문 감지: 개수가 아닌 ID 기준 (오래된 주문 정리와 겹쳐도 정확)
+      const _ids = new Set(orders.map(o => o.id));
+      if (!isFirstLoad && window.__seenOrderIds) {
+        let hasNew = false;
+        _ids.forEach(id => { if (!window.__seenOrderIds.has(id)) hasNew = true; });
+        if (hasNew) playOrderChime();
+      }
+      window.__seenOrderIds = _ids;
       isFirstLoad = false;
+      trackOrderStages(orders);
 
       orders.forEach(o => { if(o.status === 'pending') currentPendingOrders[o.id] = true; });
 
@@ -685,7 +809,7 @@
 
     window.updateNotice = () => { const input = document.getElementById('notice-input'); if(input.value.trim()) set(ref(db, 'notice'), input.value); };
     window.clearNotice = () => set(ref(db, 'notice'), "");
-    window.acceptOrder = (id) => update(ref(db, `orders/${id}`), { status: 'accepted' });
+    window.acceptOrder = (id) => update(ref(db, `orders/${id}`), { status: 'accepted', acceptedAt: Date.now() });
     window.completeOrder = (id) => update(ref(db, `orders/${id}`), { status: 'done' });
     window.rejectOrder = (id) => update(ref(db, `orders/${id}`), { status: 'rejected' });
     window.undoOrder = (id) => update(ref(db, `orders/${id}`), { status: 'pending' });
@@ -709,6 +833,7 @@
         if (o.status !== 'pending') return;
         if (!include1 && ONE_ACCOUNT_CRAFTERS.includes(o.crafter)) return;
         updates[`/orders/${o.id}/status`] = 'accepted';
+        updates[`/orders/${o.id}/acceptedAt`] = Date.now();
       });
       if (Object.keys(updates).length) update(ref(db), updates);
     };
@@ -1398,8 +1523,54 @@
     onValue(ref(db,'stats/seasons'), s=>{
       const v=s.val();
       if(!v || !Object.keys(v).length){ set(ref(db,'stats/seasons'), { midnight_s1:{ name:'한밤 시즌1', start:'2026-06-28' } }); return; }
-      _seasons=v; renderSeasonPanel(); rebuildSeasonFilter(); _rebuildCrafterPeriod(); bindDcCurrentSeason(); updateSeasonSum(); if(_dcOpen()){ renderVisitsChart(); renderOrdersChart(); renderCrafterChart(); }
+      _seasons=v; renderSeasonPanel(); rebuildSeasonFilter(); _rebuildCrafterPeriod(); _rebuildRefPeriod(); bindDcCurrentSeason(); updateSeasonSum(); if(_dcOpen()){ renderVisitsChart(); renderOrdersChart(); renderCrafterChart(); }
     });
+
+    // ════════ 유입 경로 ════════
+    let _refTotal = {}, _refDaily = {}, _refChart = null;
+    function _refOpen(){ const b=document.getElementById('refpanel-body'); return b && !b.classList.contains('hidden'); }
+    window.toggleRefPanel = function(){
+      const b=document.getElementById('refpanel-body'), c=document.getElementById('refpanel-chevron');
+      b.classList.toggle('hidden');
+      c.style.transform = b.classList.contains('hidden') ? '' : 'rotate(180deg)';
+      if(_refOpen()) renderRefChart();
+    };
+    function _rebuildRefPeriod(){
+      const sel=document.getElementById('ref-period'); if(!sel) return; const cur=sel.value;
+      let html='<option value="all">전체 누적</option><option value="w">주간 (최근 7일)</option><option value="m">월간 (최근 30일)</option>';
+      seasonsSorted(_seasons).forEach(s=>html+=`<option value="s:${s.id}">${escapeHTML(s.name)}</option>`);
+      sel.innerHTML=html; if(cur && html.indexOf('value="'+cur+'"')>=0) sel.value=cur;
+    }
+    window.renderRefChart = function(){
+      if(!_refOpen() || typeof Chart==='undefined') return;
+      const sel=(document.getElementById('ref-period')||{}).value||'all';
+      let sums={};
+      if(sel==='all'){ sums=Object.assign({}, _refTotal); }
+      else {
+        let ks=Object.keys(_refDaily).filter(k=>/^\d{4}-\d{2}-\d{2}$/.test(k)).sort();
+        if(sel==='w') ks=ks.slice(-7);
+        else if(sel==='m') ks=ks.slice(-30);
+        else if(sel.indexOf('s:')===0){ const r=_seasonRange(sel.slice(2)); if(r) ks=ks.filter(d=> d>=r.from && (r.to?d<r.to:true)); }
+        ks.forEach(d=>{ const o=_refDaily[d]||{}; Object.keys(o).forEach(k=>{ sums[k]=(sums[k]||0)+(o[k]||0); }); });
+      }
+      const entries=Object.entries(sums).filter(e=>e[1]>0).sort((a,b)=> b[1]-a[1]).slice(0,12);
+      const total=entries.reduce((n,e)=>n+e[1],0);
+      const el=document.getElementById('ref-sum'); if(el) el.textContent = total ? `총 ${total.toLocaleString()}명` : '';
+      const labels=entries.map(e=>e[0].replace(/_/g,'.')), data=entries.map(e=>e[1]);
+      if(_refChart) _refChart.destroy();
+      const ctx=document.getElementById('ref-chart').getContext('2d');
+      _refChart=new Chart(ctx,{ type:'bar',
+        data:{ labels, datasets:[{ data, backgroundColor:'rgba(135,136,238,0.65)', borderRadius:4, maxBarThickness:20 }] },
+        options:{ indexAxis:'y', responsive:true, maintainAspectRatio:false,
+          plugins:{ legend:{display:false}, tooltip:{ callbacks:{ title:it=>it[0].label, label:c=>' '+c.parsed.x+'명' },
+            backgroundColor:'rgba(10,10,16,0.95)', borderColor:'rgba(135,136,238,0.5)', borderWidth:1, titleColor:'#fff', bodyColor:'#a9aaf7', padding:8, displayColors:false } },
+          scales:{ x:{ beginAtZero:true, ticks:{color:'#6b7280',font:{size:9},precision:0}, grid:{color:'rgba(255,255,255,0.04)'} },
+                   y:{ ticks:{color:'#cbd5e1',font:{size:10,weight:'bold'}}, grid:{display:false} } } }
+      });
+    };
+    onValue(ref(db,'stats/referrers'),       s=>{ _refTotal=s.val()||{}; renderRefChart(); });
+    onValue(ref(db,'stats/referrers_daily'), s=>{ _refDaily=s.val()||{}; renderRefChart(); });
+
 
   </script>
 </body>
